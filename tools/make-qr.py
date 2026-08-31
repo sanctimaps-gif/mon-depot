@@ -14,8 +14,8 @@ import sys
 from pathlib import Path
 
 # Domaine du site (forme punycode : elle est comprise par tous les lecteurs
-# de QR codes, là où « barlepetitravisé.fr » en Unicode peut échouer).
-URL_PAR_DEFAUT = "https://xn--barlepetitravis-pnb.fr/carte.html"
+# de QR codes, là où « barlepetitravisé.com » en Unicode peut échouer).
+URL_PAR_DEFAUT = "https://xn--barlepetitravis-pnb.com/carte.html"
 SORTIE = Path(__file__).resolve().parent.parent / "img" / "qr-carte.svg"
 
 # Vert de la charte, pour rester cohérent avec le reste du site.

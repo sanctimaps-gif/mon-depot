@@ -29,21 +29,26 @@ défaut. Dans *Settings → Pages* : source = cette branche, dossier = **`/ (roo
 
 ### Le domaine personnalisé — à réactiver plus tard
 
-Le fichier `CNAME` a été **retiré volontairement**. Tant qu'il est présent, GitHub
-Pages redirige l'adresse `sanctimaps-gif.github.io/mon-depot/` vers
-`barlepetitravisé.fr` : si ce domaine ne pointe encore nulle part, plus rien ne
-s'ouvre — le navigateur affiche « site inaccessible ». C'était le cas.
+Le fichier `CNAME` a été **mis de côté** sous le nom `CNAME.a-activer` (GitHub ignore
+ce nom). Sa valeur est conservée telle quelle : `xn--barlepetitravis-pnb.com`,
+c'est-à-dire `barlepetitravisé.com`.
+
+Pourquoi : dès qu'un fichier `CNAME` existe, GitHub Pages **redirige**
+`sanctimaps-gif.github.io/mon-depot/` vers le domaine personnalisé. Si ce domaine ne
+pointe nulle part, la redirection tombe dans le vide et **plus aucune adresse ne
+s'ouvre** — c'était la cause du « je n'arrive pas à ouvrir le site ». Au moment de la
+vérification, ni le `.fr` ni le `.com` ne résolvaient.
 
 Marche à suivre, dans cet ordre :
 
-1. Chez le registrar, faire pointer `barlepetitravisé.fr` vers GitHub Pages
+1. Chez le registrar, faire pointer `barlepetitravisé.com` vers GitHub Pages
    (enregistrements A/ALIAS documentés par GitHub).
-2. Attendre que le domaine résolve (`ping barlepetitravisé.fr` doit répondre).
-3. Seulement ensuite, renseigner le domaine dans *Settings → Pages → Custom domain* :
-   GitHub recrée le fichier `CNAME` tout seul.
+2. Attendre que le domaine résolve (`ping xn--barlepetitravis-pnb.com` doit répondre).
+3. Seulement ensuite : `git mv CNAME.a-activer CNAME`, ou renseigner le domaine dans
+   *Settings → Pages → Custom domain* — GitHub recrée alors le fichier tout seul.
 
-Si le champ « Custom domain » est déjà rempli dans les réglages, videz-le : sinon
-GitHub recrée le fichier et la redirection casse à nouveau l'accès.
+Si le champ « Custom domain » est déjà rempli dans les réglages, **videz-le** : sinon
+GitHub recrée `CNAME` et la redirection casse à nouveau l'accès.
 
 `.nojekyll` désactive Jekyll : les fichiers sont servis tels quels.
 
@@ -105,6 +110,7 @@ Ouvrir `index.html` directement fonctionne aussi.
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
 apercu-du-site.html         Tout le site en un fichier autonome (double-clic)
+CNAME.a-activer             Domaine personnalisé, en attente du DNS
 .nojekyll                   Désactive Jekyll sur GitHub Pages
 css/style.css               Thème, mise en page, responsive, impression
 js/main.js                  Horaires, menu mobile, agenda, formulaire
@@ -194,7 +200,7 @@ et déposez la photo dans `img/`. Format carré conseillé, environ 800 × 800 p
 
 ### Le QR code
 
-Il pointe vers `https://xn--barlepetitravis-pnb.fr/carte.html` (forme punycode :
+Il pointe vers `https://xn--barlepetitravis-pnb.com/carte.html` (forme punycode :
 comprise par tous les lecteurs, là où l'Unicode peut échouer) — vérifié par décodage,
 prêt à imprimer. En cas de changement de domaine :
 
