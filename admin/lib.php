@@ -45,6 +45,35 @@ function chemin_tentatives(): string
     return __DIR__ . '/tentatives.php';
 }
 
+/**
+ * Adresse qui reçoit les messages du formulaire de contact.
+ * Elle vit ici, côté serveur, et jamais dans js/donnees.js : une adresse
+ * écrite dans un fichier public est moissonnée par les robots à spam
+ * en quelques jours.
+ */
+function chemin_destinataire(): string
+{
+    return __DIR__ . '/destinataire.php';
+}
+
+/** Adresse livrée avec le site, remplacée dès que la console en enregistre une. */
+function chemin_destinataire_initial(): string
+{
+    return __DIR__ . '/destinataire-initial.php';
+}
+
+/** Journal des messages reçus : un filet si l'envoi du courriel échoue. */
+function chemin_messages(): string
+{
+    return __DIR__ . '/messages.php';
+}
+
+/** Compteur d'envois par adresse IP, pour le formulaire de contact. */
+function chemin_envois(): string
+{
+    return __DIR__ . '/envois.php';
+}
+
 /* ---------------------------------------------------------------
    Compte administrateur
    --------------------------------------------------------------- */
@@ -111,6 +140,68 @@ function ecrire_atomique(string $chemin, string $contenu): bool
     }
     @chmod($chemin, 0644);
     return true;
+}
+
+/* ---------------------------------------------------------------
+   Destinataire du formulaire de contact
+   --------------------------------------------------------------- */
+
+/**
+ * @return array{email: string, expediteur: string}
+ */
+function lire_reglages_contact(): array
+{
+    foreach ([chemin_destinataire(), chemin_destinataire_initial()] as $fichier) {
+        if (!is_file($fichier)) {
+            continue;
+        }
+        $lu = include $fichier;
+        if (is_array($lu) && !empty($lu['email'])) {
+            return [
+                'email'      => (string) $lu['email'],
+                'expediteur' => (string) ($lu['expediteur'] ?? ''),
+            ];
+        }
+    }
+    return ['email' => '', 'expediteur' => ''];
+}
+
+function lire_destinataire(): string
+{
+    return lire_reglages_contact()['email'];
+}
+
+function ecrire_destinataire(string $email, string $expediteur = ''): bool
+{
+    // Une adresse vide est une consigne valable : elle éteint le formulaire.
+    $contenu = "<?php\n"
+        . "// Destinataire du formulaire de contact — fichier généré.\n"
+        . "// Il n'est jamais servi au public : le site ne publie que le fait\n"
+        . "// qu'une adresse est configurée, pas l'adresse elle-même.\n"
+        . "return " . var_export([
+            'email'      => $email,
+            'expediteur' => $expediteur,
+            'modifie'    => date('c'),
+        ], true) . ";\n";
+
+    return ecrire_atomique(chemin_destinataire(), $contenu);
+}
+
+/**
+ * Adresse utilisée comme expéditeur technique. Les hébergeurs refusent
+ * d'expédier un courriel dont le « From » est celui du visiteur : c'est
+ * ce que vérifient SPF et DMARC. Le visiteur est mis en « Reply-To ».
+ */
+function expediteur_technique(): string
+{
+    $configure = lire_reglages_contact()['expediteur'];
+    if ($configure !== '' && filter_var($configure, FILTER_VALIDATE_EMAIL)) {
+        return $configure;
+    }
+    $hote = (string) ($_SERVER['HTTP_HOST'] ?? 'localhost');
+    $hote = preg_replace('/:\d+$/', '', $hote) ?? $hote;   // sans le port
+    $hote = preg_replace('/^www\./', '', $hote) ?? $hote;
+    return 'no-reply@' . $hote;
 }
 
 /* ---------------------------------------------------------------
@@ -312,7 +403,9 @@ function nettoyer_donnees(array $brut): array
     $reglages = $brut['reglages'] ?? [];
     $propre = [
         'reglages' => [
-            'email'         => $texte($reglages['email'] ?? ''),
+            // L'adresse de contact n'est volontairement PAS publiée : le site
+            // n'annonce que l'existence du formulaire (voir contact.php).
+            'formulaire'    => lire_destinataire() !== '',
             'telephone'     => $texte($reglages['telephone'] ?? ''),
             'telephoneLien' => $texte($reglages['telephoneLien'] ?? ''),
             'mentionTarifs' => $texte($reglages['mentionTarifs'] ?? ''),

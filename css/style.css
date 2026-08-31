@@ -519,6 +519,18 @@ p { margin: 0 0 1rem; }
   box-shadow: var(--shadow-sm);
 }
 .field { margin-bottom: 1.1rem; }
+
+/* Champ-piège du formulaire de contact : retiré de l'affichage, du parcours
+   au clavier et de la restitution vocale, mais toujours présent dans le DOM
+   — c'est précisément ce qu'un robot à spam remplit. `display:none` seul
+   serait détecté par les plus soigneux d'entre eux. */
+.pot-de-miel {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .field label {
   display: block;

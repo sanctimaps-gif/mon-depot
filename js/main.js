@@ -611,19 +611,27 @@
   /* =========================================================
      6. Formulaire de contact
      ---------------------------------------------------------
-     L'adresse e-mail se renseigne dans js/donnees.js (ou via
-     la console d'administration). Dès qu'elle existe, le
-     formulaire ouvre le logiciel de messagerie du visiteur
-     avec un message déjà rempli. Sinon, il renvoie poliment
-     vers le téléphone.
+     Sur un hébergement PHP, le message part vraiment : il est
+     envoyé à contact.php, qui l'expédie au bar. L'adresse du
+     bar n'apparaît jamais dans ces pages — elle est lue côté
+     serveur, hors de portée des robots à spam.
+
+     Si le site est servi en statique (pas de PHP), contact.php
+     n'existe pas : on retombe alors sur le logiciel de
+     messagerie du visiteur, puis sur le téléphone.
      ========================================================= */
   var REGLAGES = DONNEES.reglages || {};
-  var EMAIL_CONTACT = REGLAGES.email || '';
+  var FORMULAIRE_ACTIF = REGLAGES.formulaire !== false;
+  var EMAIL_CONTACT = REGLAGES.email || '';   // hébergements statiques uniquement
   var TEL_AFFICHE = REGLAGES.telephone || '02 35 71 66 79';
 
   var form = document.getElementById('contactForm');
 
   if (form) {
+    // Heure d'affichage du formulaire : un envoi arrivé en moins de trois
+    // secondes vient d'un automate, pas d'une personne qui écrit.
+    var instantAffichage = Date.now();
+
     var setError = function (name, message) {
       var field = form.querySelector('#' + name);
       var slot = form.querySelector('[data-error-for="' + name + '"]');
@@ -659,36 +667,85 @@
         return;
       }
 
-      var nom = form.querySelector('#nom').value.trim();
-
-      if (!EMAIL_CONTACT) {
-        status.textContent = 'Merci ' + nom + ' ! Le plus rapide pour nous joindre reste le ' +
-          'téléphone : ' + TEL_AFFICHE + ', du lundi au samedi aux heures d’ouverture.';
-        status.className = 'form-status is-ok';
-        return;
-      }
-
-      // Ouvre le logiciel de messagerie avec un message pré-rempli.
       var champ = function (id) {
         var el = form.querySelector('#' + id);
         return el ? el.value.trim() : '';
       };
-      var corps = [
-        champ('message'),
-        '',
-        '— ' + nom,
-        champ('email'),
-        champ('telephone')
-      ].filter(Boolean).join('\n');
+      var nom = champ('nom');
+      var bouton = form.querySelector('button[type="submit"]');
 
-      window.location.href = 'mailto:' + EMAIL_CONTACT +
-        '?subject=' + encodeURIComponent('[Site] ' + champ('sujet')) +
-        '&body=' + encodeURIComponent(corps);
+      // Repli sans serveur : le logiciel de messagerie du visiteur, ou le
+      // téléphone si aucune adresse n'est disponible côté client.
+      var repli = function (raison) {
+        if (!EMAIL_CONTACT) {
+          status.textContent = raison || ('Merci ' + nom + ' ! Le plus rapide pour nous ' +
+            'joindre reste le téléphone : ' + TEL_AFFICHE + ', du lundi au samedi aux ' +
+            'heures d’ouverture.');
+          status.className = 'form-status is-ok';
+          return;
+        }
+        var corps = [champ('message'), '', '— ' + nom, champ('email'), champ('telephone')]
+          .filter(Boolean).join('\n');
+        window.location.href = 'mailto:' + EMAIL_CONTACT +
+          '?subject=' + encodeURIComponent('[Site] ' + champ('sujet')) +
+          '&body=' + encodeURIComponent(corps);
+        status.textContent = 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec ' +
+          'le message pré-rempli — il ne reste qu’à l’envoyer.';
+        status.className = 'form-status is-ok';
+        form.reset();
+      };
 
-      status.textContent = 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec le ' +
-        'message pré-rempli — il ne reste qu’à l’envoyer.';
-      status.className = 'form-status is-ok';
-      form.reset();
+      if (!FORMULAIRE_ACTIF) { repli(); return; }
+
+      status.textContent = 'Envoi en cours…';
+      status.className = 'form-status';
+      if (bouton) bouton.disabled = true;
+
+      fetch('contact.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom: nom,
+          email: champ('email'),
+          telephone: champ('telephone'),
+          sujet: champ('sujet'),
+          message: champ('message'),
+          societe: champ('societe'),     // piège à robots, toujours vide
+          instant: instantAffichage
+        })
+      })
+        .then(function (r) {
+          // Une page 404 renvoie du HTML : c'est le signe qu'il n'y a pas de PHP.
+          return r.text().then(function (t) {
+            var data;
+            try { data = JSON.parse(t); } catch (e) { throw new Error('sans-php'); }
+            return { code: r.status, data: data };
+          });
+        })
+        .then(function (r) {
+          if (bouton) bouton.disabled = false;
+
+          if (r.data.erreurs) {
+            Object.keys(r.data.erreurs).forEach(function (k) { setError(k, r.data.erreurs[k]); });
+            status.textContent = 'Le formulaire contient des erreurs. Merci de les corriger.';
+            status.className = 'form-status is-error';
+            return;
+          }
+          if (!r.data.ok) {
+            status.textContent = r.data.erreur || 'L’envoi a échoué. Merci de nous appeler au ' + TEL_AFFICHE + '.';
+            status.className = 'form-status is-error';
+            return;
+          }
+
+          status.textContent = r.data.message || 'Message envoyé, merci !';
+          status.className = 'form-status is-ok';
+          form.reset();
+          instantAffichage = Date.now();
+        })
+        .catch(function () {
+          if (bouton) bouton.disabled = false;
+          repli();
+        });
     });
 
     ['nom', 'email', 'message'].forEach(function (name) {

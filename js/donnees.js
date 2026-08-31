@@ -11,7 +11,7 @@
 
 window.DONNEES = {
     "reglages": {
-        "email": "",
+        "formulaire": true,
         "telephone": "02 35 71 66 79",
         "telephoneLien": "+33235716679",
         "mentionTarifs": "Tarifs affichés au comptoir et en terrasse."

@@ -99,10 +99,25 @@ if ($action === 'enregistrer') {
         reponse_json(['erreur' => 'Contenu illisible.'], 422);
     }
 
+    // L'adresse de contact quitte les données publiques : elle est enregistrée
+    // côté serveur, hors de portée des moissonneurs d'adresses.
+    $reglages = is_array($donnees['reglages'] ?? null) ? $donnees['reglages'] : [];
+    $adresse = trim((string) ($reglages['email'] ?? ''));
+    if ($adresse !== '' && !filter_var($adresse, FILTER_VALIDATE_EMAIL)) {
+        reponse_json(['erreur' => 'Adresse e-mail de contact invalide.'], 422);
+    }
+    if ($adresse !== lire_destinataire() && !ecrire_destinataire($adresse, lire_reglages_contact()['expediteur'])) {
+        reponse_json(['erreur' => 'Enregistrement de l’adresse impossible. Vérifiez les droits d’écriture sur le dossier admin/.'], 500);
+    }
+
     $propre = nettoyer_donnees($donnees);
     if (!ecrire_donnees($propre)) {
         reponse_json(['erreur' => 'Écriture impossible. Vérifiez les droits sur js/donnees.js.'], 500);
     }
+    // Renvoyée à la console seule, jamais écrite dans le fichier public :
+    // sans cela le champ « Adresse e-mail de contact » se viderait après
+    // chaque enregistrement.
+    $propre['reglages']['email'] = $adresse;
     reponse_json(['ok' => true, 'donnees' => $propre]);
 }
 

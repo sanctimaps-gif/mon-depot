@@ -141,6 +141,13 @@
           <a href="evenements.html">l'agenda des soirées</a>.</p>
 
         <form class="form" id="contactForm" novalidate>
+          <!-- Piège à robots : invisible et hors du parcours au clavier, seul un
+               automate le remplit. Un message qui l'a rempli est ignoré. -->
+          <div class="pot-de-miel" aria-hidden="true">
+            <label for="societe">Société</label>
+            <input type="text" id="societe" name="societe" tabindex="-1" autocomplete="off">
+          </div>
+
           <div class="field">
             <label for="nom">Nom</label>
             <input type="text" id="nom" name="nom" autocomplete="name" required>

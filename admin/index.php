@@ -14,6 +14,11 @@ header('X-Frame-Options: DENY');
 header('Referrer-Policy: same-origin');
 
 $donnees = $connecte ? lire_donnees() : null;
+if ($donnees !== null) {
+    // L'adresse de contact est stockée à part et n'est jamais publiée ;
+    // la console est le seul endroit où elle s'affiche.
+    $donnees['reglages']['email'] = lire_destinataire();
+}
 
 // ?onglet=carte permet d'arriver directement sur la bonne section depuis
 // le site ; toute valeur inconnue retombe sur les réglages.
