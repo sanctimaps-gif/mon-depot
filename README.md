@@ -139,6 +139,9 @@ js/donnees.js               LE CONTENU : réglages, carte, agenda, photos
 js/main.js                  Horaires, menu mobile, rendu de la carte et de l'agenda
 css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
+img/partage.jpg             Image de partage (réseaux sociaux)
+robots.txt                  Indexation : /admin/ exclu
+sitemap.xml                 Plan du site pour les moteurs
 img/photos/                 Photos déposées depuis le site
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
@@ -422,6 +425,76 @@ système prennent le relais sans casser la mise en page.
   *profil*, l'encart restera vide — un lien de repli est affiché juste en dessous.
 - **Avis Google** : la note est affichée avec sa date de relevé, et un bouton renvoie
   vers la fiche. Aucun avis n'est recopié ni inventé.
+
+## Référencement
+
+### Ce qui est en place dans le site
+
+- **Titres et descriptions** propres à chaque page, construits autour des recherches
+  visées : *bar à Rouen*, *bar centre-ville Rouen*, *bar avec terrasse Rouen*,
+  *bar convivial Rouen*. Tous sous les limites d'affichage de Google (65 et 160
+  caractères).
+- **Données structurées** `BarOrPub` sur l'accueil : adresse, téléphone, horaires
+  (samedi séparé), zone desservie, lien vers la carte, équipements (terrasse, tabac,
+  Française des Jeux), profil Facebook. `BreadcrumbList` sur les cinq autres pages.
+- **`sitemap.xml`** et **`robots.txt`** (qui exclut `/admin/` de l'indexation).
+- **URL canoniques** sur chaque page, **Open Graph** et **Twitter Card** complets avec
+  une image de partage (`img/partage.jpg`) : un lien collé sur Facebook ou WhatsApp
+  affiche une vignette propre plutôt qu'un carré vide.
+- **Contenu local** : quartier Vieux-Marché – Cathédrale, rue Jeanne d'Arc,
+  Gros-Horloge, métro Palais de Justice et Théâtre des Arts, parkings — écrits dans des
+  phrases normales, pas en liste de mots-clés.
+- Site rapide, responsive, sans dépendance : trois critères que Google mesure vraiment.
+
+### Ce qui ne se joue pas ici : le pack local et Google Maps
+
+**Apparaître dans les trois résultats avec la carte, quand quelqu'un cherche « bar à
+Rouen », ne dépend quasiment pas du site.** Cela dépend de la **fiche d'établissement
+Google** (Google Business Profile). Le site n'y contribue qu'indirectement, en
+confirmant les informations de la fiche.
+
+La fiche existe déjà — 4,6/5, une cinquantaine d'avis. Par ordre d'impact :
+
+1. **Revendiquer la fiche** si ce n'est pas fait (« Vous êtes propriétaire ? »), avec
+   vérification par courrier ou téléphone.
+2. **Catégorie principale : « Bar »**. C'est le levier le plus fort pour « bar à
+   Rouen ». Si la catégorie principale est « Bureau de tabac », la fiche ne sortira
+   pratiquement jamais sur cette recherche. Mettre *Bar-tabac*, *Bureau de tabac* et
+   *Café* en catégories secondaires.
+3. **Nom, adresse, téléphone strictement identiques** partout : fiche Google, site,
+   Facebook, annuaires. ⚠️ Aujourd'hui la fiche et Facebook écrivent « Le P'tit
+   Ravisé » tandis que d'autres annuaires écrivent « Le Petit Ravisé » : cette
+   incohérence dessert le référencement local. Choisir une orthographe et l'appliquer
+   partout, à commencer par ce site.
+4. **Horaires complets** sur la fiche, samedi 8 h 30 inclus, plus les horaires
+   exceptionnels (jours fériés) — Google valorise les fiches tenues à jour.
+5. **Attributs** : terrasse, accessibilité, moyens de paiement, Wi-Fi le cas échéant.
+   L'attribut *terrasse* aide directement sur « bar avec terrasse Rouen ».
+6. **Photos régulières** : la fiche progresse avec des photos récentes. Les mêmes
+   peuvent être déposées sur le site depuis les boutons de la page « Le bar ».
+7. **Avis** : en demander aux habitués, et **répondre à tous**, y compris aux négatifs.
+   Le taux de réponse est un signal mesuré.
+8. **Lien du site sur la fiche**, pointant vers l'accueil.
+9. **Publications Google** (Google Posts) pour les événements : gratuit, visible dans
+   la fiche.
+
+### Après la mise en ligne
+
+1. Déclarer le site dans **Google Search Console**, y soumettre `sitemap.xml`.
+2. Faire de même dans **Bing Webmaster Tools** (Bing alimente aussi certains
+   assistants).
+3. Vérifier les annuaires existants : PagesJaunes, Petit Futé, TripAdvisor, acceslibre.
+   ⚠️ Une page `le-ptit-ravise.eatbu.com` existe déjà et fait doublon avec ce site :
+   mieux vaut la mettre à jour pour qu'elle pointe vers le nouveau domaine, ou la
+   fermer, plutôt que laisser deux sites se concurrencer.
+4. Contrôler le rendu des données structurées avec le *Test des résultats enrichis* de
+   Google.
+
+### Ce qu'il ne faut pas faire
+
+Répéter « bar Rouen » dans le texte n'améliore rien et peut nuire. Les recherches
+« bar près de moi » se gagnent par la proximité et la fiche Google, jamais par une
+phrase sur la page.
 
 ## Accessibilité
 
