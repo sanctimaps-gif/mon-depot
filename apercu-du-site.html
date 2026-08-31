@@ -698,6 +698,63 @@ p { margin: 0 0 1rem; }
   a[href]::after { content: ""; }
 }
 
+/* ---------------- Galerie : photos et dépôt ---------------- */
+/* La vignette est une grille « image / légende » : l'image occupe la
+   première rangée sans écraser la légende de la seconde. */
+.gallery .illu-photo { grid-template-rows: 1fr auto; place-items: stretch; }
+.gallery .illu-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;          /* sans cela l'image impose sa hauteur et rogne la légende */
+  object-fit: cover;
+  padding: 0;
+}
+
+.btn-photo {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2rem;
+  transform: translateX(-50%);
+  background: rgba(255, 253, 249, 0.94);
+  border: 1px solid var(--line);
+  color: var(--green);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.btn-photo:hover { background: var(--green); border-color: var(--green); color: #fff; }
+.gallery .illu { position: relative; }
+
+/* Fenêtre de dépôt d'une photo */
+.depot-fond {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 32, 28, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  z-index: 200;
+}
+.depot {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: clamp(1.3rem, 4vw, 2rem);
+  width: min(100%, 460px);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+.depot h2 { margin-bottom: 0.5rem; }
+.depot input[type="file"] { padding: 0.5rem; background: var(--paper-alt); }
+.depot-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.depot-actions .btn { flex: 1; }
+.depot-statut:empty { display: none; }
+
 /* Séparation visuelle entre les pages, propre à l'aperçu. */
 section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line); }
 </style>
@@ -1013,8 +1070,11 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <p class="eyebrow">En images</p>
 <h2>Quelques photos</h2>
 </div>
-<div class="gallery">
-<figure aria-label="Illustration : le comptoir, ses tabourets et l'étagère à bouteilles" class="illu reveal" role="img">
+<!-- La galerie est rendue par js/main.js à partir de js/donnees.js.
+             Tant qu'un emplacement n'a pas de photo, l'illustration ci-dessous
+             sert de remplacement et un bouton permet d'en déposer une. -->
+<div class="gallery" id="galerie"></div>
+<template data-illustration="comptoir">
 <svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
 <!-- étagère et bouteilles -->
 <path d="M28 74h144" opacity=".6"></path>
@@ -1026,9 +1086,8 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <path d="M58 132h32M74 138v34M62 172h24"></path>
 <path d="M112 132h32M128 138v34M116 172h24"></path>
 </svg>
-<figcaption>Le comptoir</figcaption>
-</figure>
-<figure aria-label="Illustration : une table de terrasse au soleil" class="illu reveal" role="img">
+</template>
+<template data-illustration="terrasse">
 <svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
 <circle cx="150" cy="46" opacity=".7" r="18"></circle>
 <path d="M150 16v-8M150 84v-8M180 46h8M112 46h8M171 25l6-6M129 67l-6 6M171 67l6 6M129 25l-6-6" opacity=".45"></path>
@@ -1036,9 +1095,8 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <path d="M86 120v50M62 170h48"></path>
 <path d="M34 118v46M24 164h20M34 118q-14-4-14-16" opacity=".75"></path>
 </svg>
-<figcaption>La terrasse</figcaption>
-</figure>
-<figure aria-label="Illustration : l'enseigne tabac et la presse" class="illu reveal" role="img">
+</template>
+<template data-illustration="tabac">
 <svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
 <path d="M100 26v18"></path>
 <path d="M100 44c13 0 21 9 21 22v34c0 13-8 22-21 22s-21-9-21-22V66c0-13 8-22 21-22z"></path>
@@ -1046,18 +1104,15 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <path d="M44 140h112v34H44z" opacity=".8"></path>
 <path d="M58 154h36M58 164h64" opacity=".45"></path>
 </svg>
-<figcaption>Tabac &amp; FDJ</figcaption>
-</figure>
-<figure aria-label="Illustration : un demi de bière pression" class="illu reveal" role="img">
+</template>
+<template data-illustration="demi">
 <svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
 <path d="M62 60h68l-6 106a8 8 0 01-8 7H76a8 8 0 01-8-7z"></path>
 <path d="M64 92h64" opacity=".5"></path>
 <path d="M62 60q10-14 22-6t22-2 24 8" opacity=".8"></path>
 <path d="M130 78h16a16 16 0 010 32h-14"></path>
 </svg>
-<figcaption>Le demi</figcaption>
-</figure>
-</div>
+</template>
 </div>
 </section>
 <!-- ================= VENIR ================= -->
@@ -1366,6 +1421,7 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
           et à celle de votre entourage.</p>
 <p class="footer-createur">Pour contacter le créateur de ce site, il suffit d'envoyer un mail
           à l'adresse suivante : <a href="mailto:sanctimaps@gmail.com">sanctimaps@gmail.com</a>.</p>
+<p class="footer-createur"><a href="admin/">Administration du site</a></p>
 </div>
 </div>
 </footer>
@@ -1620,7 +1676,29 @@ window.DONNEES = {
             ]
         }
     ],
-    "evenements": []
+    "evenements": [],
+    "photos": [
+        {
+            "id": "comptoir",
+            "legende": "Le comptoir",
+            "fichier": ""
+        },
+        {
+            "id": "terrasse",
+            "legende": "La terrasse",
+            "fichier": ""
+        },
+        {
+            "id": "tabac",
+            "legende": "Tabac & FDJ",
+            "fichier": ""
+        },
+        {
+            "id": "demi",
+            "legende": "Le demi",
+            "fichier": ""
+        }
+    ]
 };
 
 /* =========================================================
@@ -1938,6 +2016,126 @@ window.DONNEES = {
       if (auMoinsUnPrix) mention.remove();
       else mention.textContent = (DONNEES.reglages && DONNEES.reglages.mentionTarifs) || '';
     }
+  }
+
+  /* =========================================================
+     5 ter. Galerie photos
+     ---------------------------------------------------------
+     Chaque emplacement affiche la photo déposée, ou à défaut
+     l'illustration au trait accompagnée d'un bouton de dépôt.
+     Le bouton disparaît dès qu'une photo est en place.
+     ========================================================= */
+  var galerie = document.getElementById('galerie');
+
+  if (galerie && Array.isArray(DONNEES.photos)) {
+    DONNEES.photos.forEach(function (photo) {
+      var figure = document.createElement('figure');
+      figure.className = 'illu';
+
+      if (photo.fichier) {
+        var image = document.createElement('img');
+        image.src = 'img/photos/' + photo.fichier;
+        image.alt = photo.legende || 'Photo du bar';
+        image.loading = 'lazy';
+        figure.appendChild(image);
+        figure.classList.add('illu-photo');
+      } else {
+        var modele = document.querySelector('template[data-illustration="' + photo.id + '"]');
+        if (modele) figure.appendChild(modele.content.cloneNode(true));
+        figure.setAttribute('role', 'img');
+        figure.setAttribute('aria-label', 'Illustration — ' + (photo.legende || ''));
+
+        var bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'btn-photo';
+        bouton.textContent = 'Ajouter une photo';
+        bouton.addEventListener('click', function () { ouvrirDepot(photo); });
+        figure.appendChild(bouton);
+      }
+
+      var legende = document.createElement('figcaption');
+      legende.textContent = photo.legende || '';
+      figure.appendChild(legende);
+
+      galerie.appendChild(figure);
+    });
+  }
+
+  // Fenêtre de dépôt : mot de passe de l'administration puis fichier.
+  function ouvrirDepot(photo) {
+    var fond = document.createElement('div');
+    fond.className = 'depot-fond';
+    fond.innerHTML =
+      '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="depot-titre">' +
+        '<h2 id="depot-titre">Ajouter une photo</h2>' +
+        '<p class="note">Emplacement : <strong class="depot-emplacement"></strong>. ' +
+          'Réservé au bar : le mot de passe de l’administration est demandé.</p>' +
+        '<form>' +
+          '<div class="field">' +
+            '<label for="depot-mdp">Mot de passe</label>' +
+            '<input type="password" id="depot-mdp" autocomplete="current-password">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="depot-fichier">Photo</label>' +
+            '<input type="file" id="depot-fichier" accept="image/jpeg,image/png,image/webp">' +
+            '<p class="note">JPEG, PNG ou WebP, 8 Mo maximum. La photo est recadrée en carré.</p>' +
+          '</div>' +
+          '<div class="depot-actions">' +
+            '<button type="button" class="btn btn-outline depot-annuler">Annuler</button>' +
+            '<button type="submit" class="btn">Envoyer</button>' +
+          '</div>' +
+          '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
+        '</form>' +
+      '</div>';
+
+    fond.querySelector('.depot-emplacement').textContent = photo.legende || photo.id;
+    document.body.appendChild(fond);
+
+    var statut = fond.querySelector('.depot-statut');
+    var champMdp = fond.querySelector('#depot-mdp');
+    var champFichier = fond.querySelector('#depot-fichier');
+    champMdp.focus();
+
+    function fermer() { fond.remove(); document.removeEventListener('keydown', surEchap); }
+    function surEchap(e) { if (e.key === 'Escape') fermer(); }
+    document.addEventListener('keydown', surEchap);
+    fond.querySelector('.depot-annuler').addEventListener('click', fermer);
+    fond.addEventListener('click', function (e) { if (e.target === fond) fermer(); });
+
+    fond.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!champMdp.value) { statut.textContent = 'Indiquez le mot de passe.'; statut.className = 'form-status depot-statut is-error'; return; }
+      if (!champFichier.files.length) { statut.textContent = 'Choisissez une photo.'; statut.className = 'form-status depot-statut is-error'; return; }
+
+      var donnees = new FormData();
+      donnees.append('emplacement', photo.id);
+      donnees.append('motDePasse', champMdp.value);
+      donnees.append('photo', champFichier.files[0]);
+
+      statut.textContent = 'Envoi en cours…';
+      statut.className = 'form-status depot-statut';
+
+      fetch('admin/photo.php', { method: 'POST', body: donnees, credentials: 'same-origin' })
+        .then(function (reponse) {
+          return reponse.json().catch(function () { return {}; }).then(function (r) {
+            if (!reponse.ok) throw new Error(r.erreur || 'Erreur ' + reponse.status + '.');
+            return r;
+          });
+        })
+        .then(function () {
+          statut.textContent = 'Photo enregistrée.';
+          statut.className = 'form-status depot-statut is-ok';
+          setTimeout(function () { location.reload(); }, 700);
+        })
+        .catch(function (err) {
+          // Sans PHP (ouverture locale, GitHub Pages), la requête n'aboutit pas.
+          var message = err instanceof TypeError
+            ? 'Envoi impossible : cette page doit être servie par un hébergement PHP.'
+            : err.message;
+          statut.textContent = message;
+          statut.className = 'form-status depot-statut is-error';
+        });
+    });
   }
 
   /* =========================================================

@@ -226,3 +226,24 @@ body.admin { background: var(--paper-alt); padding-bottom: 120px; }
   .admin-publish-inner { justify-content: center; text-align: center; }
   .admin-publish-actions .btn { flex: 1 1 auto; }
 }
+
+/* ---------------- Photos ---------------- */
+.photos-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.photo-case {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 0.8rem;
+  background: var(--paper);
+  text-align: center;
+}
+.photo-case img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 4px; }
+.photo-vide {
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  color: var(--ink-faint);
+  font-size: 0.86rem;
+}
+.photo-legende { font-weight: 600; margin: 0.6rem 0; font-size: 0.92rem; }

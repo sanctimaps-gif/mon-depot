@@ -316,6 +316,126 @@
   }
 
   /* =========================================================
+     5 ter. Galerie photos
+     ---------------------------------------------------------
+     Chaque emplacement affiche la photo déposée, ou à défaut
+     l'illustration au trait accompagnée d'un bouton de dépôt.
+     Le bouton disparaît dès qu'une photo est en place.
+     ========================================================= */
+  var galerie = document.getElementById('galerie');
+
+  if (galerie && Array.isArray(DONNEES.photos)) {
+    DONNEES.photos.forEach(function (photo) {
+      var figure = document.createElement('figure');
+      figure.className = 'illu';
+
+      if (photo.fichier) {
+        var image = document.createElement('img');
+        image.src = 'img/photos/' + photo.fichier;
+        image.alt = photo.legende || 'Photo du bar';
+        image.loading = 'lazy';
+        figure.appendChild(image);
+        figure.classList.add('illu-photo');
+      } else {
+        var modele = document.querySelector('template[data-illustration="' + photo.id + '"]');
+        if (modele) figure.appendChild(modele.content.cloneNode(true));
+        figure.setAttribute('role', 'img');
+        figure.setAttribute('aria-label', 'Illustration — ' + (photo.legende || ''));
+
+        var bouton = document.createElement('button');
+        bouton.type = 'button';
+        bouton.className = 'btn-photo';
+        bouton.textContent = 'Ajouter une photo';
+        bouton.addEventListener('click', function () { ouvrirDepot(photo); });
+        figure.appendChild(bouton);
+      }
+
+      var legende = document.createElement('figcaption');
+      legende.textContent = photo.legende || '';
+      figure.appendChild(legende);
+
+      galerie.appendChild(figure);
+    });
+  }
+
+  // Fenêtre de dépôt : mot de passe de l'administration puis fichier.
+  function ouvrirDepot(photo) {
+    var fond = document.createElement('div');
+    fond.className = 'depot-fond';
+    fond.innerHTML =
+      '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="depot-titre">' +
+        '<h2 id="depot-titre">Ajouter une photo</h2>' +
+        '<p class="note">Emplacement : <strong class="depot-emplacement"></strong>. ' +
+          'Réservé au bar : le mot de passe de l’administration est demandé.</p>' +
+        '<form>' +
+          '<div class="field">' +
+            '<label for="depot-mdp">Mot de passe</label>' +
+            '<input type="password" id="depot-mdp" autocomplete="current-password">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="depot-fichier">Photo</label>' +
+            '<input type="file" id="depot-fichier" accept="image/jpeg,image/png,image/webp">' +
+            '<p class="note">JPEG, PNG ou WebP, 8 Mo maximum. La photo est recadrée en carré.</p>' +
+          '</div>' +
+          '<div class="depot-actions">' +
+            '<button type="button" class="btn btn-outline depot-annuler">Annuler</button>' +
+            '<button type="submit" class="btn">Envoyer</button>' +
+          '</div>' +
+          '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
+        '</form>' +
+      '</div>';
+
+    fond.querySelector('.depot-emplacement').textContent = photo.legende || photo.id;
+    document.body.appendChild(fond);
+
+    var statut = fond.querySelector('.depot-statut');
+    var champMdp = fond.querySelector('#depot-mdp');
+    var champFichier = fond.querySelector('#depot-fichier');
+    champMdp.focus();
+
+    function fermer() { fond.remove(); document.removeEventListener('keydown', surEchap); }
+    function surEchap(e) { if (e.key === 'Escape') fermer(); }
+    document.addEventListener('keydown', surEchap);
+    fond.querySelector('.depot-annuler').addEventListener('click', fermer);
+    fond.addEventListener('click', function (e) { if (e.target === fond) fermer(); });
+
+    fond.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!champMdp.value) { statut.textContent = 'Indiquez le mot de passe.'; statut.className = 'form-status depot-statut is-error'; return; }
+      if (!champFichier.files.length) { statut.textContent = 'Choisissez une photo.'; statut.className = 'form-status depot-statut is-error'; return; }
+
+      var donnees = new FormData();
+      donnees.append('emplacement', photo.id);
+      donnees.append('motDePasse', champMdp.value);
+      donnees.append('photo', champFichier.files[0]);
+
+      statut.textContent = 'Envoi en cours…';
+      statut.className = 'form-status depot-statut';
+
+      fetch('admin/photo.php', { method: 'POST', body: donnees, credentials: 'same-origin' })
+        .then(function (reponse) {
+          return reponse.json().catch(function () { return {}; }).then(function (r) {
+            if (!reponse.ok) throw new Error(r.erreur || 'Erreur ' + reponse.status + '.');
+            return r;
+          });
+        })
+        .then(function () {
+          statut.textContent = 'Photo enregistrée.';
+          statut.className = 'form-status depot-statut is-ok';
+          setTimeout(function () { location.reload(); }, 700);
+        })
+        .catch(function (err) {
+          // Sans PHP (ouverture locale, GitHub Pages), la requête n'aboutit pas.
+          var message = err instanceof TypeError
+            ? 'Envoi impossible : cette page doit être servie par un hébergement PHP.'
+            : err.message;
+          statut.textContent = message;
+          statut.className = 'form-status depot-statut is-error';
+        });
+    });
+  }
+
+  /* =========================================================
      6. Formulaire de contact
      ---------------------------------------------------------
      L'adresse e-mail se renseigne dans js/donnees.js (ou via

@@ -18,6 +18,11 @@ function chemin_donnees(): string
     return dirname(__DIR__) . '/js/donnees.js';
 }
 
+function dossier_photos(): string
+{
+    return dirname(__DIR__) . '/img/photos';
+}
+
 function chemin_compte(): string
 {
     return __DIR__ . '/compte.php';
@@ -264,7 +269,7 @@ TXT;
 
 function donnees_par_defaut(): array
 {
-    return ['reglages' => new stdClass(), 'carte' => [], 'evenements' => []];
+    return ['reglages' => new stdClass(), 'carte' => [], 'evenements' => [], 'photos' => []];
 }
 
 function lire_donnees(): array
@@ -314,6 +319,7 @@ function nettoyer_donnees(array $brut): array
         ],
         'carte' => [],
         'evenements' => [],
+        'photos' => [],
     ];
 
     foreach (($brut['carte'] ?? []) as $rubrique) {
@@ -355,6 +361,28 @@ function nettoyer_donnees(array $brut): array
             'description' => $texte($ev['description'] ?? ''),
             'heure'       => $texte($ev['heure'] ?? ''),
             'prix'        => $texte($ev['prix'] ?? ''),
+        ];
+    }
+
+    foreach (($brut['photos'] ?? []) as $photo) {
+        if (!is_array($photo)) {
+            continue;
+        }
+        $id = $texte($photo['id'] ?? '');
+        if ($id === '' || !preg_match('/^[a-z0-9-]{1,40}$/', $id)) {
+            continue;
+        }
+        // Le nom de fichier ne vient jamais du client : on ne garde que ce qui
+        // ressemble à un fichier déposé par photo.php et qui existe encore.
+        $fichier = $texte($photo['fichier'] ?? '');
+        if (!preg_match('/^[a-z0-9_-]+\.(jpg|webp)$/', $fichier)
+            || !is_file(dossier_photos() . '/' . $fichier)) {
+            $fichier = '';
+        }
+        $propre['photos'][] = [
+            'id'      => $id,
+            'legende' => $texte($photo['legende'] ?? ''),
+            'fichier' => $fichier,
         ];
     }
 

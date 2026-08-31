@@ -391,6 +391,66 @@
     majEtatModifs();
   });
 
+  /* ---- Photos ---- */
+  etat.photos = etat.photos || [];
+
+  function dessinerPhotos() {
+    var hote = $('photosEditeur');
+    if (!hote) return;
+    hote.innerHTML = '';
+
+    if (!etat.photos.length) {
+      var vide = document.createElement('p');
+      vide.className = 'vide';
+      vide.textContent = 'Aucun emplacement photo.';
+      hote.appendChild(vide);
+      return;
+    }
+
+    var grille = document.createElement('div');
+    grille.className = 'photos-grille';
+
+    etat.photos.forEach(function (photo) {
+      var bloc = document.createElement('div');
+      bloc.className = 'photo-case';
+
+      if (photo.fichier) {
+        var image = document.createElement('img');
+        image.src = '../img/photos/' + photo.fichier;
+        image.alt = photo.legende || '';
+        bloc.appendChild(image);
+      } else {
+        var vide2 = document.createElement('div');
+        vide2.className = 'photo-vide';
+        vide2.textContent = 'Emplacement libre';
+        bloc.appendChild(vide2);
+      }
+
+      var titre = document.createElement('p');
+      titre.className = 'photo-legende';
+      titre.textContent = photo.legende || photo.id;
+      bloc.appendChild(titre);
+
+      if (photo.fichier) {
+        var retirer = document.createElement('button');
+        retirer.type = 'button';
+        retirer.className = 'btn btn-outline btn-small';
+        retirer.textContent = 'Retirer la photo';
+        retirer.addEventListener('click', function () {
+          if (!confirm('Retirer la photo « ' + (photo.legende || photo.id) + ' » ? ' +
+                       'L’illustration reprend sa place et une nouvelle photo pourra être déposée.')) return;
+          photo.fichier = '';
+          dessinerPhotos();
+          majEtatModifs();
+        });
+        bloc.appendChild(retirer);
+      }
+
+      grille.appendChild(bloc);
+    });
+    hote.appendChild(grille);
+  }
+
   /* ---- Enregistrement ---- */
   function messagePublication(texte, type) {
     var el = $('messagePublication');
@@ -415,6 +475,7 @@
         etat.reglages = etat.reglages || {};
         etat.carte = etat.carte || [];
         etat.evenements = etat.evenements || [];
+        etat.photos = etat.photos || [];
         reference = copie(etat);
         dessinerTout();
         messagePublication('Enregistré. Le site est à jour — rechargez-le pour voir le résultat.', 'ok');
@@ -463,6 +524,7 @@
     dessinerReglages();
     dessinerCarte();
     dessinerAgenda();
+    dessinerPhotos();
     majEtatModifs();
   }
 

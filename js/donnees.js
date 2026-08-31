@@ -248,5 +248,27 @@ window.DONNEES = {
             ]
         }
     ],
-    "evenements": []
+    "evenements": [],
+    "photos": [
+        {
+            "id": "comptoir",
+            "legende": "Le comptoir",
+            "fichier": ""
+        },
+        {
+            "id": "terrasse",
+            "legende": "La terrasse",
+            "fichier": ""
+        },
+        {
+            "id": "tabac",
+            "legende": "Tabac & FDJ",
+            "fichier": ""
+        },
+        {
+            "id": "demi",
+            "legende": "Le demi",
+            "fichier": ""
+        }
+    ]
 };

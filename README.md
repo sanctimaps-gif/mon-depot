@@ -78,7 +78,7 @@ en attendant, le site reste présentable — rien n'affiche « à compléter » 
 | **Les prix** | `/admin/` → La carte | La carte s'affiche sans prix, avec « Tarifs affichés au comptoir » |
 | **Une adresse e-mail** | `/admin/` → Réglages | Le formulaire renvoie vers le téléphone |
 | **Les dates d'événements** | `/admin/` → Événements | « Aucune date annoncée pour le moment » |
-| **Des photos** | `le-bar.html` (à la main) | Illustrations au trait (dessins, pas des photos du lieu) |
+| **Des photos** | Page « Le bar » → *Ajouter une photo* | Illustrations au trait (dessins, pas des photos du lieu) |
 
 Deux points à confirmer :
 
@@ -124,6 +124,7 @@ Ouvrir `index.html` directement fonctionne aussi.
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
 admin/                      Espace d'administration (PHP) — voir plus bas
   index.php                 Connexion et console
+  photo.php                 Réception des photos déposées depuis le site
   compte-initial.php        Compte livré avec le site
   api.php                   Actions : connexion, enregistrement, mot de passe
   lib.php                   Compte, session, écriture du contenu
@@ -133,10 +134,11 @@ apercu-du-site.html         Tout le site en un fichier autonome (double-clic)
 CNAME.a-activer             Domaine personnalisé, en attente du DNS
 .nojekyll                   Désactive Jekyll sur GitHub Pages
 css/style.css               Thème, mise en page, responsive, impression
-js/donnees.js               LE CONTENU : réglages, carte, agenda (écrit par la console)
+js/donnees.js               LE CONTENU : réglages, carte, agenda, photos
 js/main.js                  Horaires, menu mobile, rendu de la carte et de l'agenda
 css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
+img/photos/                 Photos déposées depuis le site
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
 tools/creer-compte.php      Crée un compte avec un mot de passe unique
@@ -144,7 +146,15 @@ tools/creer-compte.php      Crée un compte avec un mot de passe unique
 
 ## L'espace d'administration
 
-Le site se modifie depuis **`/admin/`** (par exemple `votre-domaine.fr/admin/`) :
+**Comment y accéder :** un lien discret *Administration du site* figure tout en bas de
+chaque page, ou directement à l'adresse **`/admin/`** (par exemple
+`votre-domaine.fr/admin/`).
+
+> ⚠️ **Cette page ne fonctionne que sur un hébergement PHP.** Sur GitHub Pages, PHP
+> n'est pas exécuté : `/admin/` n'ouvrira rien d'utile. C'est la raison la plus
+> fréquente de « je ne vois pas comment me connecter ».
+
+Le site se modifie depuis **`/admin/`** :
 adresse e-mail de contact, carte, prix, événements, mot de passe. Aucun compte
 extérieur — ni GitHub, ni service tiers.
 
@@ -194,6 +204,7 @@ Rien n'est alors public.
 | Réglages | Adresse e-mail de contact, téléphone, mention en haut de la carte |
 | La carte | Rubriques, intitulés, prix, descriptions — ajout, modification, suppression |
 | Événements | Dates, titres, heures, tarifs. Les dates passées disparaissent du site |
+| Photos | Retirer une photo de la galerie pour libérer son emplacement |
 | Mon compte | Adresse de connexion et mot de passe |
 
 Enregistrer réécrit `js/donnees.js`, que les pages publiques lisent. Dès qu'un prix est
@@ -241,6 +252,8 @@ autour de 3 à 5 € par mois. Aucune base de données, aucune extension particu
   s'affiche comme du texte et ne peut pas exécuter de code sur le site.
 - Écritures atomiques (fichier temporaire puis renommage) : jamais de fichier tronqué,
   même si le serveur coupe au mauvais moment.
+- Photos systématiquement ré-encodées côté serveur, nom de fichier engendré, exécution
+  de code interdite dans `img/photos/`, et dépôt refusé sur un emplacement déjà occupé.
 
 ### Revendre le site
 
@@ -313,11 +326,32 @@ Dans le tableau `evenements` de `js/donnees.js` :
 
 Les dates passées disparaissent toutes seules. Liste vide = « Aucune date annoncée ».
 
-### Remplacer les illustrations par des photos
+### Les photos de la galerie
 
-Dans `le-bar.html`, chaque vignette est un `<figure class="illu">` contenant un `<svg>`.
-Remplacez le bloc `<svg>…</svg>` par `<img src="img/comptoir.jpg" alt="Le comptoir">`
-et déposez la photo dans `img/`. Format carré conseillé, environ 800 × 800 px.
+Quatre emplacements : *Le comptoir*, *La terrasse*, *Tabac & FDJ*, *Le demi*. Tant
+qu'un emplacement est vide, la page « Le bar » y affiche une illustration au trait et
+un bouton **Ajouter une photo**.
+
+Le dépôt se fait depuis le site lui-même, sans passer par la console : le bouton
+demande le mot de passe de l'administration, puis ouvre la photothèque de l'appareil
+(téléphone ou ordinateur). Une fois la photo en place, le bouton disparaît — cet
+emplacement est occupé et le serveur refuse de l'écraser.
+
+Pour changer une photo : onglet **Photos** de la console → *Retirer la photo*.
+L'emplacement redevient libre et le bouton réapparaît sur le site.
+
+Ce que le serveur fait de la photo reçue : il la décode, la recadre en carré, la
+redimensionne à 1200 px maximum et la **ré-encode en JPEG**. Un fichier qui n'est pas
+une vraie image échoue au décodage ; le ré-encodage supprime au passage tout ce qui
+pourrait être dissimulé dans les métadonnées. Le nom du fichier est engendré par le
+serveur, jamais repris de l'envoi. Formats acceptés : JPEG, PNG, WebP, 8 Mo maximum.
+
+Les photos atterrissent dans `img/photos/`, dossier où un `.htaccess` interdit
+l'exécution de code.
+
+> **Droits d'usage :** n'y déposez que des photos dont vous détenez les droits — les
+> vôtres, ou celles fournies par le bar. Les images des fiches Google Maps ou des pages
+> Facebook appartiennent à ceux qui les ont prises et ne peuvent pas être reprises.
 
 ### Le QR code
 

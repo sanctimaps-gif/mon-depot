@@ -127,6 +127,7 @@ $donnees = $connecte ? lire_donnees() : null;
         <button role="tab" id="tab-reglages" aria-controls="panel-reglages" aria-selected="true" class="admin-tab">Réglages</button>
         <button role="tab" id="tab-carte" aria-controls="panel-carte" aria-selected="false" class="admin-tab" tabindex="-1">La carte</button>
         <button role="tab" id="tab-agenda" aria-controls="panel-agenda" aria-selected="false" class="admin-tab" tabindex="-1">Événements</button>
+        <button role="tab" id="tab-photos" aria-controls="panel-photos" aria-selected="false" class="admin-tab" tabindex="-1">Photos</button>
         <button role="tab" id="tab-compte" aria-controls="panel-compte" aria-selected="false" class="admin-tab" tabindex="-1">Mon compte</button>
       </div>
 
@@ -176,6 +177,16 @@ $donnees = $connecte ? lire_donnees() : null;
           <p class="note">Les dates passées disparaissent automatiquement du site.</p>
           <div id="agendaEditeur"></div>
           <button class="btn btn-outline" type="button" id="btnAjouterEvenement">+ Ajouter un événement</button>
+        </div>
+      </div>
+
+      <div role="tabpanel" id="panel-photos" aria-labelledby="tab-photos" class="admin-panel" tabindex="0" hidden>
+        <div class="admin-card">
+          <h2>Photos de la galerie</h2>
+          <p class="note">Une photo se dépose directement depuis la page « Le bar » du site :
+            le bouton <em>Ajouter une photo</em> apparaît sur les emplacements vides. Pour en
+            remplacer une, retirez-la ici — l'emplacement redevient libre et le bouton réapparaît.</p>
+          <div id="photosEditeur"></div>
         </div>
       </div>
 
