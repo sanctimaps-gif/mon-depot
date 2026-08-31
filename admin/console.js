@@ -102,6 +102,34 @@
   }
 
   /* =========================================================
+     Première utilisation : remplacer le mot de passe livré
+     ========================================================= */
+  if (CONFIG.mode === 'premiere-fois') {
+    $('formPremiereFois').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var email = $('p-email').value.trim();
+      var mdp = $('p-mdp').value;
+      var mdp2 = $('p-mdp2').value;
+
+      var ok = erreurChamp('p-email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : 'Adresse e-mail invalide.');
+      ok = erreurChamp('p-mdp', mdp.length < 10 ? 'Au moins 10 caractères.' : '') && ok;
+      ok = erreurChamp('p-mdp2', mdp2 !== mdp ? 'Les deux mots de passe diffèrent.' : '') && ok;
+      if (!ok) return;
+
+      afficher('statutPremiereFois', 'Enregistrement…');
+      appel('changer-mot-de-passe', { nouveau: mdp, email: email })
+        .then(function () { location.reload(); })
+        .catch(function (err) { afficher('statutPremiereFois', err.message, 'error'); });
+    });
+
+    $('btnDeconnexion').addEventListener('click', function () {
+      appel('deconnexion').then(function () { location.reload(); })
+        .catch(function () { location.reload(); });
+    });
+    return;
+  }
+
+  /* =========================================================
      Console
      ========================================================= */
   var etat = copie(CONFIG.donnees || {});

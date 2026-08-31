@@ -123,7 +123,8 @@ Ouvrir `index.html` directement fonctionne aussi.
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
 admin/                      Espace d'administration (PHP) — voir plus bas
-  index.php                 Création du compte, connexion, console
+  index.php                 Connexion, premier mot de passe, console
+  compte-initial.php        Compte livré avec le site (mot de passe provisoire)
   api.php                   Actions : connexion, enregistrement, mot de passe
   lib.php                   Compte, session, écriture du contenu
   console.js                Interface de la console
@@ -138,6 +139,7 @@ css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
+tools/creer-compte.php      Crée un compte avec un mot de passe provisoire unique
 ```
 
 ## L'espace d'administration
@@ -146,15 +148,41 @@ Le site se modifie depuis **`/admin/`** (par exemple `votre-domaine.fr/admin/`) 
 adresse e-mail de contact, carte, prix, événements, mot de passe. Aucun compte
 extérieur — ni GitHub, ni service tiers.
 
-### Première visite : créer le compte
+### Première connexion : le compte est déjà créé
 
-À la première ouverture de `/admin/`, la page propose de **créer le compte
-administrateur** : une adresse e-mail et un mot de passe (10 caractères minimum). Le
-compte est enregistré dans `admin/compte.php`, sur le serveur.
+Le site est livré avec un compte administrateur :
 
-Le mot de passe n'est stocké nulle part en clair, pas même sur le serveur : seule son
-empreinte l'est (`password_hash`, bcrypt). Oublié, il faut supprimer
-`admin/compte.php` par FTP pour revenir à l'écran de création.
+| | |
+| --- | --- |
+| Adresse | `admin@lepetitravise.fr` |
+| Mot de passe provisoire | `PetitRavise-2026` |
+
+À la première connexion, la console **impose de choisir un nouveau mot de passe** (et
+permet de changer l'adresse de connexion au passage). Rien d'autre n'est accessible
+tant que ce n'est pas fait : le blocage est appliqué côté serveur, pas seulement dans
+la page. Le nouveau compte est alors écrit dans `admin/compte.php`, qui prend
+définitivement le relais de `admin/compte-initial.php`.
+
+> ⚠️ **Ce mot de passe provisoire est le même pour toutes les copies du site et figure
+> dans le dépôt : il est donc public.** Entre la mise en ligne et la première connexion,
+> quelqu'un qui le connaît pourrait prendre la main. **Connectez-vous juste après avoir
+> déposé les fichiers**, avant de communiquer l'adresse au client — ou mieux, donnez à
+> chaque client un mot de passe provisoire unique (voir ci-dessous).
+
+Le mot de passe n'est jamais stocké en clair, pas même sur le serveur : seule son
+empreinte l'est (`password_hash`, bcrypt). Oublié, il suffit de supprimer
+`admin/compte.php` par FTP pour revenir au mot de passe provisoire.
+
+### Donner un mot de passe provisoire unique à chaque client
+
+Plus sûr que le mot de passe livré, si vous avez accès à PHP en ligne de commande :
+
+```bash
+php tools/creer-compte.php client@exemple.fr "un mot de passe provisoire"
+```
+
+Le fichier `admin/compte.php` est créé avec ce mot de passe et le changement reste
+imposé à la première connexion. Rien n'est alors public.
 
 ### Ce que la console permet
 
@@ -195,6 +223,9 @@ autour de 3 à 5 € par mois. Aucune base de données, aucune extension particu
 ### Sécurité — ce qui est en place
 
 - Mot de passe haché avec `password_hash()` (bcrypt), jamais stocké en clair.
+- Changement du mot de passe livré imposé à la première connexion, refusé côté serveur
+  pour toute autre action tant qu'il n'est pas fait ; le nouveau doit différer de
+  l'ancien.
 - Session par cookie `HttpOnly`, `SameSite=Lax`, `Secure` dès que le site est en HTTPS ;
   identifiant de session régénéré à la connexion (anti-fixation).
 - Jeton anti-CSRF exigé sur toute action qui modifie quelque chose.
@@ -215,9 +246,16 @@ Le site est autonome et transférable : un dossier de fichiers, aucun abonnement
 aucune clé d'API, aucun compte de développeur.
 
 1. Copier le dossier **sans** `admin/compte.php` ni `admin/tentatives.php` (ils sont
-   exclus par `.gitignore`, et propres à chaque installation).
-2. L'acheteur envoie le dossier sur son hébergement, ouvre `/admin/`, crée son compte.
-3. Il est seul détenteur de ses accès. Vous n'avez rien à conserver.
+   exclus par `.gitignore`, et propres à chaque installation). `admin/compte-initial.php`
+   fait partie de la livraison : c'est lui qui porte le compte de départ.
+2. L'acheteur envoie le dossier sur son hébergement et ouvre `/admin/`.
+3. Il se connecte avec les identifiants provisoires, la console lui impose aussitôt de
+   choisir son mot de passe et son adresse.
+4. Il est ensuite seul détenteur de ses accès. Vous n'avez rien à conserver.
+
+Le pied de page du site porte votre adresse de contact
+(`sanctimaps@gmail.com`) : elle se modifie dans les six fichiers `.html`,
+paragraphe `footer-createur`.
 
 Pensez à adapter le contenu (`js/donnees.js`), les mentions légales et le fichier
 `CNAME.a-activer` s'il change de domaine.

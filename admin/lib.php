@@ -23,6 +23,16 @@ function chemin_compte(): string
     return __DIR__ . '/compte.php';
 }
 
+/**
+ * Compte livré avec le site. Il sert tant que le mot de passe n'a pas été
+ * changé ; à ce moment-là compte.php est écrit et prend définitivement
+ * le relais.
+ */
+function chemin_compte_initial(): string
+{
+    return __DIR__ . '/compte-initial.php';
+}
+
 function chemin_tentatives(): string
 {
     // Extension .php volontaire : le fichier n'est jamais servi comme
@@ -36,17 +46,33 @@ function chemin_tentatives(): string
 
 function compte_existe(): bool
 {
-    return is_file(chemin_compte());
+    return is_file(chemin_compte()) || is_file(chemin_compte_initial());
 }
 
-/** @return array{email: string, hash: string}|null */
+/**
+ * Le compte personnalisé prime toujours sur celui livré avec le site.
+ *
+ * @return array{email: string, hash: string, doitChanger?: bool}|null
+ */
 function lire_compte(): ?array
 {
-    if (!compte_existe()) {
-        return null;
+    foreach ([chemin_compte(), chemin_compte_initial()] as $fichier) {
+        if (!is_file($fichier)) {
+            continue;
+        }
+        $compte = include $fichier;
+        if (is_array($compte) && isset($compte['email'], $compte['hash'])) {
+            return $compte;
+        }
     }
-    $compte = include chemin_compte();
-    return is_array($compte) && isset($compte['email'], $compte['hash']) ? $compte : null;
+    return null;
+}
+
+/** Le mot de passe livré doit-il encore être remplacé ? */
+function doit_changer_mot_de_passe(): bool
+{
+    $compte = lire_compte();
+    return $compte !== null && !empty($compte['doitChanger']);
 }
 
 function ecrire_compte(string $email, string $motDePasse): bool
@@ -55,9 +81,10 @@ function ecrire_compte(string $email, string $motDePasse): bool
         . "// Compte administrateur — fichier généré, ne pas modifier à la main.\n"
         . "// Le mot de passe n'est pas stocké : seule son empreinte l'est.\n"
         . "return " . var_export([
-            'email' => $email,
-            'hash'  => password_hash($motDePasse, PASSWORD_DEFAULT),
-            'cree'  => date('c'),
+            'email'       => $email,
+            'hash'        => password_hash($motDePasse, PASSWORD_DEFAULT),
+            'doitChanger' => false,
+            'cree'        => date('c'),
         ], true) . ";\n";
 
     return ecrire_atomique(chemin_compte(), $contenu);
