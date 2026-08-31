@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Chaque page est déclarée dans les deux langues : les balises
+     xhtml:link indiquent à Google que ce sont deux versions de la
+     même page, et non deux contenus concurrents. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/carte.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/carte.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/menu.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/carte.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/menu.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/carte.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/menu.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/carte.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/le-bar.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/le-bar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/the-bar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/le-bar.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/the-bar.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/le-bar.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/the-bar.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/le-bar.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/infos.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/infos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/visit.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/infos.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/visit.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/infos.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/visit.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/infos.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/evenements.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/evenements.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/events.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/evenements.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/events.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/evenements.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/events.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/evenements.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/contact.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://xn--barlepetitravis-pnb.com/en/contact.html</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://xn--barlepetitravis-pnb.com/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://xn--barlepetitravis-pnb.com/en/contact.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://xn--barlepetitravis-pnb.com/contact.html"/>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>

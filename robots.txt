@@ -1,0 +1,10 @@
+# Le P’tit Ravisé — bar-tabac, 14 rue des Bons-Enfants, 76000 Rouen
+
+User-agent: *
+Allow: /
+
+# L'espace d'administration n'a rien à faire dans un index.
+Disallow: /admin/
+Disallow: /apercu-du-site.html
+
+Sitemap: https://xn--barlepetitravis-pnb.com/sitemap.xml

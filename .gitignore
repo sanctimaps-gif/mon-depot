@@ -1,0 +1,8 @@
+# Fichiers créés par l'administration sur le serveur : propres à chaque
+# installation, ils ne doivent pas être versionnés ni livrés à un client.
+admin/compte.php
+admin/tentatives.php
+admin/destinataire.php
+admin/messages.php
+admin/envois.php
+admin/*.tmp*

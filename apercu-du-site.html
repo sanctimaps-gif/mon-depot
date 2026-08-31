@@ -1,0 +1,2715 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le P’tit Ravisé — aperçu du site</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   Le P’tit Ravisé — bar-tabac, 14 rue des Bons-Enfants, Rouen
+   Feuille de style unique, partagée par les six pages.
+   ========================================================= */
+
+:root {
+  --paper: #faf6ef;
+  --paper-alt: #f3ece0;
+  --surface: #fffdf9;
+  --ink: #23201c;
+  --ink-soft: #5f5850;
+  --ink-faint: #8a8177;
+  --green: #1f4d3d;
+  --green-light: #2c6b55;
+  --red: #b6412f;
+  --amber: #b8873a;
+  --line: rgba(35, 32, 28, 0.14);
+  --line-soft: rgba(35, 32, 28, 0.08);
+  --ok: #1f7a4d;
+
+  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  --wrap: 1140px;
+  --radius: 6px;
+  --shadow-sm: 0 2px 10px rgba(35, 32, 28, 0.06);
+  --shadow: 0 18px 44px rgba(35, 32, 28, 0.12);
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 96px; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: var(--green); text-underline-offset: 3px; }
+a:hover { color: var(--red); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  letter-spacing: -0.01em;
+}
+h1 { font-size: clamp(2.2rem, 5.4vw, 3.6rem); }
+h2 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); }
+h3 { font-size: 1.2rem; }
+h4 { font-size: 1rem; }
+
+p { margin: 0 0 1rem; }
+
+.wrap { width: min(100% - 2.5rem, var(--wrap)); margin-inline: auto; }
+.wrap-narrow { width: min(100% - 2.5rem, 780px); margin-inline: auto; }
+
+.eyebrow {
+  font-size: 0.74rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.lead { color: var(--ink-soft); font-size: 1.08rem; max-width: 60ch; }
+.note { color: var(--ink-faint); font-size: 0.86rem; }
+.center { text-align: center; }
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  background: var(--green);
+  color: #fff;
+  padding: 0.7rem 1.1rem;
+  z-index: 200;
+  font-weight: 600;
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; border-radius: 3px; }
+
+/* ---------------- Boutons ---------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--green);
+  color: #fff;
+  border: 1px solid var(--green);
+  border-radius: var(--radius);
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.94rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.22s var(--ease), transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+}
+.btn:hover {
+  background: var(--green-light);
+  border-color: var(--green-light);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active { transform: translateY(0); }
+
+.btn-outline { background: transparent; color: var(--green); border-color: var(--line); }
+.btn-outline:hover { background: rgba(31, 77, 61, 0.07); color: var(--green); border-color: var(--green); }
+
+.btn-red { background: var(--red); border-color: var(--red); }
+.btn-red:hover { background: #c8503d; border-color: #c8503d; }
+
+.btn-small { padding: 0.5rem 1rem; font-size: 0.86rem; }
+.btn-block { width: 100%; }
+.btn svg { flex: none; }
+
+/* ---------------- En-tête ---------------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250, 246, 239, 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line-soft);
+  transition: box-shadow 0.3s var(--ease);
+}
+.site-header.is-scrolled { box-shadow: var(--shadow-sm); }
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 78px;
+}
+
+.brand { display: flex; align-items: center; gap: 0.7rem; text-decoration: none; color: var(--ink); }
+.brand-mark { color: var(--red); display: flex; flex: none; }
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.brand-name { font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; }
+.brand-sub {
+  font-size: 0.64rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.nav ul {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 500;
+  position: relative;
+  padding: 0.3rem 0;
+  white-space: nowrap;
+}
+.nav a:not(.btn)::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: 0;
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width 0.25s var(--ease);
+}
+.nav a:not(.btn):hover::after,
+.nav a:not(.btn)[aria-current="page"]::after { width: 100%; }
+.nav a:not(.btn)[aria-current="page"] { color: var(--red); font-weight: 600; }
+/* `.nav a` est plus spécifique que `.btn` : sans cette règle le bouton
+   perdrait son texte blanc. */
+.nav a.btn { color: #fff; }
+
+.nav-toggle {
+  display: none;
+  width: 46px; height: 46px;
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  cursor: pointer;
+  position: relative;
+  color: var(--ink);
+}
+.nav-toggle-bar,
+.nav-toggle-bar::before,
+.nav-toggle-bar::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 20px; height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: transform 0.28s var(--ease), opacity 0.2s var(--ease);
+}
+.nav-toggle-bar { top: 50%; margin-top: -1px; }
+.nav-toggle-bar::before { top: -6px; left: 0; transform: none; }
+.nav-toggle-bar::after { top: 6px; left: 0; transform: none; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar { background: transparent; }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::before { transform: translateY(6px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] .nav-toggle-bar::after { transform: translateY(-6px) rotate(-45deg); }
+
+/* ---------------- Indicateur ouvert / fermé ---------------- */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.5rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; background: var(--ink-faint); flex: none; }
+.dot.is-open { background: var(--ok); box-shadow: 0 0 0 4px rgba(31, 122, 77, 0.15); }
+.dot.is-closed { background: var(--red); box-shadow: 0 0 0 4px rgba(182, 65, 47, 0.14); }
+
+/* ---------------- Bandeau / hero ---------------- */
+.hero { padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(3rem, 7vw, 5rem); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+.hero h1 { margin-bottom: 0.6rem; }
+.hero-tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  color: var(--red);
+  margin-bottom: 1.2rem;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 1.8rem 0 1.4rem; }
+
+.hero-facts {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.6rem 0 0;
+  padding: 1.4rem 0 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+.hero-facts li { display: flex; gap: 0.7rem; align-items: flex-start; font-size: 0.95rem; }
+.hero-facts .ico { color: var(--red); flex: none; margin-top: 2px; }
+.hero-facts a { text-decoration: none; font-weight: 600; }
+.hero-facts a:hover { text-decoration: underline; }
+
+/* Bandeau de page pour les pages intérieures */
+.page-head {
+  background: var(--paper-alt);
+  border-bottom: 1px solid var(--line-soft);
+  padding: clamp(2.2rem, 5vw, 3.4rem) 0;
+}
+.page-head h1 { margin-bottom: 0.4rem; }
+.breadcrumb { font-size: 0.84rem; color: var(--ink-faint); margin-bottom: 0.9rem; }
+.breadcrumb a { color: var(--ink-faint); }
+
+/* ---------------- Sections ---------------- */
+.section { padding: clamp(3rem, 7vw, 5rem) 0; }
+.section-alt { background: var(--paper-alt); }
+.section-head { max-width: 62ch; margin-bottom: 2.6rem; }
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 3.5rem);
+  align-items: center;
+}
+.grid-2.top { align-items: start; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.2rem;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-sm);
+}
+.card h3 { color: var(--green); }
+.card > :last-child { margin-bottom: 0; }
+.card-link { text-decoration: none; display: block; transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease); }
+.card-link:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.card-link h3 { color: var(--green); }
+.card-link p { color: var(--ink-soft); }
+
+/* ---------------- Illustrations ---------------- */
+.illu {
+  position: relative;
+  border-radius: var(--radius);
+  border: 1px solid var(--line);
+  background: linear-gradient(170deg, #fffdf8, #f0e7d8);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  color: var(--green);
+  margin: 0;
+}
+.illu svg { width: 84%; height: auto; max-height: 84%; }
+.illu-devanture { aspect-ratio: 4 / 3; }
+
+.gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+.gallery .illu { aspect-ratio: 1 / 1; }
+.gallery figcaption {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  padding: 0.5rem 0.7rem;
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface);
+  width: 100%;
+  text-align: center;
+}
+.gallery .illu { grid-template-rows: 1fr auto; place-items: stretch; }
+.gallery .illu svg { justify-self: center; align-self: center; width: 72%; padding: 1rem 0 0; }
+
+/* ---------------- Carte / menu ---------------- */
+.menu-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2.4rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.menu-nav a {
+  padding: 0.5rem 1.05rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--surface);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.menu-nav a:hover { background: var(--green); border-color: var(--green); color: #fff; }
+
+.menu-block { margin-bottom: 3rem; scroll-margin-top: 100px; }
+.menu-block h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 2px solid var(--green);
+  margin-bottom: 1.5rem;
+}
+.menu-block h2 .emoji { font-size: 1.4rem; }
+
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.1rem 3rem;
+}
+.menu > li { padding-bottom: 0.9rem; border-bottom: 1px dotted var(--line); }
+.menu-line { display: flex; align-items: baseline; gap: 0.7rem; }
+.menu-line .name { font-weight: 600; }
+.menu-line .dots { flex: 1; border-bottom: 1px dotted var(--line); transform: translateY(-3px); }
+.menu-line .price { font-variant-numeric: tabular-nums; font-weight: 600; color: var(--green); white-space: nowrap; }
+.menu-line .price.todo { color: var(--ink-faint); font-weight: 500; }
+.menu > li p { margin: 0.2rem 0 0; font-size: 0.9rem; color: var(--ink-soft); }
+
+.callout {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  padding: 1.1rem 1.3rem;
+  border: 1px solid rgba(182, 65, 47, 0.35);
+  background: rgba(182, 65, 47, 0.06);
+  border-radius: var(--radius);
+  margin-bottom: 2.4rem;
+}
+.callout .ico { color: var(--red); flex: none; margin-top: 3px; }
+.callout p { margin: 0; font-size: 0.92rem; }
+.callout strong { color: var(--red); }
+.callout-info { border-color: rgba(31, 77, 61, 0.3); background: rgba(31, 77, 61, 0.05); }
+.callout-info .ico { color: var(--green); }
+.callout-info strong { color: var(--green); }
+
+/* ---------------- Événements ---------------- */
+.events { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
+.event {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.event-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--line);
+  padding-right: 1rem;
+  text-align: center;
+}
+.event-date .day { font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; color: var(--red); line-height: 1; }
+.event-date .month { font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faint); }
+.event-body h3 { margin-bottom: 0.3rem; }
+.event-body p { color: var(--ink-soft); margin: 0 0 0.4rem; }
+.event-meta { font-size: 0.85rem; color: var(--green); font-weight: 600; }
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.empty-state .ico { color: var(--ink-faint); margin-bottom: 0.8rem; }
+.empty-state h3 { margin-bottom: 0.4rem; }
+.empty-state p { color: var(--ink-soft); max-width: 46ch; margin-inline: auto; }
+
+/* ---------------- Carte géographique & embeds ---------------- */
+.map-frame {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--paper-alt);
+  box-shadow: var(--shadow-sm);
+}
+.map-frame iframe { width: 100%; height: 380px; border: 0; display: block; }
+.map-caption {
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--line-soft);
+  background: var(--surface);
+  font-size: 0.86rem;
+  color: var(--ink-soft);
+}
+
+.embed-fb {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  padding: 1.2rem;
+  box-shadow: var(--shadow-sm);
+}
+.embed-fb iframe { width: 100%; height: 500px; border: 0; display: block; }
+.embed-fallback { font-size: 0.88rem; color: var(--ink-soft); margin: 0.9rem 0 0; }
+
+/* ---------------- Avis ---------------- */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  padding: 1.4rem 1.6rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+}
+.rating-score { font-family: var(--font-display); font-size: 3rem; font-weight: 700; line-height: 1; color: var(--green); }
+.rating-stars { color: var(--amber); font-size: 1.1rem; letter-spacing: 2px; }
+.rating-meta { font-size: 0.86rem; color: var(--ink-faint); }
+
+/* ---------------- Horaires ---------------- */
+.hours { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+.hours th, .hours td { padding: 0.5rem 0; text-align: left; font-weight: 400; border-bottom: 1px solid var(--line-soft); }
+.hours td { text-align: right; color: var(--ink-soft); }
+.hours tr:last-child th, .hours tr:last-child td { border-bottom: 0; }
+.hours tr.is-today th, .hours tr.is-today td { color: var(--red); font-weight: 700; }
+.hours tr.is-closed td { color: var(--ink-faint); }
+
+/* ---------------- QR code ---------------- */
+.qr-block {
+  display: grid;
+  grid-template-columns: 190px 1fr;
+  gap: 1.6rem;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  box-shadow: var(--shadow-sm);
+}
+.qr-block img { width: 100%; height: auto; border: 1px solid var(--line-soft); border-radius: 4px; background: #fff; padding: 8px; }
+.qr-block h3 { margin-bottom: 0.4rem; }
+
+/* ---------------- Formulaire ---------------- */
+.form {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: clamp(1.4rem, 4vw, 2rem);
+  box-shadow: var(--shadow-sm);
+}
+.field { margin-bottom: 1.1rem; }
+
+/* Champ-piège du formulaire de contact : retiré de l'affichage, du parcours
+   au clavier et de la restitution vocale, mais toujours présent dans le DOM
+   — c'est précisément ce qu'un robot à spam remplit. `display:none` seul
+   serait détecté par les plus soigneux d'entre eux. */
+.pot-de-miel {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+.optional { text-transform: none; letter-spacing: 0; font-weight: 400; color: var(--ink-faint); }
+
+.field input, .field select, .field textarea {
+  width: 100%;
+  padding: 0.75rem 0.9rem;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 0.96rem;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(31, 77, 61, 0.12);
+  outline: none;
+}
+.field input[aria-invalid="true"], .field textarea[aria-invalid="true"], .field select[aria-invalid="true"] { border-color: var(--red); }
+
+/* Hauteur réservée en permanence : afficher ou effacer un message ne doit
+   jamais décaler le bouton d'envoi sous le curseur de l'utilisateur. */
+.error { color: var(--red); font-size: 0.82rem; line-height: 1.3; margin: 0.35rem 0 0; min-height: 1.07rem; }
+
+.form-status { margin: 1rem 0 0; font-size: 0.92rem; font-weight: 500; }
+.form-status.is-ok { color: var(--ok); }
+.form-status.is-error { color: var(--red); }
+
+/* ---------------- Réseaux sociaux ---------------- */
+.socials { display: flex; flex-wrap: wrap; gap: 0.7rem; list-style: none; margin: 0; padding: 0; }
+.socials a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  background: var(--surface);
+  color: var(--ink);
+}
+.socials a:hover { border-color: var(--green); color: var(--green); }
+
+/* ---------------- Pied de page ---------------- */
+.site-footer {
+  background: var(--green);
+  color: #eae4d8;
+  padding: 3.2rem 0 2rem;
+  margin-top: 0;
+}
+.site-footer h3 { color: #fff; font-size: 1.05rem; margin-bottom: 0.8rem; }
+.site-footer a { color: #f0e9dc; }
+.site-footer a:hover { color: #fff; }
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 2rem;
+}
+.footer-brand { font-family: var(--font-display); font-size: 1.5rem; color: #fff; margin: 0 0 0.4rem; }
+.footer-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; font-size: 0.92rem; }
+.footer-list a { text-decoration: none; }
+.footer-list a:hover { text-decoration: underline; }
+.footer-legal {
+  margin-top: 2.4rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  font-size: 0.8rem;
+  color: rgba(234, 228, 216, 0.75);
+}
+.footer-legal p { margin: 0 0 0.4rem; }
+.site-footer .status { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.25); color: #f0e9dc; }
+
+/* ---------------- Apparition au défilement ---------------- */
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity 0.6s var(--ease), transform 0.6s var(--ease); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 1040px) {
+  .nav ul { gap: 1.1rem; }
+  .nav a { font-size: 0.88rem; }
+}
+
+@media (max-width: 900px) {
+  .hero-grid, .grid-2 { grid-template-columns: 1fr; }
+  .menu { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .qr-block { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  .qr-block img { max-width: 200px; }
+
+  .nav-toggle { display: block; }
+  .nav {
+    position: fixed;
+    inset: 78px 0 auto 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 1rem 1.25rem 1.6rem;
+    transform: translateY(-120%);
+    /* Fermé : masqué visuellement ET retiré du parcours clavier. */
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.32s var(--ease), visibility 0s linear 0.32s;
+    max-height: calc(100vh - 78px);
+    overflow-y: auto;
+  }
+  .nav.is-open {
+    transform: translateY(0);
+    visibility: visible;
+    pointer-events: auto;
+    transition: transform 0.32s var(--ease), visibility 0s;
+  }
+  .nav ul { flex-direction: column; align-items: stretch; gap: 0; }
+  .nav a:not(.btn) {
+    display: block;
+    padding: 0.85rem 0.25rem;
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 1.02rem;
+  }
+  .nav a:not(.btn)::after { display: none; }
+  .nav .btn { margin-top: 1rem; width: 100%; }
+
+  /* Dans le menu déplié, la bascule de langue reste une pastille : sans
+     cela elle s'étirerait sur toute la largeur comme les autres liens. */
+  .nav li:has(> .nav-langue) { padding: 0.6rem 0.25rem; }
+  .nav a.nav-langue {
+    display: inline-block;
+    border-bottom: 1px solid var(--line);
+    padding: 0.3rem 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .event { grid-template-columns: 1fr; gap: 0.8rem; }
+  .event-date {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+    justify-content: flex-start;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 0 0 0.7rem;
+  }
+  .field-row { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .gallery { grid-template-columns: 1fr; }
+  .hero-actions .btn { flex: 1 1 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* ---------------- Impression (la carte surtout) ---------------- */
+@media print {
+  .site-header, .nav, .site-footer, .menu-nav, .hero-actions, .callout, .qr-block, .map-frame, .embed-fb { display: none !important; }
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .menu { grid-template-columns: 1fr 1fr; gap: 0.5rem 2rem; }
+  .menu-block h2 { border-color: #000; }
+  a[href]::after { content: ""; }
+}
+
+/* ---------------- Galerie : photos et dépôt ---------------- */
+/* La vignette est une grille « image / légende » : l'image occupe la
+   première rangée sans écraser la légende de la seconde. */
+.gallery .illu-photo { grid-template-rows: 1fr auto; place-items: stretch; }
+.gallery .illu-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 0;          /* sans cela l'image impose sa hauteur et rogne la légende */
+  object-fit: cover;
+  padding: 0;
+}
+
+.btn-photo {
+  position: absolute;
+  left: 50%;
+  bottom: 3.2rem;
+  transform: translateX(-50%);
+  background: rgba(255, 253, 249, 0.94);
+  border: 1px solid var(--line);
+  color: var(--green);
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+.btn-photo:hover { background: var(--green); border-color: var(--green); color: #fff; }
+.gallery .illu { position: relative; }
+
+/* Fenêtre de dépôt d'une photo */
+.depot-fond {
+  position: fixed;
+  inset: 0;
+  background: rgba(35, 32, 28, 0.55);
+  display: grid;
+  place-items: center;
+  padding: 1.25rem;
+  z-index: 200;
+}
+.depot {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: clamp(1.3rem, 4vw, 2rem);
+  width: min(100%, 460px);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+.depot h2 { margin-bottom: 0.5rem; }
+.depot input[type="file"] { padding: 0.5rem; background: var(--paper-alt); }
+.depot-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
+.depot-actions .btn { flex: 1; }
+.depot-statut:empty { display: none; }
+
+/* Entrée « Compte » du menu : discrète, réservée au bar. */
+.nav a.nav-compte { color: var(--ink-faint); font-size: 0.86rem; }
+.nav a.nav-compte:hover { color: var(--green); }
+
+/* Bascule français / anglais : discrète, mais reconnaissable au premier
+   coup d'œil grâce au cadre. */
+.nav a.nav-langue {
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.18rem 0.6rem;
+}
+.nav a.nav-langue:hover { color: var(--green); border-color: var(--green); }
+.nav a.nav-langue::after { display: none; }
+
+/* Bandeau réservé à l'administrateur connecté.
+   La règle [hidden] doit être répétée : un `display` posé par une classe
+   l'emporte sur celle de la feuille du navigateur, et l'élément resterait
+   visible malgré l'attribut. */
+.bandeau-admin[hidden] { display: none; }
+.bandeau-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.3rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(31, 77, 61, 0.3);
+  background: rgba(31, 77, 61, 0.06);
+  border-radius: var(--radius);
+}
+.bandeau-admin p { margin: 0; font-size: 0.92rem; }
+.bandeau-admin strong { color: var(--green); }
+
+/* Séparation visuelle entre les pages, propre à l'aperçu. */
+section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line); }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#contenu">Aller au contenu principal</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="#page-accueil">
+<span aria-hidden="true" class="brand-mark">
+<svg fill="none" height="28" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" viewbox="0 0 24 24" width="28">
+<path d="M3 8h14v6a5 5 0 01-5 5H8a5 5 0 01-5-5z"></path>
+<path d="M17 10h2a2.5 2.5 0 010 5h-2"></path>
+<path d="M6 4.5V3M10 4.5V3M14 4.5V3"></path>
+</svg>
+</span>
+<span class="brand-text">
+<span class="brand-name">Le P’tit Ravisé</span>
+<span class="brand-sub">Bar · Tabac · Rouen</span>
+</span>
+</a>
+<button aria-controls="nav" aria-expanded="false" aria-label="Ouvrir le menu" class="nav-toggle" id="navToggle">
+<span class="nav-toggle-bar"></span>
+</button>
+<nav aria-label="Navigation principale" class="nav" id="nav">
+<ul>
+<li><a href="#page-accueil">Accueil</a></li>
+<li><a href="#page-carte">La carte</a></li>
+<li><a href="#page-le-bar">Le bar</a></li>
+<li><a href="#page-evenements">Événements</a></li>
+<li><a href="#page-infos">Infos pratiques</a></li>
+<li><a href="#page-contact">Contact</a></li>
+<li><a class="nav-langue" href="en/index.html" hreflang="en" lang="en">English</a></li>
+<li><a class="nav-compte" href="admin/" id="lienCompte">Compte</a></li>
+<li><a class="btn btn-small" href="tel:+33235716679">02 35 71 66 79</a></li>
+</ul>
+</nav>
+</div>
+</header>
+<main id="contenu">
+<section id="page-accueil"><main>
+<!-- ================= ACCUEIL ================= -->
+<section class="hero">
+<div class="wrap hero-grid">
+<div>
+<p class="eyebrow">Bar-tabac · Centre-ville de Rouen</p>
+<h1>Le P’tit Ravisé</h1>
+<p class="hero-tagline">Le café du matin, le verre de midi, la terrasse au soleil.</p>
+<p class="lead">Un bar de quartier comme on n'en fait plus beaucoup, en plein centre-ville
+            de Rouen : on y entre pour un express au comptoir, on y reste pour la terrasse. Tabac,
+            Française des Jeux et visages connus depuis l'ouverture des portes à 7 h.</p>
+<div class="hero-actions">
+<a class="btn" href="#page-carte">Voir la carte</a>
+<a class="btn btn-red" href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" rel="noopener noreferrer" target="_blank">
+<svg aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="17">
+<path d="M3 11l19-9-9 19-2-8z"></path>
+</svg>
+              Itinéraire
+            </a>
+<a class="btn btn-outline" href="tel:+33235716679">Appeler</a>
+</div>
+<ul class="hero-facts">
+<li>
+<span aria-hidden="true" class="ico">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+</span>
+<span>14 rue des Bons-Enfants, 76000 Rouen</span>
+</li>
+<li>
+<span aria-hidden="true" class="ico">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+</span>
+<span>Lundi au vendredi 7 h – 20 h · Samedi 8 h 30 – 20 h · Fermé le dimanche</span>
+</li>
+<li>
+<span aria-hidden="true" class="ico">
+<svg fill="none" height="18" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="18"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"></path></svg>
+</span>
+<span><a href="tel:+33235716679">02 35 71 66 79</a></span>
+</li>
+</ul>
+<p class="status" data-status="" style="margin-top:1.4rem">
+<span class="dot"></span><span class="status-text">Horaires en cours de chargement…</span>
+</p>
+</div>
+<div>
+<figure aria-label="Illustration de la devanture du bar : store, terrasse et enseigne tabac" class="illu illu-devanture" data-emplacement="devanture" role="img">
+<template data-illustration="devanture">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.4" viewbox="0 0 480 380">
+<!-- façade -->
+<path d="M64 40h352v260H64z"></path>
+<path d="M64 40l24-22h304l24 22" opacity=".6"></path>
+<!-- store rayé -->
+<path d="M46 158l26-46h336l26 46z"></path>
+<path d="M98 112l-14 46M146 112l-9 46M194 112l-5 46M242 112v46M290 112l5 46M338 112l9 46M386 112l14 46" opacity=".45"></path>
+<path d="M46 158h388"></path>
+<!-- vitrine et porte -->
+<path d="M96 190h108v88H96zM236 190h68v110h-68z"></path>
+<path d="M96 234h108M150 190v88" opacity=".4"></path>
+<circle cx="248" cy="248" r="4"></circle>
+<path d="M330 190h54v58h-54z" opacity=".8"></path>
+<!-- enseigne « carotte » tabac -->
+<path d="M404 66v18"></path>
+<path d="M404 84c9 0 15 6 15 15v14c0 9-6 15-15 15s-15-6-15-15v-14c0-9 6-15 15-15z"></path>
+<!-- sol et terrasse -->
+<path d="M20 300h440"></path>
+<ellipse cx="120" cy="318" rx="34" ry="8"></ellipse>
+<path d="M120 326v34M104 360h32"></path>
+<path d="M60 316v30M52 346h16M60 316q-12-2-12-14"></path>
+<ellipse cx="382" cy="318" opacity=".75" rx="30" ry="7"></ellipse>
+<path d="M382 325v34M368 359h28" opacity=".75"></path>
+</svg>
+</template>
+</figure>
+</div>
+</div>
+</section>
+<!-- ================= APERÇU DES PAGES ================= -->
+<section class="section section-alt">
+<div class="wrap">
+<div class="section-head reveal">
+<p class="eyebrow">En deux mots</p>
+<h2>Ce que vous trouverez ici</h2>
+</div>
+<div class="cards">
+<a class="card card-link reveal" href="#page-carte">
+<h3>🍺 La carte</h3>
+<p>Bières, cocktails, softs, boissons chaudes et de quoi grignoter.</p>
+</a>
+<a class="card card-link reveal" href="#page-le-bar">
+<h3>🪑 Le bar</h3>
+<p>L'ambiance, la terrasse et l'histoire du lieu.</p>
+</a>
+<a class="card card-link reveal" href="#page-evenements">
+<h3>📅 Événements</h3>
+<p>Retransmissions et soirées annoncées au fil de l'eau.</p>
+</a>
+<a class="card card-link reveal" href="#page-infos">
+<h3>📍 Infos pratiques</h3>
+<p>Plan, horaires, transports et stationnement à proximité.</p>
+</a>
+</div>
+</div>
+</section>
+<!-- ================= PRÉSENTATION ================= -->
+<section class="section">
+<div class="wrap grid-2">
+<div class="reveal">
+<p class="eyebrow">Le lieu</p>
+<h2>Un bar convivial au centre-ville de Rouen, à deux pas du Vieux-Marché</h2>
+<p>Le P’tit Ravisé, c'est d'abord un comptoir : celui où l'on prend son café debout avant
+            le travail, où l'on achète son paquet et sa grille, où l'on discute avec le patron sans
+            avoir besoin de commander quoi que ce soit.</p>
+<p>La rue des Bons-Enfants est l'une des plus anciennes du centre de Rouen, à quelques pas
+            de la rue Jeanne d'Arc, du Gros-Horloge et de la place du Vieux-Marché. Un bar avec
+            terrasse, donc, dans le quartier Vieux-Marché – Cathédrale : la table au soleil dès
+            qu'il pointe, et l'ombre du store le reste du temps.</p>
+<p>À pied, on y est en quelques minutes depuis le métro Palais de Justice comme depuis
+            le Théâtre des Arts.</p>
+<p><a class="btn btn-outline" href="#page-le-bar">Découvrir le bar</a></p>
+</div>
+<div class="reveal">
+<div class="card">
+<h3>Les horaires</h3>
+<table class="hours">
+<tbody>
+<tr data-day="1"><th scope="row">Lundi</th><td>7 h – 20 h</td></tr>
+<tr data-day="2"><th scope="row">Mardi</th><td>7 h – 20 h</td></tr>
+<tr data-day="3"><th scope="row">Mercredi</th><td>7 h – 20 h</td></tr>
+<tr data-day="4"><th scope="row">Jeudi</th><td>7 h – 20 h</td></tr>
+<tr data-day="5"><th scope="row">Vendredi</th><td>7 h – 20 h</td></tr>
+<tr data-day="6"><th scope="row">Samedi</th><td>8 h 30 – 20 h</td></tr>
+<tr class="is-closed" data-day="0"><th scope="row">Dimanche</th><td>Fermé</td></tr>
+</tbody>
+</table>
+<p class="note" style="margin-top:1rem">Jours fériés et fermetures exceptionnelles :
+              un appel évite le déplacement.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= AVIS ================= -->
+<section class="section section-alt">
+<div class="wrap wrap-narrow center">
+<p class="eyebrow reveal">Ce qu'en disent les clients</p>
+<h2 class="reveal">4,6 sur 5 sur Google</h2>
+<div class="rating reveal" style="justify-content:center;margin-top:1.6rem">
+<span class="rating-score">4,6</span>
+<div style="text-align:left">
+<div aria-hidden="true" class="rating-stars">★★★★★</div>
+<p class="rating-meta" style="margin:0">D'après une cinquantaine d'avis publiés sur
+              Google — note relevée en août 2026.</p>
+</div>
+</div>
+<p style="margin-top:1.6rem">
+<a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Le%20P%27tit%20Ravis%C3%A9%2C%2014%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen" rel="noopener noreferrer" target="_blank">Lire ou laisser un avis</a>
+</p>
+</div>
+</section>
+</main></section><section id="page-carte"><div class="page-head">
+<div class="wrap">
+<p class="breadcrumb"><a href="#page-accueil">Accueil</a> · La carte</p>
+<h1>La carte du P’tit Ravisé, bar à Rouen</h1>
+<p class="lead">Ce qu'on sert au comptoir et en terrasse, du café de 7 h au dernier demi
+        avant la fermeture.</p>
+</div>
+</div><main class="section">
+<div class="wrap">
+<!-- Visible uniquement lorsqu'une session d'administration est ouverte
+           (voir js/main.js et admin/session.php). -->
+<div class="bandeau-admin" data-si-connecte="" hidden="">
+<p><strong>Vous êtes connecté.</strong> La carte se modifie depuis la console :
+          rubriques, intitulés, descriptions, et les prix si vous souhaitez les afficher.</p>
+<a class="btn btn-small" href="admin/?onglet=carte">Modifier la carte</a>
+</div>
+<nav aria-label="Catégories de la carte" class="menu-nav" id="carte-nav"></nav>
+<p class="note" id="carte-mention" style="margin:-1.2rem 0 2.4rem"></p>
+<!-- La carte est rendue par js/main.js à partir de js/donnees.js,
+           modifiable depuis la console d'administration (admin.html). -->
+<div id="carte"></div>
+<noscript>
+<div class="callout">
+<p>La carte s'affiche avec JavaScript activé. Sans lui, appelez le
+            <a href="tel:+33235716679">02 35 71 66 79</a> ou passez au comptoir :
+            l'ardoise fait foi.</p>
+</div>
+</noscript>
+<div class="callout callout-info">
+<span aria-hidden="true" class="ico">
+<svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="12" cy="12" r="9"></circle><path d="M12 16v-5M12 7.5v.01"></path></svg>
+</span>
+<p><strong>Au comptoir également :</strong> tabac et Française des Jeux.
+          Allergènes et provenance des produits sur demande auprès du bar.</p>
+</div>
+<p class="note" style="margin-top:1.6rem">On sert la même carte en salle et sur
+        <a href="#page-le-bar">la terrasse du bar</a>. Pour venir :
+        <a href="#page-infos">horaires et accès rue des Bons-Enfants</a>, en plein centre-ville
+        de Rouen.</p>
+<!-- ================= QR CODE ================= -->
+<section style="margin-top:3rem">
+<div class="qr-block">
+<img alt="QR code renvoyant vers la carte du bar" height="190" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOTYiIGhlaWdodD0iMjk2IiBjbGFzcz0ic2Vnbm8iPjxnIHRyYW5zZm9ybT0ic2NhbGUoOCkiPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMzd2MzdoLTM3eiIvPjxwYXRoIGNsYXNzPSJxcmxpbmUiIHN0cm9rZT0iIzFmNGQzZCIgZD0iTTIgMi41aDdtMSAwaDFtMiAwaDFtMSAwaDNtMSAwaDFtMSAwaDNtMSAwaDFtMiAwaDdtLTMzIDFoMW01IDBoMW0yIDBoM204IDBoMW0zIDBoMW0xIDBoMW01IDBoMW0tMzMgMWgxbTEgMGgzbTEgMGgxbTIgMGgybTQgMGgxbTUgMGg0bTEgMGgxbTEgMGgzbTEgMGgxbS0zMyAxaDFtMSAwaDNtMSAwaDFtMyAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMSAwaDFtLTMzIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoM20xIDBoMm0yIDBoNG0xIDBoMW0yIDBoMW0xIDBoM20xIDBoMW0tMzMgMWgxbTUgMGgxbTEgMGgzbTEgMGgzbTYgMGgxbTQgMGgxbTUgMGgxbS0zMyAxaDdtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDdtLTIzIDFoMm0zIDBoMW0yIDBoMW0xIDBoNG0tMjMgMWg3bTEgMGgybTEgMGgybTEgMGgxbTEgMGgxbTQgMGgzbTIgMGgybTMgMGgxbS0zMyAxaDFtMiAwaDNtMiAwaDFtMyAwaDFtMiAwaDNtMSAwaDVtMiAwaDJtMSAwaDJtMSAwaDFtLTMxIDFoMW0yIDBoM20xIDBoMW0yIDBoMW0zIDBoMW00IDBoMW02IDBoMW0xIDBoMm0tMzIgMWgxbTIgMGgzbTEgMGgxbTIgMGgxbTMgMGgxbTEgMGgxbTEgMGgxbTEgMGgzbTMgMGgxbTEgMGgzbTEgMGgxbS0zMiAxaDFtMiAwaDFtMSAwaDJtNSAwaDJtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMiAwaDNtMSAwaDFtLTMwIDFoNG00IDBoMm02IDBoN20xIDBoMW00IDBoMm0tMzAgMWg0bTIgMGgzbTEgMGgxbTEgMGgzbTcgMGg3bS0zMiAxaDNtMiAwaDFtMSAwaDFtMyAwaDFtMiAwaDNtNCAwaDFtMyAwaDJtMSAwaDNtLTI5IDFoMW0xIDBoMW0xIDBoNW0xIDBoMW0xIDBoMm0yIDBoM20xIDBoNG0xIDBoM20yIDBoMW0tMzIgMWgxbTIgMGgxbTIgMGgybTEgMGgxbTEgMGgybTEgMGgybTIgMGgzbTEgMGg1bTEgMGg0bS0zMSAxaDNtMSAwaDJtNCAwaDJtMyAwaDJtMSAwaDFtNCAwaDRtMSAwaDJtLTMwIDFoMm0xIDBoMW0yIDBoMm0xIDBoMW0xIDBoMm01IDBoMm00IDBoNm0tMzIgMWgxbTEgMGgxbTIgMGg0bTUgMGgybTEgMGgybTMgMGg0bTEgMGgzbS0zMCAxaDNtNiAwaDFtNCAwaDRtMSAwaDJtMSAwaDJtMiAwaDFtMyAwaDFtMSAwaDFtLTMzIDFoMW0yIDBoMW0yIDBoNW0xIDBoMW0yIDBoMm0xIDBoMW0yIDBoMm0zIDBoMm0xIDBoMW0xIDBoMW0tMzIgMWgxbTMgMGgybTUgMGgzbTEgMGg3bTEgMGgxbTMgMGgxbTIgMGgxbTEgMGgxbS0zMyAxaDFtMyAwaDFtMSAwaDFtMSAwaDFtMSAwaDJtMSAwaDJtMSAwaDFtMiAwaDFtMiAwaDdtMiAwaDJtLTI1IDFoNG0xIDBoMm0yIDBoNW0yIDBoMW0zIDBoMW0xIDBoMW0xIDBoMW0tMzMgMWg3bTEgMGgzbTYgMGgxbTMgMGg0bTEgMGgxbTEgMGgxbTEgMGgybS0zMiAxaDFtNSAwaDFtMSAwaDJtMSAwaDFtMSAwaDFtMiAwaDFtNCAwaDFtMiAwaDFtMyAwaDNtMSAwaDFtLTMzIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0yIDBoMW0xIDBoNG0xIDBoMW0zIDBoMW0xIDBoNm0tMzAgMWgxbTEgMGgzbTEgMGgxbTEgMGgzbTMgMGgxbTIgMGgxbTEgMGgxbTEgMGgxbTMgMGgxbTIgMGgybTIgMGgxbS0zMyAxaDFtMSAwaDNtMSAwaDFtMSAwaDRtMSAwaDJtMSAwaDJtMiAwaDRtMiAwaDJtMSAwaDJtLTMxIDFoMW01IDBoMW0xIDBoNG0xIDBoMm01IDBoM201IDBoM20tMzEgMWg3bTQgMGgxbTEgMGg0bTEgMGgxbTEgMGgxbTEgMGg2bTEgMGgxbTEgMGgxIi8+PC9nPjwvc3ZnPgo=" width="190"/>
+<div>
+<h3>La carte sur votre téléphone</h3>
+<p>Scannez ce code avec l'appareil photo de votre téléphone : la carte s'ouvre
+              directement, sans rien installer.</p>
+<p style="margin-bottom:0">Pratique aussi en terrasse, quand l'ardoise est loin.</p>
+</div>
+</div>
+</section>
+</div>
+</main></section><section id="page-le-bar"><div class="page-head">
+<div class="wrap">
+<p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Le bar</p>
+<h1>Un bar avec terrasse au centre-ville de Rouen</h1>
+<p class="lead">Un comptoir, une terrasse ensoleillée, un buraliste et beaucoup d'habitués, au centre-ville de Rouen.</p>
+</div>
+</div><main>
+<!-- ================= CONCEPT ================= -->
+<section class="section">
+<div class="wrap grid-2">
+<div class="reveal">
+<p class="eyebrow">L'esprit de la maison</p>
+<h2>Un bar convivial, ouvert dès 7 h</h2>
+<p>Le P’tit Ravisé n'a pas de concept : il a des habitudes. Le café serré avalé au comptoir
+            avant d'aller travailler. Le journal parcouru sur un coin de table. La grille validée
+            entre deux gorgées. Le demi de fin d'après-midi, quand la lumière tourne sur la rue.</p>
+<p>C'est un bar-tabac, au sens le plus complet du terme : on y vient pour boire, mais aussi
+            pour acheter son paquet, tenter sa chance à la Française des Jeux, ou simplement dire
+            bonjour à quelqu'un.</p>
+<p>La terrasse fait le reste. Dès que le soleil passe au-dessus des toits, les tables se
+            remplissent — et la conversation avec. C'est l'une des rares terrasses calmes du
+            centre-ville de Rouen : la rue est passante sans être bruyante.</p>
+</div>
+<div class="reveal">
+<figure aria-label="Illustration : une tasse de café et un journal sur le comptoir" class="illu" data-emplacement="ambiance" role="img" style="aspect-ratio:4/3">
+<template data-illustration="ambiance">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 400 300">
+<!-- journal -->
+<path d="M40 128h150v122H40z" opacity=".85"></path>
+<path d="M56 150h60M56 168h118M56 186h118M56 204h118M56 222h80" opacity=".45"></path>
+<!-- tasse -->
+<path d="M214 150h108v52a34 34 0 01-34 34h-40a34 34 0 01-34-34z"></path>
+<path d="M322 162h14a22 22 0 010 44h-14"></path>
+<ellipse cx="268" cy="250" opacity=".5" rx="72" ry="10"></ellipse>
+<!-- vapeur -->
+<path d="M244 122q10-12 0-24t0-24M268 118q10-12 0-24t0-20M292 122q10-12 0-24t0-24" opacity=".55"></path>
+<!-- cuillère -->
+<path d="M348 214v-38" opacity=".7"></path>
+<ellipse cx="348" cy="164" opacity=".7" rx="9" ry="13"></ellipse>
+</svg>
+</template>
+</figure>
+</div>
+</div>
+</section>
+<!-- ================= LE QUARTIER ================= -->
+<section class="section section-alt">
+<div class="wrap">
+<div class="section-head reveal">
+<p class="eyebrow">Le lieu</p>
+<h2>Rue des Bons-Enfants</h2>
+</div>
+<div class="grid-2 top">
+<div class="reveal">
+<p>La rue des Bons-Enfants est l'une des vieilles rues du centre de Rouen, dans le
+              quartier Vieux-Marché – Cathédrale. Elle relie le cœur commerçant aux abords du
+              musée des Beaux-Arts, à quelques minutes à pied du Gros-Horloge et de la place du
+              Vieux-Marché.</p>
+<p>C'est un quartier de passage et de résidents à la fois : employés du centre-ville le
+              matin, promeneurs l'après-midi, riverains toute l'année. Le bar vit à ce rythme-là,
+              du lundi au samedi.</p>
+</div>
+<div class="reveal">
+<div class="card">
+<h3>En bref</h3>
+<ul class="footer-list" style="color:var(--ink-soft)">
+<li><strong>Adresse :</strong> 14 rue des Bons-Enfants, 76000 Rouen</li>
+<li><strong>Quartier :</strong> Vieux-Marché – Cathédrale</li>
+<li><strong>Ouvert :</strong> lundi au vendredi 7 h – 20 h, samedi 8 h 30 – 20 h</li>
+<li><strong>Fermé :</strong> le dimanche</li>
+<li><strong>Services :</strong> bar, tabac, Française des Jeux, terrasse</li>
+</ul>
+<p style="margin:1.2rem 0 0"><a class="btn btn-outline btn-small" href="#page-infos">Plan et accès</a></p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ================= GALERIE ================= -->
+<section class="section">
+<div class="wrap">
+<div class="section-head reveal">
+<p class="eyebrow">En images</p>
+<h2>Quelques photos</h2>
+</div>
+<!-- La galerie est rendue par js/main.js à partir de js/donnees.js.
+             Tant qu'un emplacement n'a pas de photo, l'illustration ci-dessous
+             sert de remplacement et un bouton permet d'en déposer une. -->
+<div class="gallery" id="galerie"></div>
+<template data-illustration="comptoir">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
+<!-- étagère et bouteilles -->
+<path d="M28 74h144" opacity=".6"></path>
+<path d="M52 74V52q0-6 5-8v-8h9v8q5 2 5 8v22zM84 74V48q0-6 5-8v-7h9v7q5 2 5 8v26zM118 74V56q0-6 5-8v-7h9v7q5 2 5 8v18z"></path>
+<!-- comptoir -->
+<path d="M22 96h156v14H22z"></path>
+<path d="M34 110v26M166 110v26" opacity=".5"></path>
+<!-- tabourets -->
+<path d="M58 132h32M74 138v34M62 172h24"></path>
+<path d="M112 132h32M128 138v34M116 172h24"></path>
+</svg>
+</template>
+<template data-illustration="terrasse">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
+<circle cx="150" cy="46" opacity=".7" r="18"></circle>
+<path d="M150 16v-8M150 84v-8M180 46h8M112 46h8M171 25l6-6M129 67l-6 6M171 67l6 6M129 25l-6-6" opacity=".45"></path>
+<ellipse cx="86" cy="108" rx="56" ry="12"></ellipse>
+<path d="M86 120v50M62 170h48"></path>
+<path d="M34 118v46M24 164h20M34 118q-14-4-14-16" opacity=".75"></path>
+</svg>
+</template>
+<template data-illustration="tabac">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
+<path d="M100 26v18"></path>
+<path d="M100 44c13 0 21 9 21 22v34c0 13-8 22-21 22s-21-9-21-22V66c0-13 8-22 21-22z"></path>
+<path d="M79 78h42M79 100h42" opacity=".45"></path>
+<path d="M44 140h112v34H44z" opacity=".8"></path>
+<path d="M58 154h36M58 164h64" opacity=".45"></path>
+</svg>
+</template>
+<template data-illustration="demi">
+<svg aria-hidden="true" fill="none" focusable="false" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.6" viewbox="0 0 200 200">
+<path d="M62 60h68l-6 106a8 8 0 01-8 7H76a8 8 0 01-8-7z"></path>
+<path d="M64 92h64" opacity=".5"></path>
+<path d="M62 60q10-14 22-6t22-2 24 8" opacity=".8"></path>
+<path d="M130 78h16a16 16 0 010 32h-14"></path>
+</svg>
+</template>
+</div>
+</section>
+<!-- ================= VENIR ================= -->
+<section class="section section-alt">
+<div class="wrap wrap-narrow center">
+<p class="eyebrow reveal">Passer nous voir</p>
+<h2 class="reveal">Le café est prêt dès 7 h</h2>
+<p class="lead reveal" style="margin-inline:auto">Du lundi au vendredi de 7 h à 20 h,
+          le samedi de 8 h 30 à 20 h.
+          Pas besoin de réserver : il y a presque toujours une place au comptoir.</p>
+<p class="status reveal" data-status="" style="margin:1.6rem 0">
+<span class="dot"></span><span class="status-text">Horaires…</span>
+</p>
+<div class="hero-actions reveal" style="justify-content:center">
+<a class="btn" href="#page-carte">Voir la carte</a>
+<a class="btn btn-outline" href="#page-infos">Plan et accès</a>
+</div>
+</div>
+</section>
+</main></section><section id="page-evenements"><div class="page-head">
+<div class="wrap">
+<p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Événements</p>
+<h1>Événements et soirées du bar, à Rouen</h1>
+<p class="lead">Les rendez-vous annoncés par le bar. Les dates passées disparaissent
+        automatiquement de cette page.</p>
+</div>
+</div><main class="section">
+<div class="wrap">
+<!-- Le calendrier est rendu par js/main.js à partir de js/evenements.js -->
+<div class="reveal" id="events">
+<noscript>
+<div class="empty-state">
+<h3>Agenda indisponible sans JavaScript</h3>
+<p>Les prochaines dates sont annoncées sur la page Facebook du bar, ou par téléphone
+              au 02 35 71 66 79.</p>
+</div>
+</noscript>
+</div>
+<!-- ================= FACEBOOK ================= -->
+<section class="section" style="padding-bottom:0">
+<div class="section-head reveal">
+<p class="eyebrow">En direct</p>
+<h2>La page Facebook du bar</h2>
+<p class="lead">C'est là que l'actualité se publie au jour le jour. Le fil ci-dessous est
+            celui de la page officielle.</p>
+</div>
+<div class="embed-fb reveal">
+<iframe allow="clipboard-write; encrypted-media; picture-in-picture; web-share" loading="lazy" scrolling="no" src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2F100057174890968&amp;tabs=timeline&amp;width=500&amp;height=500&amp;small_header=false&amp;adapt_container_width=true&amp;hide_cover=false&amp;show_facepile=true" title="Fil d'actualité Facebook du P’tit Ravisé">
+</iframe>
+<p class="embed-fallback">Le fil ne s'affiche pas ? Facebook bloque parfois l'affichage
+            intégré selon le navigateur ou le type de page.
+            <a href="https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/" rel="noopener noreferrer" target="_blank">Ouvrir la page Facebook directement</a>.</p>
+</div>
+<p class="note" style="margin-top:2rem">Avant de venir, jetez un œil à
+          <a href="#page-carte">la carte</a> et aux
+          <a href="#page-infos">horaires du bar, rue des Bons-Enfants à Rouen</a>.
+          Une soirée à proposer ? <a href="#page-contact">Écrivez-nous</a>.</p>
+</section>
+</div>
+</main></section><section id="page-infos"><div class="page-head">
+<div class="wrap">
+<p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Infos pratiques</p>
+<h1>Horaires et accès — 14 rue des Bons-Enfants, Rouen</h1>
+<p class="lead">Où nous trouver, quand venir, comment s'y rendre et où se garer.</p>
+</div>
+</div><main class="section">
+<div class="wrap">
+<!-- ================= ADRESSE & PLAN ================= -->
+<div class="grid-2 top">
+<div class="reveal">
+<p class="eyebrow">📍 Adresse</p>
+<h2>14 rue des Bons-Enfants</h2>
+<p class="lead">76000 Rouen — quartier Vieux-Marché – Cathédrale.</p>
+<p class="status" data-status="" style="margin:1.2rem 0">
+<span class="dot"></span><span class="status-text">Horaires…</span>
+</p>
+<div class="hero-actions" style="margin-top:1.2rem">
+<a class="btn btn-red" href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" rel="noopener noreferrer" target="_blank">
+<svg aria-hidden="true" fill="none" height="17" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="17"><path d="M3 11l19-9-9 19-2-8z"></path></svg>
+              Itinéraire — Google Maps
+            </a>
+<a class="btn btn-outline" href="https://maps.apple.com/?daddr=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" rel="noopener noreferrer" target="_blank">Plans (Apple)</a>
+<a class="btn btn-outline" href="https://www.waze.com/ul?q=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen&amp;navigate=yes" rel="noopener noreferrer" target="_blank">Waze</a>
+</div>
+</div>
+<div class="reveal">
+<div class="map-frame">
+<iframe loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=1.0852%2C49.4424%2C1.0932%2C49.4464&amp;layer=mapnik" title="Plan du quartier de la rue des Bons-Enfants à Rouen"></iframe>
+<p class="map-caption">Plan du quartier (OpenStreetMap). Le bar se situe rue des
+              Bons-Enfants, au numéro 14 — utilisez le bouton <em>Itinéraire</em> pour une
+              navigation porte-à-porte exacte.
+              <a href="https://www.openstreetmap.org/search?query=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen" rel="noopener noreferrer" target="_blank">Ouvrir le plan en grand</a>
+              si la carte ne s'affiche pas.</p>
+</div>
+</div>
+</div>
+<!-- ================= HORAIRES / TÉLÉPHONE / SERVICES ================= -->
+<section class="section" style="padding-bottom:0">
+<div class="cards">
+<div class="card reveal">
+<h3>🕐 Horaires</h3>
+<table class="hours">
+<tbody>
+<tr data-day="1"><th scope="row">Lundi</th><td>7 h – 20 h</td></tr>
+<tr data-day="2"><th scope="row">Mardi</th><td>7 h – 20 h</td></tr>
+<tr data-day="3"><th scope="row">Mercredi</th><td>7 h – 20 h</td></tr>
+<tr data-day="4"><th scope="row">Jeudi</th><td>7 h – 20 h</td></tr>
+<tr data-day="5"><th scope="row">Vendredi</th><td>7 h – 20 h</td></tr>
+<tr data-day="6"><th scope="row">Samedi</th><td>8 h 30 – 20 h</td></tr>
+<tr class="is-closed" data-day="0"><th scope="row">Dimanche</th><td>Fermé</td></tr>
+</tbody>
+</table>
+<p class="note" style="margin-top:1rem">Jours fériés et fermetures exceptionnelles :
+              un appel évite le déplacement.</p>
+</div>
+<div class="card reveal">
+<h3>📞 Téléphone</h3>
+<p style="font-size:1.2rem;font-weight:600"><a href="tel:+33235716679">02 35 71 66 79</a></p>
+<p>Pour une question rapide, une réservation de table ou vérifier une ouverture,
+              le téléphone reste le plus sûr.</p>
+<h3 style="margin-top:1.6rem">Services</h3>
+<p>Bar · Tabac · Française des Jeux · Terrasse</p>
+</div>
+<div class="card reveal">
+<h3>🚇 Transports</h3>
+<p>Le bar est en plein centre de Rouen, dans le secteur du Vieux-Marché : tout se fait
+              à pied depuis les arrêts du centre.</p>
+<ul class="footer-list" style="color:var(--ink-soft)">
+<li><strong>Métro :</strong> Palais de Justice ou Théâtre des Arts</li>
+<li><strong>TEOR T1, T2, T3 :</strong> Théâtre des Arts</li>
+<li><strong>À pied :</strong> quelques minutes depuis le Gros-Horloge</li>
+</ul>
+<p class="note" style="margin-top:1rem">Distances indicatives, à confirmer selon votre
+              point de départ.</p>
+</div>
+<div class="card reveal">
+<h3>🅿️ Stationnement</h3>
+<p>Le centre est très majoritairement piéton : mieux vaut viser un parking souterrain
+              puis finir à pied.</p>
+<ul class="footer-list" style="color:var(--ink-soft)">
+<li><strong>Palais de Justice</strong> — le plus grand du centre</li>
+<li><strong>Vieux-Marché</strong> — au pied de la place</li>
+<li><strong>P+R</strong> en périphérie, avec titre de transport</li>
+</ul>
+<p class="note" style="margin-top:1rem">Tarifs et horaires des parkings à vérifier
+              auprès des exploitants.</p>
+</div>
+</div>
+</section>
+<!-- ================= QR / CARTE MOBILE ================= -->
+<section class="section" style="padding-bottom:0">
+<div class="section-head reveal">
+<p class="eyebrow">Sur place</p>
+<h2>La carte au format téléphone</h2>
+</div>
+<div class="qr-block reveal">
+<img alt="QR code renvoyant vers la carte du bar" height="190" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyOTYiIGhlaWdodD0iMjk2IiBjbGFzcz0ic2Vnbm8iPjxnIHRyYW5zZm9ybT0ic2NhbGUoOCkiPjxwYXRoIGZpbGw9IiNmZmYiIGQ9Ik0wIDBoMzd2MzdoLTM3eiIvPjxwYXRoIGNsYXNzPSJxcmxpbmUiIHN0cm9rZT0iIzFmNGQzZCIgZD0iTTIgMi41aDdtMSAwaDFtMiAwaDFtMSAwaDNtMSAwaDFtMSAwaDNtMSAwaDFtMiAwaDdtLTMzIDFoMW01IDBoMW0yIDBoM204IDBoMW0zIDBoMW0xIDBoMW01IDBoMW0tMzMgMWgxbTEgMGgzbTEgMGgxbTIgMGgybTQgMGgxbTUgMGg0bTEgMGgxbTEgMGgzbTEgMGgxbS0zMyAxaDFtMSAwaDNtMSAwaDFtMyAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDFtMiAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMSAwaDFtLTMzIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0xIDBoM20xIDBoMm0yIDBoNG0xIDBoMW0yIDBoMW0xIDBoM20xIDBoMW0tMzMgMWgxbTUgMGgxbTEgMGgzbTEgMGgzbTYgMGgxbTQgMGgxbTUgMGgxbS0zMyAxaDdtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDdtLTIzIDFoMm0zIDBoMW0yIDBoMW0xIDBoNG0tMjMgMWg3bTEgMGgybTEgMGgybTEgMGgxbTEgMGgxbTQgMGgzbTIgMGgybTMgMGgxbS0zMyAxaDFtMiAwaDNtMiAwaDFtMyAwaDFtMiAwaDNtMSAwaDVtMiAwaDJtMSAwaDJtMSAwaDFtLTMxIDFoMW0yIDBoM20xIDBoMW0yIDBoMW0zIDBoMW00IDBoMW02IDBoMW0xIDBoMm0tMzIgMWgxbTIgMGgzbTEgMGgxbTIgMGgxbTMgMGgxbTEgMGgxbTEgMGgxbTEgMGgzbTMgMGgxbTEgMGgzbTEgMGgxbS0zMiAxaDFtMiAwaDFtMSAwaDJtNSAwaDJtMSAwaDFtMSAwaDFtMSAwaDFtMSAwaDNtMiAwaDNtMSAwaDFtLTMwIDFoNG00IDBoMm02IDBoN20xIDBoMW00IDBoMm0tMzAgMWg0bTIgMGgzbTEgMGgxbTEgMGgzbTcgMGg3bS0zMiAxaDNtMiAwaDFtMSAwaDFtMyAwaDFtMiAwaDNtNCAwaDFtMyAwaDJtMSAwaDNtLTI5IDFoMW0xIDBoMW0xIDBoNW0xIDBoMW0xIDBoMm0yIDBoM20xIDBoNG0xIDBoM20yIDBoMW0tMzIgMWgxbTIgMGgxbTIgMGgybTEgMGgxbTEgMGgybTEgMGgybTIgMGgzbTEgMGg1bTEgMGg0bS0zMSAxaDNtMSAwaDJtNCAwaDJtMyAwaDJtMSAwaDFtNCAwaDRtMSAwaDJtLTMwIDFoMm0xIDBoMW0yIDBoMm0xIDBoMW0xIDBoMm01IDBoMm00IDBoNm0tMzIgMWgxbTEgMGgxbTIgMGg0bTUgMGgybTEgMGgybTMgMGg0bTEgMGgzbS0zMCAxaDNtNiAwaDFtNCAwaDRtMSAwaDJtMSAwaDJtMiAwaDFtMyAwaDFtMSAwaDFtLTMzIDFoMW0yIDBoMW0yIDBoNW0xIDBoMW0yIDBoMm0xIDBoMW0yIDBoMm0zIDBoMm0xIDBoMW0xIDBoMW0tMzIgMWgxbTMgMGgybTUgMGgzbTEgMGg3bTEgMGgxbTMgMGgxbTIgMGgxbTEgMGgxbS0zMyAxaDFtMyAwaDFtMSAwaDFtMSAwaDFtMSAwaDJtMSAwaDJtMSAwaDFtMiAwaDFtMiAwaDdtMiAwaDJtLTI1IDFoNG0xIDBoMm0yIDBoNW0yIDBoMW0zIDBoMW0xIDBoMW0xIDBoMW0tMzMgMWg3bTEgMGgzbTYgMGgxbTMgMGg0bTEgMGgxbTEgMGgxbTEgMGgybS0zMiAxaDFtNSAwaDFtMSAwaDJtMSAwaDFtMSAwaDFtMiAwaDFtNCAwaDFtMiAwaDFtMyAwaDNtMSAwaDFtLTMzIDFoMW0xIDBoM20xIDBoMW0xIDBoMW0yIDBoMW0xIDBoNG0xIDBoMW0zIDBoMW0xIDBoNm0tMzAgMWgxbTEgMGgzbTEgMGgxbTEgMGgzbTMgMGgxbTIgMGgxbTEgMGgxbTEgMGgxbTMgMGgxbTIgMGgybTIgMGgxbS0zMyAxaDFtMSAwaDNtMSAwaDFtMSAwaDRtMSAwaDJtMSAwaDJtMiAwaDRtMiAwaDJtMSAwaDJtLTMxIDFoMW01IDBoMW0xIDBoNG0xIDBoMm01IDBoM201IDBoM20tMzEgMWg3bTQgMGgxbTEgMGg0bTEgMGgxbTEgMGgxbTEgMGg2bTEgMGgxbTEgMGgxIi8+PC9nPjwvc3ZnPgo=" width="190"/>
+<div>
+<h3>Un QR code sur chaque table</h3>
+<p>Imprimé et posé sur les tables, il ouvre directement la carte sur le téléphone du
+              client — sans application à installer. Il renvoie vers
+              <strong>barlepetitravisé.com/carte.html</strong>.</p>
+<p style="margin-bottom:0"><a class="btn btn-outline btn-small" href="#page-carte">Voir la carte</a></p>
+</div>
+</div>
+</section>
+<!-- ================= AVIS ================= -->
+<section class="section" style="padding-bottom:0">
+<div class="section-head reveal">
+<p class="eyebrow">Avis</p>
+<h2>Ce qu'en disent les clients</h2>
+</div>
+<div class="rating reveal">
+<span class="rating-score">4,6</span>
+<div>
+<div aria-hidden="true" class="rating-stars">★★★★★</div>
+<p class="rating-meta" style="margin:0">Sur 5, d'après une cinquantaine d'avis
+              publiés sur Google — note relevée en août 2026.</p>
+</div>
+</div>
+<p style="margin-top:1.4rem">
+<a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Le%20P%27tit%20Ravis%C3%A9%2C%2014%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen" rel="noopener noreferrer" target="_blank">Lire ou laisser un avis sur Google</a>
+</p>
+</section>
+</div>
+</main></section><section id="page-contact"><div class="page-head">
+<div class="wrap">
+<p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Contact</p>
+<h1>Contacter Le P’tit Ravisé à Rouen</h1>
+<p class="lead">Le plus simple reste le téléphone — mais le formulaire fonctionne aussi.</p>
+</div>
+</div><main class="section">
+<div class="wrap grid-2 top">
+<div class="reveal">
+<h2>Nous joindre</h2>
+<div class="card" style="margin-bottom:1.2rem">
+<h3>📞 Par téléphone</h3>
+<p style="font-size:1.35rem;font-weight:600;margin-bottom:0.3rem">
+<a href="tel:+33235716679">02 35 71 66 79</a>
+</p>
+<p class="note" style="margin-bottom:0">Du lundi au samedi, aux heures d'ouverture.</p>
+</div>
+<div class="card" style="margin-bottom:1.2rem">
+<h3>📍 Sur place</h3>
+<p>14 rue des Bons-Enfants<br/>76000 Rouen</p>
+<p class="status" data-status="" style="margin:0.8rem 0">
+<span class="dot"></span><span class="status-text">Horaires…</span>
+</p>
+<p style="margin-bottom:0">
+<a class="btn btn-red btn-small" href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" rel="noopener noreferrer" target="_blank">Itinéraire</a>
+</p>
+</div>
+<div class="card">
+<h3>💬 Réseaux sociaux</h3>
+<p>L'actualité du bar se publie surtout sur Facebook.</p>
+<ul class="socials">
+<li>
+<a href="https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/" rel="noopener noreferrer" target="_blank">
+<svg aria-hidden="true" fill="currentColor" height="16" viewbox="0 0 24 24" width="16"><path d="M22 12a10 10 0 10-11.6 9.9v-7h-2.5V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.8-1.6 1.6V12h2.7l-.4 2.9h-2.3v7A10 10 0 0022 12z"></path></svg>
+                Facebook
+              </a>
+</li>
+<li>
+<a href="https://www.google.com/maps/search/?api=1&amp;query=Le%20P%27tit%20Ravis%C3%A9%2C%2014%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen" rel="noopener noreferrer" target="_blank">
+<svg aria-hidden="true" fill="none" height="16" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="16"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                Fiche Google
+              </a>
+</li>
+</ul>
+</div>
+</div>
+<div class="reveal">
+<h2>Nous écrire</h2>
+<p class="lead">Une question, une table à réserver, un objet oublié : écrivez-nous ici.
+          Pour une réponse immédiate, le téléphone reste le plus rapide.</p>
+<p class="note">Avant d'écrire, la réponse est peut-être déjà sur
+          <a href="#page-infos">la page horaires et accès</a>, sur
+          <a href="#page-carte">la carte</a> ou dans
+          <a href="#page-evenements">l'agenda des soirées</a>.</p>
+<form class="form" id="contactForm" novalidate="">
+<!-- Piège à robots : invisible et hors du parcours au clavier, seul un
+               automate le remplit. Un message qui l'a rempli est ignoré. -->
+<div aria-hidden="true" class="pot-de-miel">
+<label for="societe">Société</label>
+<input autocomplete="off" id="societe" name="societe" tabindex="-1" type="text"/>
+</div>
+<div class="field">
+<label for="nom">Nom</label>
+<input autocomplete="name" id="nom" name="nom" required="" type="text"/>
+<p class="error" data-error-for="nom"></p>
+</div>
+<div class="field-row">
+<div class="field">
+<label for="email">E-mail</label>
+<input autocomplete="email" id="email" name="email" required="" type="email"/>
+<p class="error" data-error-for="email"></p>
+</div>
+<div class="field">
+<label for="telephone">Téléphone <span class="optional">(facultatif)</span></label>
+<input autocomplete="tel" id="telephone" name="telephone" type="tel"/>
+<p class="error" data-error-for="telephone"></p>
+</div>
+</div>
+<div class="field">
+<label for="sujet">Sujet</label>
+<select id="sujet" name="sujet">
+<option>Question générale</option>
+<option>Réserver une table</option>
+<option>Privatiser le bar</option>
+<option>Proposer une soirée ou un concert</option>
+<option>Objet oublié sur place</option>
+<option>Autre</option>
+</select>
+</div>
+<div class="field">
+<label for="message">Message</label>
+<textarea id="message" name="message" placeholder="Votre message…" required="" rows="5"></textarea>
+<p class="error" data-error-for="message"></p>
+</div>
+<button class="btn btn-block" type="submit">Envoyer le message</button>
+<p aria-live="polite" class="form-status" id="formStatus" role="status"></p>
+</form>
+</div>
+</div>
+</main></section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<div class="footer-grid">
+<div>
+<p class="footer-brand">Le P’tit Ravisé</p>
+<p style="margin-bottom:1rem">Bar · Tabac · Française des Jeux<br/>
+            14 rue des Bons-Enfants, 76000 Rouen</p>
+<p class="status" data-status="">
+<span class="dot"></span><span class="status-text">Horaires…</span>
+</p>
+</div>
+<div>
+<h3>Le site</h3>
+<ul class="footer-list">
+<li><a href="#page-carte">La carte</a></li>
+<li><a href="#page-le-bar">Le bar</a></li>
+<li><a href="#page-evenements">Événements</a></li>
+<li><a href="#page-infos">Infos pratiques</a></li>
+<li><a href="#page-contact">Contact</a></li>
+</ul>
+</div>
+<div>
+<h3>Nous joindre</h3>
+<ul class="footer-list">
+<li><a href="tel:+33235716679">02 35 71 66 79</a></li>
+<li><a href="https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/" rel="noopener noreferrer" target="_blank">Page Facebook</a></li>
+<li><a href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" rel="noopener noreferrer" target="_blank">Itinéraire</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-legal">
+<p>© <span id="year">2026</span> Le P’tit Ravisé. Tous droits réservés.</p>
+<p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération. La vente d'alcool
+          et de tabac est interdite aux mineurs de moins de 18 ans. Fumer nuit gravement à votre santé
+          et à celle de votre entourage.</p>
+<p class="footer-createur">Pour contacter le créateur de ce site, il suffit d'envoyer un mail
+          à l'adresse suivante : <a href="mailto:sanctimaps@gmail.com">sanctimaps@gmail.com</a>.</p>
+<p class="footer-createur"><a href="admin/">Administration du site</a></p>
+</div>
+</div>
+</footer>
+<script>
+/* =========================================================
+   Le P’tit Ravisé — contenu modifiable du site
+   ---------------------------------------------------------
+   CE FICHIER EST LA SOURCE UNIQUE du contenu : réglages,
+   carte et agenda. Les pages du site le lisent, la console
+   d'administration (admin/) l'écrit.
+
+   Écrit automatiquement — évitez de le modifier à la main
+   pendant qu'une session d'administration est ouverte.
+   ========================================================= */
+
+window.DONNEES = {
+    "reglages": {
+        "formulaire": true,
+        "telephone": "02 35 71 66 79",
+        "telephoneLien": "+33235716679",
+        "mentionTarifs": "Tarifs affichés au comptoir et en terrasse."
+    },
+    "carte": [
+        {
+            "id": "bieres",
+            "emoji": "🍺",
+            "titre": "Bières",
+            "items": [
+                {
+                    "nom": "Pression — 25 cl",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Pression — 50 cl",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Blonde en bouteille",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Blanche",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Ambrée",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Bière sans alcool",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Panaché",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Monaco",
+                    "prix": "",
+                    "description": "Bière, limonade et grenadine."
+                }
+            ]
+        },
+        {
+            "id": "cocktails",
+            "emoji": "🍹",
+            "titre": "Cocktails & apéritifs",
+            "items": [
+                {
+                    "nom": "Kir",
+                    "prix": "",
+                    "description": "Cassis, mûre ou pêche."
+                },
+                {
+                    "nom": "Kir royal",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Spritz",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Mojito",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Anisé",
+                    "prix": "",
+                    "description": "Servi avec sa carafe d'eau fraîche."
+                },
+                {
+                    "nom": "Punch maison",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Cocktail sans alcool",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Vin au verre — rouge, blanc, rosé",
+                    "prix": "",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "id": "softs",
+            "emoji": "🥤",
+            "titre": "Softs",
+            "items": [
+                {
+                    "nom": "Sodas — 33 cl",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Jus de fruits",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Eau plate — 50 cl",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Eau pétillante — 50 cl",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Limonade",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Sirop à l'eau",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Diabolo",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Perrier",
+                    "prix": "",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "id": "chaudes",
+            "emoji": "☕",
+            "titre": "Boissons chaudes",
+            "items": [
+                {
+                    "nom": "Express",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Café allongé",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Double express",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Noisette",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Café crème",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Cappuccino",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Chocolat chaud",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Thé & infusions",
+                    "prix": "",
+                    "description": ""
+                }
+            ]
+        },
+        {
+            "id": "manger",
+            "emoji": "🥖",
+            "titre": "À grignoter",
+            "items": [
+                {
+                    "nom": "Croissant, pain au chocolat",
+                    "prix": "",
+                    "description": "Le matin, avec le café."
+                },
+                {
+                    "nom": "Sandwich jambon-beurre",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Sandwich poulet crudités",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Croque-monsieur",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Planche de charcuterie",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Planche mixte charcuterie & fromage",
+                    "prix": "",
+                    "description": ""
+                },
+                {
+                    "nom": "Chips, cacahuètes, olives",
+                    "prix": "",
+                    "description": ""
+                }
+            ]
+        }
+    ],
+    "evenements": [],
+    "photos": [
+        {
+            "id": "devanture",
+            "legende": "La devanture",
+            "fichier": ""
+        },
+        {
+            "id": "ambiance",
+            "legende": "Le café du matin",
+            "fichier": ""
+        },
+        {
+            "id": "comptoir",
+            "legende": "Le comptoir",
+            "fichier": ""
+        },
+        {
+            "id": "terrasse",
+            "legende": "La terrasse",
+            "fichier": ""
+        },
+        {
+            "id": "tabac",
+            "legende": "Tabac & FDJ",
+            "fichier": ""
+        },
+        {
+            "id": "demi",
+            "legende": "Le demi",
+            "fichier": ""
+        }
+    ]
+};
+
+/* =========================================================
+   Le P’tit Ravisé — script commun aux six pages.
+   Vanilla JS, aucune dépendance.
+   ========================================================= */
+(function () {
+  'use strict';
+
+  /* =========================================================
+     0. LANGUE
+     ---------------------------------------------------------
+     Le même script sert les pages françaises (racine) et les
+     pages anglaises (/en/). Deux choses en dépendent :
+
+       - les textes produits par le script (statut d'ouverture,
+         agenda, boutons, messages du formulaire) ;
+       - les chemins vers les ressources communes, puisque les
+         pages anglaises sont un dossier plus bas.
+
+     Les deux se lisent sur la balise <html> : `lang` et
+     `data-racine`. Une page qui n'annonce rien reste française
+     et à la racine.
+     ========================================================= */
+  var LANGUE = (document.documentElement.lang || 'fr').slice(0, 2).toLowerCase();
+  var RACINE = document.documentElement.getAttribute('data-racine') || '';
+
+  var TEXTES = {
+    fr: {
+      jours: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+      mois: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+      minuit: 'minuit',
+      ouvertJusqu: 'Ouvert — jusqu’à ',
+      ouvreAujourdhui: 'Fermé — ouvre aujourd’hui à ',
+      reouverture: 'Fermé — réouverture ',
+      demain: 'demain',
+      a: ' à ',
+      ferme: 'Fermé',
+      ouvrirMenu: 'Ouvrir le menu',
+      fermerMenu: 'Fermer le menu',
+      agendaVideTitre: 'Aucune date annoncée pour le moment',
+      agendaVideTexte: 'Les prochaines soirées et retransmissions seront publiées ici. ' +
+        'En attendant, la page Facebook du bar reste la source la plus à jour.',
+      evenement: 'Événement',
+      ajouterPhoto: 'Ajouter une photo',
+      illustration: 'Illustration — ',
+      altPhoto: ' — Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen',
+      altPhotoSeule: 'Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen',
+      depotEmplacement: 'Emplacement : ',
+      depotReserve: 'Réservé au bar : le mot de passe de l’administration est demandé.',
+      motDePasse: 'Mot de passe',
+      photo: 'Photo',
+      depotFormats: 'JPEG, PNG ou WebP, 8 Mo maximum. La photo est recadrée en carré.',
+      annuler: 'Annuler',
+      envoyer: 'Envoyer',
+      indiquezMdp: 'Indiquez le mot de passe.',
+      choisissezPhoto: 'Choisissez une photo.',
+      envoiEnCours: 'Envoi en cours…',
+      photoEnregistree: 'Photo enregistrée.',
+      sansPhp: 'Envoi impossible : cette page doit être servie par un hébergement PHP.',
+      erreur: 'Erreur ',
+      formErreurs: 'Le formulaire contient des erreurs. Merci de les corriger.',
+      formNom: 'Merci d’indiquer votre nom.',
+      formEmail: 'Adresse e-mail invalide.',
+      formMessage: 'Votre message est un peu court.',
+      formEnvoye: 'Message envoyé, merci !',
+      formEchec: 'L’envoi a échoué. Merci de nous appeler au ',
+      formTelephone: function (nom, tel) {
+        return 'Merci ' + nom + ' ! Le plus rapide pour nous joindre reste le téléphone : ' +
+          tel + ', du lundi au samedi aux heures d’ouverture.';
+      },
+      formMailto: function (nom) {
+        return 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec le message ' +
+          'pré-rempli — il ne reste qu’à l’envoyer.';
+      },
+      sujetMail: '[Site] '
+    },
+    en: {
+      jours: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      mois: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      minuit: 'midnight',
+      ouvertJusqu: 'Open — until ',
+      ouvreAujourdhui: 'Closed — opens today at ',
+      reouverture: 'Closed — reopens ',
+      demain: 'tomorrow',
+      a: ' at ',
+      ferme: 'Closed',
+      ouvrirMenu: 'Open menu',
+      fermerMenu: 'Close menu',
+      agendaVideTitre: 'No dates announced yet',
+      agendaVideTexte: 'Upcoming nights and screenings will be posted here. ' +
+        'In the meantime, the bar’s Facebook page is the most up-to-date source.',
+      evenement: 'Event',
+      ajouterPhoto: 'Add a photo',
+      illustration: 'Illustration — ',
+      altPhoto: ' — Le P’tit Ravisé, bar and tobacconist at 14 rue des Bons-Enfants, Rouen',
+      altPhotoSeule: 'Le P’tit Ravisé, bar and tobacconist at 14 rue des Bons-Enfants, Rouen',
+      depotEmplacement: 'Slot: ',
+      depotReserve: 'Staff only: the administration password is required.',
+      motDePasse: 'Password',
+      photo: 'Photo',
+      depotFormats: 'JPEG, PNG or WebP, 8 MB maximum. The photo is cropped to a square.',
+      annuler: 'Cancel',
+      envoyer: 'Send',
+      indiquezMdp: 'Please enter the password.',
+      choisissezPhoto: 'Please choose a photo.',
+      envoiEnCours: 'Sending…',
+      photoEnregistree: 'Photo saved.',
+      sansPhp: 'Upload failed: this page must be served by PHP hosting.',
+      erreur: 'Error ',
+      formErreurs: 'The form contains errors. Please correct them.',
+      formNom: 'Please give your name.',
+      formEmail: 'Invalid e-mail address.',
+      formMessage: 'Your message is a little short.',
+      formEnvoye: 'Message sent, thank you!',
+      formEchec: 'Sending failed. Please call us on ',
+      formTelephone: function (nom, tel) {
+        return 'Thank you ' + nom + '! The quickest way to reach us is the phone: ' +
+          tel + ', Monday to Saturday during opening hours.';
+      },
+      formMailto: function (nom) {
+        return 'Thank you ' + nom + '! Your e-mail app is opening with the message ' +
+          'ready — all that is left is to send it.';
+      },
+      sujetMail: '[Website] '
+    }
+  };
+
+  var T = TEXTES[LANGUE] || TEXTES.fr;
+
+  /* =========================================================
+     1. HORAIRES — source unique de vérité
+     ---------------------------------------------------------
+     Clés : 0 = dimanche, 1 = lundi … 6 = samedi.
+     Valeurs en minutes depuis minuit ; `null` = fermé.
+     Une fermeture supérieure à 24*60 signifie « ferme le
+     lendemain matin » (ex. 26*60 = 2 h du matin).
+
+     Cet objet pilote l'indicateur « ouvert / fermé » affiché
+     sur toutes les pages ET le surlignage du jour courant
+     dans le tableau des horaires. Pensez à mettre à jour en
+     parallèle le tableau HTML de infos.html et le bloc
+     Schema.org `openingHoursSpecification`.
+     ========================================================= */
+  var SCHEDULE = {
+    0: null,                                 // dimanche : fermé
+    1: { open: 7 * 60, close: 20 * 60 },     // lundi
+    2: { open: 7 * 60, close: 20 * 60 },     // mardi
+    3: { open: 7 * 60, close: 20 * 60 },     // mercredi
+    4: { open: 7 * 60, close: 20 * 60 },     // jeudi
+    5: { open: 7 * 60, close: 20 * 60 },     // vendredi
+    6: { open: 8 * 60 + 30, close: 20 * 60 } // samedi : ouverture plus tardive
+  };
+
+
+  function formatMinutes(total) {
+    var m = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
+    var h = Math.floor(m / 60);
+    var mins = m % 60;
+    if (h === 0 && mins === 0) return T.minuit;
+    if (LANGUE === 'en') {
+      // Format anglais : 7 am, 8:30 am, 8 pm.
+      var suffixe = h < 12 ? ' am' : ' pm';
+      var h12 = h % 12 === 0 ? 12 : h % 12;
+      return (mins === 0 ? String(h12) : h12 + ':' + String(mins).padStart(2, '0')) + suffixe;
+    }
+    return mins === 0 ? h + ' h' : h + ' h ' + String(mins).padStart(2, '0');
+  }
+
+  function nextOpening(fromDay) {
+    for (var i = 1; i <= 7; i++) {
+      var day = (fromDay + i) % 7;
+      if (SCHEDULE[day]) return { day: day, open: SCHEDULE[day].open, inDays: i };
+    }
+    return null;
+  }
+
+  // Renvoie { open: bool, message: string } pour l'instant présent.
+  function currentStatus(now) {
+    var day = now.getDay();
+    var minutes = now.getHours() * 60 + now.getMinutes();
+
+    // Le service de la veille peut déborder après minuit.
+    var yesterday = (day + 6) % 7;
+    var yShift = SCHEDULE[yesterday];
+    if (yShift && yShift.close > 24 * 60 && minutes < yShift.close - 24 * 60) {
+      return { open: true, message: T.ouvertJusqu + formatMinutes(yShift.close) };
+    }
+
+    var today = SCHEDULE[day];
+    if (today && minutes >= today.open && minutes < today.close) {
+      return { open: true, message: T.ouvertJusqu + formatMinutes(today.close) };
+    }
+    if (today && minutes < today.open) {
+      return { open: false, message: T.ouvreAujourdhui + formatMinutes(today.open) };
+    }
+
+    var next = nextOpening(day);
+    return {
+      open: false,
+      message: next
+        ? T.reouverture + (next.inDays === 1 ? T.demain : T.jours[next.day]) +
+          T.a + formatMinutes(next.open)
+        : T.ferme
+    };
+  }
+
+  function updateStatusWidgets() {
+    var widgets = document.querySelectorAll('[data-status]');
+    if (!widgets.length) return;
+    var state = currentStatus(new Date());
+    Array.prototype.forEach.call(widgets, function (widget) {
+      var dot = widget.querySelector('.dot');
+      var text = widget.querySelector('.status-text');
+      if (dot) dot.className = 'dot ' + (state.open ? 'is-open' : 'is-closed');
+      if (text) text.textContent = state.message;
+    });
+  }
+
+  updateStatusWidgets();
+  setInterval(updateStatusWidgets, 60 * 1000);
+
+  // Surlignage du jour courant dans le tableau des horaires.
+  var todayRow = document.querySelector('.hours tr[data-day="' + new Date().getDay() + '"]');
+  if (todayRow) todayRow.classList.add('is-today');
+
+  /* =========================================================
+     2. Menu mobile
+     ========================================================= */
+  var nav = document.getElementById('nav');
+  var navToggle = document.getElementById('navToggle');
+
+  function closeNav() {
+    if (!nav || !navToggle) return;
+    nav.classList.remove('is-open');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navToggle.setAttribute('aria-label', T.ouvrirMenu);
+  }
+
+  if (nav && navToggle) {
+    navToggle.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      navToggle.setAttribute('aria-expanded', String(open));
+      navToggle.setAttribute('aria-label', open ? T.fermerMenu : T.ouvrirMenu);
+    });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) closeNav(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNav(); });
+  }
+
+  /* =========================================================
+     3. Ombre de l'en-tête au défilement
+     ========================================================= */
+  var header = document.querySelector('.site-header');
+  function onScroll() { if (header) header.classList.toggle('is-scrolled', window.scrollY > 12); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* =========================================================
+     4. Apparition progressive
+     ========================================================= */
+  var revealables = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealables.forEach(function (el) { el.classList.add('is-visible'); });
+  } else {
+    var observer = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (entry, i) {
+        if (!entry.isIntersecting) return;
+        setTimeout(function () { entry.target.classList.add('is-visible'); }, Math.min(i, 4) * 70);
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealables.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* =========================================================
+     5. Calendrier des événements
+     ---------------------------------------------------------
+     Les données vivent dans js/donnees.js. Les dates passées
+     sont masquées automatiquement ; s'il ne reste rien à
+     annoncer, un état vide s'affiche.
+     ========================================================= */
+  var DONNEES = window.DONNEES || {};
+  var eventsHost = document.getElementById('events');
+
+  if (eventsHost) {
+    var data = Array.isArray(DONNEES.evenements) ? DONNEES.evenements : [];
+    var startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    var upcoming = data
+      .filter(function (ev) {
+        var d = new Date(ev.date + 'T00:00:00');
+        return !isNaN(d) && d >= startOfToday;
+      })
+      .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+
+    if (!upcoming.length) {
+      eventsHost.innerHTML =
+        '<div class="empty-state">' +
+        '<svg class="ico" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>' +
+        '<h3></h3><p></p>' +
+        '</div>';
+      eventsHost.querySelector('h3').textContent = T.agendaVideTitre;
+      eventsHost.querySelector('p').textContent = T.agendaVideTexte;
+    } else {
+      var list = document.createElement('ul');
+      list.className = 'events';
+
+      upcoming.forEach(function (ev) {
+        var d = new Date(ev.date + 'T00:00:00');
+        var item = document.createElement('li');
+        item.className = 'event';
+
+        var meta = [T.jours[d.getDay()]];
+        if (ev.heure) meta.push(ev.heure);
+        if (ev.prix) meta.push(ev.prix);
+
+        // textContent partout : aucune donnée n'est injectée en HTML.
+        var dateBox = document.createElement('div');
+        dateBox.className = 'event-date';
+        var day = document.createElement('span');
+        day.className = 'day';
+        day.textContent = String(d.getDate()).padStart(2, '0');
+        var month = document.createElement('span');
+        month.className = 'month';
+        month.textContent = T.mois[d.getMonth()];
+        dateBox.appendChild(day);
+        dateBox.appendChild(month);
+
+        var body = document.createElement('div');
+        body.className = 'event-body';
+        var title = document.createElement('h3');
+        title.textContent = ev.titre || T.evenement;
+        body.appendChild(title);
+        if (ev.description) {
+          var desc = document.createElement('p');
+          desc.textContent = ev.description;
+          body.appendChild(desc);
+        }
+        var metaLine = document.createElement('p');
+        metaLine.className = 'event-meta';
+        metaLine.textContent = meta.join(' · ');
+        body.appendChild(metaLine);
+
+        item.appendChild(dateBox);
+        item.appendChild(body);
+        list.appendChild(item);
+      });
+
+      eventsHost.innerHTML = '';
+      eventsHost.appendChild(list);
+    }
+  }
+
+  /* =========================================================
+     5 bis. La carte
+     ---------------------------------------------------------
+     Rendue à partir de js/donnees.js : rubriques, intitulés,
+     prix et descriptions. Le prix est omis quand il est vide,
+     ce qui évite une colonne de tirets.
+     ========================================================= */
+  var carteHost = document.getElementById('carte');
+
+  if (carteHost && Array.isArray(DONNEES.carte)) {
+    var navCarte = document.getElementById('carte-nav');
+    if (navCarte) navCarte.innerHTML = '';
+
+    DONNEES.carte.forEach(function (rubrique) {
+      if (!rubrique.items || !rubrique.items.length) return;
+
+      if (navCarte) {
+        var lien = document.createElement('a');
+        lien.href = '#' + rubrique.id;
+        lien.textContent = (rubrique.emoji ? rubrique.emoji + ' ' : '') + rubrique.titre;
+        navCarte.appendChild(lien);
+      }
+
+      var bloc = document.createElement('section');
+      bloc.className = 'menu-block';
+      bloc.id = rubrique.id;
+
+      var titre = document.createElement('h2');
+      if (rubrique.emoji) {
+        var emoji = document.createElement('span');
+        emoji.className = 'emoji';
+        emoji.setAttribute('aria-hidden', 'true');
+        emoji.textContent = rubrique.emoji;
+        titre.appendChild(emoji);
+        titre.appendChild(document.createTextNode(' '));
+      }
+      titre.appendChild(document.createTextNode(rubrique.titre));
+      bloc.appendChild(titre);
+
+      var liste = document.createElement('ul');
+      liste.className = 'menu';
+
+      rubrique.items.forEach(function (item) {
+        if (!item.nom) return;
+        var li = document.createElement('li');
+
+        var ligne = document.createElement('p');
+        ligne.className = 'menu-line';
+        var nom = document.createElement('span');
+        nom.className = 'name';
+        nom.textContent = item.nom;                 // textContent : jamais d'HTML injecté
+        ligne.appendChild(nom);
+
+        if (item.prix) {
+          var points = document.createElement('span');
+          points.className = 'dots';
+          var prix = document.createElement('span');
+          prix.className = 'price';
+          prix.textContent = item.prix;
+          ligne.appendChild(points);
+          ligne.appendChild(prix);
+        }
+        li.appendChild(ligne);
+
+        if (item.description) {
+          var desc = document.createElement('p');
+          desc.textContent = item.description;
+          li.appendChild(desc);
+        }
+        liste.appendChild(li);
+      });
+
+      bloc.appendChild(liste);
+      carteHost.appendChild(bloc);
+    });
+
+    // La mention « tarifs au comptoir » n'a de sens que si aucun prix n'est saisi.
+    var mention = document.getElementById('carte-mention');
+    if (mention) {
+      var auMoinsUnPrix = DONNEES.carte.some(function (r) {
+        return (r.items || []).some(function (i) { return i.prix; });
+      });
+      if (auMoinsUnPrix) mention.remove();
+      else mention.textContent = (DONNEES.reglages && DONNEES.reglages.mentionTarifs) || '';
+    }
+  }
+
+  /* =========================================================
+     5 ter. Emplacements photo
+     ---------------------------------------------------------
+     Deux formes : la galerie de la page « Le bar », et les
+     illustrations isolées marquées data-emplacement. Dans les
+     deux cas, un emplacement vide montre son dessin au trait
+     et un bouton de dépôt ; le bouton disparaît dès qu'une
+     photo est en place.
+     ========================================================= */
+  var PHOTOS = Array.isArray(DONNEES.photos) ? DONNEES.photos : [];
+
+  function photoParId(id) {
+    for (var i = 0; i < PHOTOS.length; i++) {
+      if (PHOTOS[i].id === id) return PHOTOS[i];
+    }
+    return null;
+  }
+
+  // Remplit une vignette : la photo si elle existe, sinon l'illustration
+  // et son bouton. Le <template> reste en place pour un éventuel retrait.
+  function remplirEmplacement(figure, photo) {
+    Array.prototype.slice.call(figure.children).forEach(function (enfant) {
+      if (enfant.tagName !== 'TEMPLATE') enfant.remove();
+    });
+
+    if (photo.fichier) {
+      var image = document.createElement('img');
+      image.src = RACINE + 'img/photos/' + photo.fichier;
+      // L'alternative textuelle nomme l'établissement et la ville : elle sert
+      // aux lecteurs d'écran comme à la recherche d'images locale.
+      image.alt = photo.legende ? photo.legende + T.altPhoto : T.altPhotoSeule;
+      image.loading = 'lazy';
+      figure.appendChild(image);
+      figure.classList.add('illu-photo');
+      figure.removeAttribute('role');
+      figure.removeAttribute('aria-label');
+      return;
+    }
+
+    figure.classList.remove('illu-photo');
+    var modele = figure.querySelector('template[data-illustration]')
+      || document.querySelector('template[data-illustration="' + photo.id + '"]');
+    if (modele) figure.appendChild(modele.content.cloneNode(true));
+    figure.setAttribute('role', 'img');
+    if (!figure.getAttribute('aria-label')) {
+      figure.setAttribute('aria-label', T.illustration + (photo.legende || ''));
+    }
+
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'btn-photo';
+    bouton.textContent = T.ajouterPhoto;
+    bouton.addEventListener('click', function () { ouvrirDepot(photo); });
+    figure.appendChild(bouton);
+  }
+
+  // Illustrations isolées (accueil, page « Le bar »).
+  var dejaPlaces = {};
+  Array.prototype.forEach.call(document.querySelectorAll('[data-emplacement]'), function (figure) {
+    var id = figure.getAttribute('data-emplacement');
+    var photo = photoParId(id);
+    if (!photo) return;
+    dejaPlaces[id] = true;
+    remplirEmplacement(figure, photo);
+  });
+
+  // Galerie : les vignettes sont créées à partir des données.
+  var galerie = document.getElementById('galerie');
+
+  if (galerie) {
+    PHOTOS.forEach(function (photo) {
+      // La galerie n'accueille que les emplacements qui ont un dessin à ce
+      // niveau : ni ceux déjà rendus ailleurs dans la page, ni ceux dont le
+      // dessin n'existe que sur une autre page.
+      if (dejaPlaces[photo.id]) return;
+      var modeleGalerie = galerie.parentNode.querySelector(
+        ':scope > template[data-illustration="' + photo.id + '"]');
+      if (!modeleGalerie) return;
+
+      var figure = document.createElement('figure');
+      figure.className = 'illu';
+      remplirEmplacement(figure, photo);
+
+      var legende = document.createElement('figcaption');
+      legende.textContent = photo.legende || '';
+      figure.appendChild(legende);
+
+      galerie.appendChild(figure);
+    });
+  }
+
+  // Fenêtre de dépôt : mot de passe de l'administration puis fichier.
+  function ouvrirDepot(photo) {
+    var fond = document.createElement('div');
+    fond.className = 'depot-fond';
+    fond.innerHTML =
+      '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="depot-titre">' +
+        '<h2 id="depot-titre" class="depot-titre"></h2>' +
+        '<p class="note"><span class="depot-intro"></span><strong class="depot-emplacement"></strong>. ' +
+          '<span class="depot-reserve"></span></p>' +
+        '<form>' +
+          '<div class="field">' +
+            '<label for="depot-mdp" class="depot-l-mdp"></label>' +
+            '<input type="password" id="depot-mdp" autocomplete="current-password">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="depot-fichier" class="depot-l-photo"></label>' +
+            '<input type="file" id="depot-fichier" accept="image/jpeg,image/png,image/webp">' +
+            '<p class="note depot-formats"></p>' +
+          '</div>' +
+          '<div class="depot-actions">' +
+            '<button type="button" class="btn btn-outline depot-annuler"></button>' +
+            '<button type="submit" class="btn depot-envoyer"></button>' +
+          '</div>' +
+          '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
+        '</form>' +
+      '</div>';
+
+    var libelles = {
+      '.depot-titre': T.ajouterPhoto,
+      '.depot-intro': T.depotEmplacement,
+      '.depot-reserve': T.depotReserve,
+      '.depot-l-mdp': T.motDePasse,
+      '.depot-l-photo': T.photo,
+      '.depot-formats': T.depotFormats,
+      '.depot-annuler': T.annuler,
+      '.depot-envoyer': T.envoyer
+    };
+    Object.keys(libelles).forEach(function (sel) {
+      fond.querySelector(sel).textContent = libelles[sel];
+    });
+    fond.querySelector('.depot-emplacement').textContent = photo.legende || photo.id;
+    document.body.appendChild(fond);
+
+    var statut = fond.querySelector('.depot-statut');
+    var champMdp = fond.querySelector('#depot-mdp');
+    var champFichier = fond.querySelector('#depot-fichier');
+    champMdp.focus();
+
+    function fermer() { fond.remove(); document.removeEventListener('keydown', surEchap); }
+    function surEchap(e) { if (e.key === 'Escape') fermer(); }
+    document.addEventListener('keydown', surEchap);
+    fond.querySelector('.depot-annuler').addEventListener('click', fermer);
+    fond.addEventListener('click', function (e) { if (e.target === fond) fermer(); });
+
+    fond.querySelector('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!champMdp.value) { statut.textContent = T.indiquezMdp; statut.className = 'form-status depot-statut is-error'; return; }
+      if (!champFichier.files.length) { statut.textContent = T.choisissezPhoto; statut.className = 'form-status depot-statut is-error'; return; }
+
+      var donnees = new FormData();
+      donnees.append('emplacement', photo.id);
+      donnees.append('motDePasse', champMdp.value);
+      donnees.append('photo', champFichier.files[0]);
+
+      statut.textContent = T.envoiEnCours;
+      statut.className = 'form-status depot-statut';
+
+      fetch(RACINE + 'admin/photo.php', { method: 'POST', body: donnees, credentials: 'same-origin' })
+        .then(function (reponse) {
+          return reponse.json().catch(function () { return {}; }).then(function (r) {
+            if (!reponse.ok) throw new Error(r.erreur || T.erreur + reponse.status + '.');
+            return r;
+          });
+        })
+        .then(function () {
+          statut.textContent = T.photoEnregistree;
+          statut.className = 'form-status depot-statut is-ok';
+          setTimeout(function () { location.reload(); }, 700);
+        })
+        .catch(function (err) {
+          // Sans PHP (ouverture locale, GitHub Pages), la requête n'aboutit pas.
+          var message = err instanceof TypeError
+            ? T.sansPhp
+            : err.message;
+          statut.textContent = message;
+          statut.className = 'form-status depot-statut is-error';
+        });
+    });
+  }
+
+  /* =========================================================
+     5 bis bis. Commandes réservées à l'administrateur
+     ---------------------------------------------------------
+     Les pages publiques étant statiques, elles demandent au
+     serveur si une session est ouverte, et ne dévoilent les
+     éléments marqués data-si-connecte que dans ce cas. Sans
+     PHP, ou hors session, ils restent masqués.
+     ========================================================= */
+  var reserves = document.querySelectorAll('[data-si-connecte]');
+
+  if (reserves.length) {
+    fetch(RACINE + 'admin/session.php', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (etat) {
+        if (!etat || !etat.connecte) return;
+        Array.prototype.forEach.call(reserves, function (el) { el.hidden = false; });
+      })
+      .catch(function () { /* pas de PHP : rien à dévoiler */ });
+  }
+
+  /* =========================================================
+     5 quater. Entrée « Compte » du menu
+     ---------------------------------------------------------
+     Ouvre une fenêtre de changement de mot de passe. Le lien
+     pointe vers /admin/ : sans JavaScript, ou si le clic est
+     fait avec Ctrl, on atterrit sur la console, ce qui reste
+     une réponse utile.
+     ========================================================= */
+  var lienCompte = document.getElementById('lienCompte');
+
+  if (lienCompte) {
+    lienCompte.addEventListener('click', function (e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      closeNav();
+      ouvrirCompte();
+    });
+  }
+
+  function ouvrirCompte() {
+    var fond = document.createElement('div');
+    fond.className = 'depot-fond';
+    fond.innerHTML =
+      '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="compte-titre">' +
+        '<h2 id="compte-titre">Changer le mot de passe</h2>' +
+        '<p class="note">Réservé au bar. Le mot de passe actuel est demandé ; ' +
+          'c’est lui qui autorise le changement.</p>' +
+        '<form>' +
+          '<div class="field">' +
+            '<label for="compte-actuel">Mot de passe actuel</label>' +
+            '<input type="password" id="compte-actuel" autocomplete="current-password">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="compte-nouveau">Nouveau mot de passe</label>' +
+            '<input type="password" id="compte-nouveau" autocomplete="new-password">' +
+            '<p class="note">Au moins 10 caractères.</p>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="compte-nouveau2">Confirmer le nouveau mot de passe</label>' +
+            '<input type="password" id="compte-nouveau2" autocomplete="new-password">' +
+          '</div>' +
+          '<div class="depot-actions">' +
+            '<button type="button" class="btn btn-outline depot-annuler">Annuler</button>' +
+            '<button type="submit" class="btn">Enregistrer</button>' +
+          '</div>' +
+          '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
+          '<p class="note" style="margin:1rem 0 0">Pour modifier la carte, les événements ' +
+            'ou les réglages : <a href="admin/">console d’administration</a>.</p>' +
+        '</form>' +
+      '</div>';
+
+    document.body.appendChild(fond);
+
+    var statut = fond.querySelector('.depot-statut');
+    var actuel = fond.querySelector('#compte-actuel');
+    var nouveau = fond.querySelector('#compte-nouveau');
+    var nouveau2 = fond.querySelector('#compte-nouveau2');
+    actuel.focus();
+
+    function fermer() { fond.remove(); document.removeEventListener('keydown', surEchap); }
+    function surEchap(ev) { if (ev.key === 'Escape') fermer(); }
+    document.addEventListener('keydown', surEchap);
+    fond.querySelector('.depot-annuler').addEventListener('click', fermer);
+    fond.addEventListener('click', function (ev) { if (ev.target === fond) fermer(); });
+
+    function erreur(message) {
+      statut.textContent = message;
+      statut.className = 'form-status depot-statut is-error';
+    }
+
+    fond.querySelector('form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!actuel.value) return erreur('Indiquez le mot de passe actuel.');
+      if (nouveau.value.length < 10) return erreur('Le nouveau mot de passe doit faire au moins 10 caractères.');
+      if (nouveau.value !== nouveau2.value) return erreur('Les deux nouveaux mots de passe diffèrent.');
+
+      statut.textContent = T.envoiEnCours;
+      statut.className = 'form-status depot-statut';
+
+      fetch('admin/motdepasse.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ actuel: actuel.value, nouveau: nouveau.value })
+      })
+        .then(function (reponse) {
+          return reponse.json().catch(function () { return {}; }).then(function (r) {
+            if (!reponse.ok) throw new Error(r.erreur || T.erreur + reponse.status + '.');
+            return r;
+          });
+        })
+        .then(function () {
+          statut.textContent = LANGUE === 'en' ? 'Password changed.' : 'Mot de passe modifié.';
+          statut.className = 'form-status depot-statut is-ok';
+          actuel.value = nouveau.value = nouveau2.value = '';
+        })
+        .catch(function (err) {
+          erreur(err instanceof TypeError
+            ? 'Impossible : cette page doit être servie par un hébergement PHP.'
+            : err.message);
+        });
+    });
+  }
+
+  /* =========================================================
+     6. Formulaire de contact
+     ---------------------------------------------------------
+     Sur un hébergement PHP, le message part vraiment : il est
+     envoyé à contact.php, qui l'expédie au bar. L'adresse du
+     bar n'apparaît jamais dans ces pages — elle est lue côté
+     serveur, hors de portée des robots à spam.
+
+     Si le site est servi en statique (pas de PHP), contact.php
+     n'existe pas : on retombe alors sur le logiciel de
+     messagerie du visiteur, puis sur le téléphone.
+     ========================================================= */
+  var REGLAGES = DONNEES.reglages || {};
+  var FORMULAIRE_ACTIF = REGLAGES.formulaire !== false;
+  var EMAIL_CONTACT = REGLAGES.email || '';   // hébergements statiques uniquement
+  var TEL_AFFICHE = REGLAGES.telephone || '02 35 71 66 79';
+
+  var form = document.getElementById('contactForm');
+
+  if (form) {
+    // Heure d'affichage du formulaire : un envoi arrivé en moins de trois
+    // secondes vient d'un automate, pas d'une personne qui écrit.
+    var instantAffichage = Date.now();
+
+    var setError = function (name, message) {
+      var field = form.querySelector('#' + name);
+      var slot = form.querySelector('[data-error-for="' + name + '"]');
+      if (slot) slot.textContent = message || '';
+      if (field) {
+        if (message) field.setAttribute('aria-invalid', 'true');
+        else field.removeAttribute('aria-invalid');
+      }
+      return !message;
+    };
+
+    var validate = function () {
+      var ok = true;
+      var nom = form.querySelector('#nom').value.trim();
+      var email = form.querySelector('#email').value.trim();
+      var message = form.querySelector('#message').value.trim();
+
+      ok = setError('nom', nom.length < 2 ? T.formNom : '') && ok;
+      ok = setError('email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : T.formEmail) && ok;
+      ok = setError('message', message.length < 10 ? T.formMessage : '') && ok;
+      return ok;
+    };
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var status = document.getElementById('formStatus');
+
+      if (!validate()) {
+        status.textContent = T.formErreurs;
+        status.className = 'form-status is-error';
+        var firstInvalid = form.querySelector('[aria-invalid="true"]');
+        if (firstInvalid) firstInvalid.focus();
+        return;
+      }
+
+      var champ = function (id) {
+        var el = form.querySelector('#' + id);
+        return el ? el.value.trim() : '';
+      };
+      var nom = champ('nom');
+      var bouton = form.querySelector('button[type="submit"]');
+
+      // Repli sans serveur : le logiciel de messagerie du visiteur, ou le
+      // téléphone si aucune adresse n'est disponible côté client.
+      var repli = function (raison) {
+        if (!EMAIL_CONTACT) {
+          status.textContent = raison || T.formTelephone(nom, TEL_AFFICHE);
+          status.className = 'form-status is-ok';
+          return;
+        }
+        var corps = [champ('message'), '', '— ' + nom, champ('email'), champ('telephone')]
+          .filter(Boolean).join('\n');
+        window.location.href = 'mailto:' + EMAIL_CONTACT +
+          '?subject=' + encodeURIComponent(T.sujetMail + champ('sujet')) +
+          '&body=' + encodeURIComponent(corps);
+        status.textContent = T.formMailto(nom);
+        status.className = 'form-status is-ok';
+        form.reset();
+      };
+
+      if (!FORMULAIRE_ACTIF) { repli(); return; }
+
+      status.textContent = 'Envoi en cours…';
+      status.className = 'form-status';
+      if (bouton) bouton.disabled = true;
+
+      fetch(RACINE + 'contact.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nom: nom,
+          email: champ('email'),
+          telephone: champ('telephone'),
+          sujet: champ('sujet'),
+          message: champ('message'),
+          societe: champ('societe'),     // piège à robots, toujours vide
+          instant: instantAffichage,
+          langue: LANGUE                 // pour que la réponse soit dans la bonne langue
+        })
+      })
+        .then(function (r) {
+          // Une page 404 renvoie du HTML : c'est le signe qu'il n'y a pas de PHP.
+          return r.text().then(function (t) {
+            var data;
+            try { data = JSON.parse(t); } catch (e) { throw new Error('sans-php'); }
+            return { code: r.status, data: data };
+          });
+        })
+        .then(function (r) {
+          if (bouton) bouton.disabled = false;
+
+          if (r.data.erreurs) {
+            Object.keys(r.data.erreurs).forEach(function (k) { setError(k, r.data.erreurs[k]); });
+            status.textContent = T.formErreurs;
+            status.className = 'form-status is-error';
+            return;
+          }
+          if (!r.data.ok) {
+            status.textContent = r.data.erreur || (T.formEchec + TEL_AFFICHE + '.');
+            status.className = 'form-status is-error';
+            return;
+          }
+
+          status.textContent = r.data.message || T.formEnvoye;
+          status.className = 'form-status is-ok';
+          form.reset();
+          instantAffichage = Date.now();
+        })
+        .catch(function () {
+          if (bouton) bouton.disabled = false;
+          repli();
+        });
+    });
+
+    ['nom', 'email', 'message'].forEach(function (name) {
+      var field = form.querySelector('#' + name);
+      if (!field) return;
+      field.addEventListener('blur', function () {
+        if (field.getAttribute('aria-invalid') || field.value) validate();
+      });
+      // Une fois un champ signalé, on efface le message dès qu'il est corrigé.
+      field.addEventListener('input', function () {
+        if (field.getAttribute('aria-invalid')) validate();
+      });
+    });
+  }
+
+  /* =========================================================
+     7. Année courante dans le pied de page
+     ========================================================= */
+  var year = document.getElementById('year');
+  if (year) year.textContent = String(new Date().getFullYear());
+})();
+
+</script>
+</body>
+</html>

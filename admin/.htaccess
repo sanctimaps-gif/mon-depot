@@ -1,0 +1,12 @@
+# Ces fichiers ne doivent jamais être servis par le serveur web, même si PHP
+# est désactivé par erreur : ils contiennent l'empreinte du mot de passe,
+# l'adresse de contact du bar et les messages reçus.
+<FilesMatch "^(compte\.php|compte-initial\.php|tentatives\.php|destinataire\.php|destinataire-initial\.php|messages\.php|envois\.php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>
