@@ -1,0 +1,11 @@
+# Le fichier du compte et le journal des tentatives ne doivent jamais
+# être servis par le serveur web, même si PHP est désactivé par erreur.
+<FilesMatch "^(compte\.php|tentatives\.php)$">
+  <IfModule mod_authz_core.c>
+    Require all denied
+  </IfModule>
+  <IfModule !mod_authz_core.c>
+    Order allow,deny
+    Deny from all
+  </IfModule>
+</FilesMatch>

@@ -2,7 +2,8 @@
 
 Site vitrine du **Petit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 Rouen.
 Six pages en HTML, CSS et JavaScript natifs : **aucune dépendance, aucune étape de
-build**.
+build**. Un espace d'administration en PHP, sans base de données, permet de modifier le
+contenu sans toucher au code.
 
 ## Ouvrir le site tout de suite (sans hébergement)
 
@@ -18,7 +19,19 @@ pip install beautifulsoup4
 python3 tools/build-apercu.py
 ```
 
-## Mise en ligne (GitHub Pages)
+## Mise en ligne
+
+Deux cas selon ce dont vous avez besoin :
+
+| | Site public | Espace d'administration |
+| --- | --- | --- |
+| **Hébergement PHP** (3–5 €/mois) | ✅ | ✅ |
+| **GitHub Pages** (gratuit) | ✅ | ❌ — PHP n'y est pas exécuté |
+
+Le site public fonctionne partout. L'administration exige PHP : voir
+*[L'espace d'administration](#lespace-dadministration)*.
+
+### GitHub Pages (site public uniquement)
 
 Les fichiers du site sont **à la racine du dépôt** — c'est ce que GitHub Pages sert par
 défaut. Dans *Settings → Pages* : source = cette branche, dossier = **`/ (root)`**.
@@ -62,9 +75,9 @@ en attendant, le site reste présentable — rien n'affiche « à compléter » 
 
 | À fournir | Où le saisir | Comportement actuel |
 | --- | --- | --- |
-| **Les prix** | Console → La carte | La carte s'affiche sans prix, avec « Tarifs affichés au comptoir » |
-| **Une adresse e-mail** | Console → Réglages | Le formulaire renvoie vers le téléphone |
-| **Les dates d'événements** | Console → Événements | « Aucune date annoncée pour le moment » |
+| **Les prix** | `/admin/` → La carte | La carte s'affiche sans prix, avec « Tarifs affichés au comptoir » |
+| **Une adresse e-mail** | `/admin/` → Réglages | Le formulaire renvoie vers le téléphone |
+| **Les dates d'événements** | `/admin/` → Événements | « Aucune date annoncée pour le moment » |
 | **Des photos** | `le-bar.html` (à la main) | Illustrations au trait (dessins, pas des photos du lieu) |
 
 Deux points à confirmer :
@@ -109,69 +122,105 @@ Ouvrir `index.html` directement fonctionne aussi.
 
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
-admin.html                  Console d'administration (non référencée par le site)
+admin/                      Espace d'administration (PHP) — voir plus bas
+  index.php                 Création du compte, connexion, console
+  api.php                   Actions : connexion, enregistrement, mot de passe
+  lib.php                   Compte, session, écriture du contenu
+  console.js                Interface de la console
+  .htaccess                 Protection des fichiers sensibles
 apercu-du-site.html         Tout le site en un fichier autonome (double-clic)
 CNAME.a-activer             Domaine personnalisé, en attente du DNS
 .nojekyll                   Désactive Jekyll sur GitHub Pages
 css/style.css               Thème, mise en page, responsive, impression
 js/donnees.js               LE CONTENU : réglages, carte, agenda (écrit par la console)
 js/main.js                  Horaires, menu mobile, rendu de la carte et de l'agenda
-js/admin.js                 Logique de la console d'administration
 css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
 ```
 
-## Modifier le site sans toucher au code
+## L'espace d'administration
 
-Ouvrez **`admin.html`** (par exemple `barlepetitravisé.com/admin.html`) : une console
-permet de modifier l'adresse e-mail, la carte et les événements, puis de publier. Les
-changements sont visibles par tous les visiteurs une minute plus tard.
+Le site se modifie depuis **`/admin/`** (par exemple `votre-domaine.fr/admin/`) :
+adresse e-mail de contact, carte, prix, événements, mot de passe. Aucun compte
+extérieur — ni GitHub, ni service tiers.
 
-### Il n'y a pas de mot de passe — et c'est voulu
+### Première visite : créer le compte
 
-Le site est statique : pas de serveur, pas de base de données. Un mot de passe stocké
-dans la page serait lisible par n'importe qui dans le code source, et les modifications
-ne seraient enregistrées que dans votre navigateur, invisibles pour les visiteurs.
+À la première ouverture de `/admin/`, la page propose de **créer le compte
+administrateur** : une adresse e-mail et un mot de passe (10 caractères minimum). Le
+compte est enregistré dans `admin/compte.php`, sur le serveur.
 
-Le compte administrateur est donc **votre compte GitHub**, où le site est hébergé. Vous
-collez une fois une *clé d'accès* ; la console écrit directement dans le dépôt.
+Le mot de passe n'est stocké nulle part en clair, pas même sur le serveur : seule son
+empreinte l'est (`password_hash`, bcrypt). Oublié, il faut supprimer
+`admin/compte.php` par FTP pour revenir à l'écran de création.
 
-### Créer la clé (une seule fois, 2 minutes)
-
-1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained
-   tokens → Generate new token**.
-2. Nom : `Site du bar`. Expiration au choix.
-3. **Repository access** → *Only select repositories* → `mon-depot`.
-4. **Permissions → Repository permissions → Contents** → *Read and write*. Rien d'autre.
-5. Générer, copier, coller dans la console. GitHub ne la réaffichera plus.
-
-La marche à suivre est également rappelée sur la page de connexion.
-
-### Ce qu'il faut savoir
-
-- La clé ne quitte pas votre navigateur : elle n'est envoyée qu'à `api.github.com`.
-  Elle est conservée dans le navigateur si vous cochez « rester connecté », sinon
-  oubliée à la fermeture de l'onglet.
-- **Sur un ordinateur partagé**, décochez « rester connecté ».
-- La clé n'ouvre que ce dépôt, et seulement ses fichiers. En cas de doute, révoquez-la
-  sur GitHub : elle cesse aussitôt de fonctionner.
-- `admin.html` est accessible publiquement (c'est un site statique), mais sans clé
-  valide la page ne peut rien faire ni rien afficher du contenu.
-- Publier écrit un commit dans `js/donnees.js` : l'historique GitHub garde chaque
-  version, donc rien n'est jamais perdu.
-
-### Ce que la console modifie
+### Ce que la console permet
 
 | Onglet | Contenu |
 | --- | --- |
-| Réglages | Adresse e-mail de contact, téléphone affiché, mention en haut de la carte |
+| Réglages | Adresse e-mail de contact, téléphone, mention en haut de la carte |
 | La carte | Rubriques, intitulés, prix, descriptions — ajout, modification, suppression |
 | Événements | Dates, titres, heures, tarifs. Les dates passées disparaissent du site |
+| Mon compte | Changement du mot de passe |
 
-Dès qu'au moins un prix est saisi, la mention « Tarifs affichés au comptoir » disparaît
-toute seule. Dès que l'adresse e-mail est renseignée, le formulaire de contact s'en sert.
+Enregistrer réécrit `js/donnees.js`, que les pages publiques lisent. Dès qu'un prix est
+saisi, la mention « Tarifs affichés au comptoir » disparaît d'elle-même ; dès que
+l'adresse e-mail est renseignée, le formulaire de contact s'en sert.
+
+### Ce qu'il faut pour que ça marche : un hébergement PHP
+
+C'est la seule contrainte, et elle est inévitable : **un compte avec mot de passe exige
+un serveur**. GitHub Pages n'en a pas — il ne sert que des fichiers.
+
+- Le **site public** reste 100 % statique : il fonctionne partout, y compris sur
+  GitHub Pages, et même en double-cliquant sur un fichier.
+- Seul le dossier **`admin/`** a besoin de PHP 8.0 ou plus récent.
+
+N'importe quel hébergement mutualisé convient (OVH, Ionos, o2switch, Hostinger…),
+autour de 3 à 5 € par mois. Aucune base de données, aucune extension particulière :
+`session`, `json` et `mbstring`, présentes partout par défaut.
+
+### Mise en ligne sur un hébergement PHP
+
+1. Envoyer tout le dossier par FTP à la racine du site (`www/` ou `public_html/`).
+2. Vérifier que le serveur peut écrire dans `admin/` et dans `js/` — c'est là que le
+   compte et le contenu sont enregistrés. Droits `755` sur les dossiers suffisent
+   généralement ; sinon `775`.
+3. Ouvrir `votre-domaine.fr/admin/` et créer le compte.
+4. **Activer HTTPS** (Let's Encrypt, inclus chez tous les hébergeurs) : sans lui, le
+   mot de passe circule en clair sur le réseau.
+
+### Sécurité — ce qui est en place
+
+- Mot de passe haché avec `password_hash()` (bcrypt), jamais stocké en clair.
+- Session par cookie `HttpOnly`, `SameSite=Lax`, `Secure` dès que le site est en HTTPS ;
+  identifiant de session régénéré à la connexion (anti-fixation).
+- Jeton anti-CSRF exigé sur toute action qui modifie quelque chose.
+- Cinq tentatives de connexion échouées par quart d'heure et par adresse IP.
+- Message d'erreur identique pour un e-mail inconnu et un mot de passe faux : rien ne
+  permet de deviner quelles adresses existent.
+- `admin/compte.php` et `admin/tentatives.php` sont des fichiers PHP : demandés par un
+  navigateur, ils ne renvoient rien, sur Apache comme sur nginx. Un `.htaccess` en
+  interdit l'accès en plus.
+- Le contenu saisi est réaffiché avec `textContent` : du HTML tapé dans la console
+  s'affiche comme du texte et ne peut pas exécuter de code sur le site.
+- Écritures atomiques (fichier temporaire puis renommage) : jamais de fichier tronqué,
+  même si le serveur coupe au mauvais moment.
+
+### Revendre le site
+
+Le site est autonome et transférable : un dossier de fichiers, aucun abonnement,
+aucune clé d'API, aucun compte de développeur.
+
+1. Copier le dossier **sans** `admin/compte.php` ni `admin/tentatives.php` (ils sont
+   exclus par `.gitignore`, et propres à chaque installation).
+2. L'acheteur envoie le dossier sur son hébergement, ouvre `/admin/`, crée son compte.
+3. Il est seul détenteur de ses accès. Vous n'avez rien à conserver.
+
+Pensez à adapter le contenu (`js/donnees.js`), les mentions légales et le fichier
+`CNAME.a-activer` s'il change de domaine.
 
 ## Modifier le site à la main
 
