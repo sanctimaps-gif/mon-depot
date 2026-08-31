@@ -13,8 +13,10 @@ Dépendance : segno (pip install segno)
 import sys
 from pathlib import Path
 
-URL_PAR_DEFAUT = "https://exemple.fr/carte.html"
-SORTIE = Path(__file__).resolve().parent.parent / "img" / "qr-carte.svg"
+# Domaine du site (forme punycode : elle est comprise par tous les lecteurs
+# de QR codes, là où « barlepetitravisé.fr » en Unicode peut échouer).
+URL_PAR_DEFAUT = "https://xn--barlepetitravis-pnb.fr/carte.html"
+SORTIE = Path(__file__).resolve().parent.parent / "docs" / "img" / "qr-carte.svg"
 
 # Vert de la charte, pour rester cohérent avec le reste du site.
 COULEUR = "#1f4d3d"
@@ -28,8 +30,6 @@ def main() -> int:
         return 1
 
     url = sys.argv[1] if len(sys.argv) > 1 else URL_PAR_DEFAUT
-    if url == URL_PAR_DEFAUT:
-        print("⚠️  URL d'exemple utilisée. Relancez avec l'adresse réelle du site.")
 
     SORTIE.parent.mkdir(parents=True, exist_ok=True)
     # error="m" : le code reste lisible même un peu abîmé ou sali sur une table.
