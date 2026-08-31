@@ -6,12 +6,14 @@ demarrer_session();
 
 $installation = !compte_existe();          // aucun compte : ni livré, ni personnalisé
 $connecte = !$installation && est_connecte();
-$premiereFois = $connecte && doit_changer_mot_de_passe();
+// Le mot de passe livré avec le site reste utilisable tant qu'il n'a pas été
+// changé ; on se contente de le rappeler dans la console.
+$motDePasseLivre = $connecte && doit_changer_mot_de_passe();
 
 header('X-Frame-Options: DENY');
 header('Referrer-Policy: same-origin');
 
-$donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
+$donnees = $connecte ? lire_donnees() : null;
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -46,9 +48,7 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
     <?php if ($connecte): ?>
       <div class="admin-bar-actions">
         <span class="admin-user"><?= e((string) ($_SESSION['email'] ?? '')) ?></span>
-        <?php if (!$premiereFois): ?>
-          <a class="btn btn-outline btn-small" href="../index.html" target="_blank" rel="noopener">Voir le site</a>
-        <?php endif; ?>
+        <a class="btn btn-outline btn-small" href="../index.html" target="_blank" rel="noopener">Voir le site</a>
         <button class="btn btn-outline btn-small" type="button" id="btnDeconnexion">Se déconnecter</button>
       </div>
     <?php endif; ?>
@@ -119,46 +119,6 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
     </div>
   </section>
 
-<?php elseif ($premiereFois): ?>
-  <!-- ================= PREMIÈRE UTILISATION ================= -->
-  <section class="wrap-narrow">
-    <div class="admin-card">
-      <h1>Choisissez votre mot de passe</h1>
-      <p class="lead">Le site est livré avec un mot de passe provisoire, identique pour toutes les
-        copies. Remplacez-le maintenant : c'est la seule action possible tant que ce n'est pas fait.</p>
-
-      <form id="formPremiereFois" novalidate>
-        <div class="field">
-          <label for="p-email">Votre adresse e-mail de connexion</label>
-          <input type="email" id="p-email" autocomplete="username"
-                 value="<?= e((string) ($_SESSION['email'] ?? '')) ?>">
-          <p class="note">C'est l'identifiant avec lequel vous vous connecterez désormais.</p>
-          <p class="error" data-error-for="p-email"></p>
-        </div>
-        <div class="field">
-          <label for="p-mdp">Nouveau mot de passe</label>
-          <input type="password" id="p-mdp" autocomplete="new-password">
-          <p class="note">Au moins 10 caractères. Une phrase dont vous vous souvenez vaut mieux
-            qu'un mot compliqué : <em>le café de 7 h est le meilleur</em>.</p>
-          <p class="error" data-error-for="p-mdp"></p>
-        </div>
-        <div class="field">
-          <label for="p-mdp2">Confirmer le mot de passe</label>
-          <input type="password" id="p-mdp2" autocomplete="new-password">
-          <p class="error" data-error-for="p-mdp2"></p>
-        </div>
-        <button class="btn btn-block" type="submit">Enregistrer et continuer</button>
-        <p class="form-status" id="statutPremiereFois" role="status" aria-live="polite"></p>
-      </form>
-
-      <div class="callout callout-info" style="margin-top:1.6rem">
-        <p><strong>Notez-le.</strong> Il n'est stocké nulle part en clair, pas même sur le serveur :
-          seule son empreinte l'est. Perdu, il faudra supprimer <code>admin/compte.php</code> par
-          FTP pour revenir au mot de passe provisoire.</p>
-      </div>
-    </div>
-  </section>
-
 <?php else: ?>
   <!-- ================= CONSOLE ================= -->
   <section>
@@ -221,8 +181,24 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
 
       <div role="tabpanel" id="panel-compte" aria-labelledby="tab-compte" class="admin-panel" tabindex="0" hidden>
         <div class="admin-card">
-          <h2>Changer le mot de passe</h2>
+          <h2>Mon compte</h2>
+          <?php if ($motDePasseLivre): ?>
+            <div class="callout">
+              <span class="ico" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>
+              </span>
+              <p><strong>Vous utilisez encore le mot de passe livré avec le site.</strong>
+                Il est identique sur toutes les copies : choisissez-en un autre ci-dessous.</p>
+            </div>
+          <?php endif; ?>
           <form id="formMotDePasse" novalidate>
+            <div class="field">
+              <label for="m-email">Adresse de connexion</label>
+              <input type="email" id="m-email" autocomplete="username"
+                     value="<?= e((string) ($_SESSION['email'] ?? '')) ?>">
+              <p class="note">Laissez telle quelle pour ne pas la modifier.</p>
+              <p class="error" data-error-for="m-email"></p>
+            </div>
             <div class="field">
               <label for="m-actuel">Mot de passe actuel</label>
               <input type="password" id="m-actuel" autocomplete="current-password">
@@ -234,7 +210,7 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
               <p class="note">Au moins 10 caractères.</p>
               <p class="error" data-error-for="m-nouveau"></p>
             </div>
-            <button class="btn" type="submit">Changer le mot de passe</button>
+            <button class="btn" type="submit">Enregistrer mes identifiants</button>
             <p class="form-status" id="statutMotDePasse" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -245,7 +221,7 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
 
 </main>
 
-<?php if ($connecte && !$premiereFois): ?>
+<?php if ($connecte): ?>
   <div class="admin-publish" id="barrePublication">
     <div class="wrap admin-publish-inner">
       <p class="admin-publish-state" id="etatModifs">Aucune modification</p>
@@ -260,7 +236,7 @@ $donnees = ($connecte && !$premiereFois) ? lire_donnees() : null;
 
 <script>
   window.ADMIN = {
-    mode: <?= json_encode($installation ? 'installation' : ($premiereFois ? 'premiere-fois' : ($connecte ? 'console' : 'connexion'))) ?>,
+    mode: <?= json_encode($installation ? 'installation' : ($connecte ? 'console' : 'connexion')) ?>,
     csrf: <?= json_encode($connecte ? jeton_csrf() : '') ?>,
     donnees: <?= json_encode($donnees ?? new stdClass(), JSON_UNESCAPED_UNICODE) ?>
   };

@@ -1,11 +1,10 @@
 #!/usr/bin/env php
 <?php
 /**
- * Crée le compte administrateur avec un mot de passe provisoire choisi.
+ * Crée le compte administrateur avec un mot de passe choisi.
  *
  * Plus sûr que le mot de passe livré dans admin/compte-initial.php, qui est
- * public : ici, chaque installation reçoit le sien. Le changement reste imposé
- * à la première connexion.
+ * public : ici, chaque installation reçoit le sien.
  *
  * Usage :
  *     php tools/creer-compte.php client@exemple.fr "mot de passe provisoire"
@@ -25,11 +24,11 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL) || mb_strlen($motDePasse) < 10) {
 
 $contenu = "<?php\n"
     . "// Compte administrateur — fichier généré, propre à cette installation.\n"
-    . "// Le changement de mot de passe est imposé à la première connexion.\n"
+    . "// Modifiable ensuite depuis l'onglet « Mon compte » de la console.\n"
     . "return " . var_export([
         'email'       => $email,
         'hash'        => password_hash($motDePasse, PASSWORD_DEFAULT),
-        'doitChanger' => true,
+        'doitChanger' => false,
         'cree'        => date('c'),
     ], true) . ";\n";
 
@@ -39,5 +38,5 @@ if (!ecrire_atomique(chemin_compte(), $contenu)) {
 }
 
 echo "Compte créé pour {$email}.\n";
-echo "Mot de passe provisoire : {$motDePasse}\n";
-echo "Il devra être changé à la première connexion.\n";
+echo "Mot de passe : {$motDePasse}\n";
+echo "Modifiable depuis l'onglet « Mon compte » de la console.\n";

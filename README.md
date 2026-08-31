@@ -123,8 +123,8 @@ Ouvrir `index.html` directement fonctionne aussi.
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
 admin/                      Espace d'administration (PHP) — voir plus bas
-  index.php                 Connexion, premier mot de passe, console
-  compte-initial.php        Compte livré avec le site (mot de passe provisoire)
+  index.php                 Connexion et console
+  compte-initial.php        Compte livré avec le site
   api.php                   Actions : connexion, enregistrement, mot de passe
   lib.php                   Compte, session, écriture du contenu
   console.js                Interface de la console
@@ -139,7 +139,7 @@ css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
-tools/creer-compte.php      Crée un compte avec un mot de passe provisoire unique
+tools/creer-compte.php      Crée un compte avec un mot de passe unique
 ```
 
 ## L'espace d'administration
@@ -155,25 +155,28 @@ Le site est livré avec un compte administrateur :
 | | |
 | --- | --- |
 | Adresse | `admin@lepetitravise.fr` |
-| Mot de passe provisoire | `PetitRavise-2026` |
+| Mot de passe | `PetitRavise-2026` |
 
-À la première connexion, la console **impose de choisir un nouveau mot de passe** (et
-permet de changer l'adresse de connexion au passage). Rien d'autre n'est accessible
-tant que ce n'est pas fait : le blocage est appliqué côté serveur, pas seulement dans
-la page. Le nouveau compte est alors écrit dans `admin/compte.php`, qui prend
-définitivement le relais de `admin/compte-initial.php`.
+Ce mot de passe reste valable tant qu'il n'a pas été changé. Le changement se fait
+quand on veut, depuis l'onglet **Mon compte**, en indiquant le mot de passe actuel —
+c'est lui qui prouve que la personne devant l'écran détient bien le compte. L'adresse
+de connexion se modifie au même endroit. Tant que le mot de passe livré est en place,
+un rappel s'affiche dans cet onglet ; il disparaît dès qu'il est remplacé.
 
-> ⚠️ **Ce mot de passe provisoire est le même pour toutes les copies du site et figure
-> dans le dépôt : il est donc public.** Entre la mise en ligne et la première connexion,
-> quelqu'un qui le connaît pourrait prendre la main. **Connectez-vous juste après avoir
-> déposé les fichiers**, avant de communiquer l'adresse au client — ou mieux, donnez à
-> chaque client un mot de passe provisoire unique (voir ci-dessous).
+Le nouveau compte est alors écrit dans `admin/compte.php`, qui prend définitivement le
+relais de `admin/compte-initial.php`.
+
+> ⚠️ **Ce mot de passe est le même pour toutes les copies du site et figure dans le
+> dépôt : il est donc public.** Tant qu'il n'est pas changé, n'importe qui peut se
+> connecter à l'administration d'un site fraîchement mis en ligne. **Changez-le dès la
+> première connexion**, avant de communiquer l'adresse au client — ou donnez à chaque
+> client un mot de passe unique (voir ci-dessous).
 
 Le mot de passe n'est jamais stocké en clair, pas même sur le serveur : seule son
 empreinte l'est (`password_hash`, bcrypt). Oublié, il suffit de supprimer
 `admin/compte.php` par FTP pour revenir au mot de passe provisoire.
 
-### Donner un mot de passe provisoire unique à chaque client
+### Donner un mot de passe unique à chaque client
 
 Plus sûr que le mot de passe livré, si vous avez accès à PHP en ligne de commande :
 
@@ -181,8 +184,8 @@ Plus sûr que le mot de passe livré, si vous avez accès à PHP en ligne de com
 php tools/creer-compte.php client@exemple.fr "un mot de passe provisoire"
 ```
 
-Le fichier `admin/compte.php` est créé avec ce mot de passe et le changement reste
-imposé à la première connexion. Rien n'est alors public.
+Le fichier `admin/compte.php` est créé avec ce mot de passe, qui remplace celui livré.
+Rien n'est alors public.
 
 ### Ce que la console permet
 
@@ -191,7 +194,7 @@ imposé à la première connexion. Rien n'est alors public.
 | Réglages | Adresse e-mail de contact, téléphone, mention en haut de la carte |
 | La carte | Rubriques, intitulés, prix, descriptions — ajout, modification, suppression |
 | Événements | Dates, titres, heures, tarifs. Les dates passées disparaissent du site |
-| Mon compte | Changement du mot de passe |
+| Mon compte | Adresse de connexion et mot de passe |
 
 Enregistrer réécrit `js/donnees.js`, que les pages publiques lisent. Dès qu'un prix est
 saisi, la mention « Tarifs affichés au comptoir » disparaît d'elle-même ; dès que
@@ -223,9 +226,8 @@ autour de 3 à 5 € par mois. Aucune base de données, aucune extension particu
 ### Sécurité — ce qui est en place
 
 - Mot de passe haché avec `password_hash()` (bcrypt), jamais stocké en clair.
-- Changement du mot de passe livré imposé à la première connexion, refusé côté serveur
-  pour toute autre action tant qu'il n'est pas fait ; le nouveau doit différer de
-  l'ancien.
+- Le changement de mot de passe exige toujours le mot de passe actuel, et le nouveau
+  doit différer de l'ancien.
 - Session par cookie `HttpOnly`, `SameSite=Lax`, `Secure` dès que le site est en HTTPS ;
   identifiant de session régénéré à la connexion (anti-fixation).
 - Jeton anti-CSRF exigé sur toute action qui modifie quelque chose.
@@ -249,8 +251,8 @@ aucune clé d'API, aucun compte de développeur.
    exclus par `.gitignore`, et propres à chaque installation). `admin/compte-initial.php`
    fait partie de la livraison : c'est lui qui porte le compte de départ.
 2. L'acheteur envoie le dossier sur son hébergement et ouvre `/admin/`.
-3. Il se connecte avec les identifiants provisoires, la console lui impose aussitôt de
-   choisir son mot de passe et son adresse.
+3. Il se connecte avec les identifiants livrés, puis change mot de passe et adresse
+   depuis l'onglet **Mon compte**.
 4. Il est ensuite seul détenteur de ses accès. Vous n'avez rien à conserver.
 
 Le pied de page du site porte votre adresse de contact

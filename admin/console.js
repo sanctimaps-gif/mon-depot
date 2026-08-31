@@ -102,34 +102,6 @@
   }
 
   /* =========================================================
-     Première utilisation : remplacer le mot de passe livré
-     ========================================================= */
-  if (CONFIG.mode === 'premiere-fois') {
-    $('formPremiereFois').addEventListener('submit', function (e) {
-      e.preventDefault();
-      var email = $('p-email').value.trim();
-      var mdp = $('p-mdp').value;
-      var mdp2 = $('p-mdp2').value;
-
-      var ok = erreurChamp('p-email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : 'Adresse e-mail invalide.');
-      ok = erreurChamp('p-mdp', mdp.length < 10 ? 'Au moins 10 caractères.' : '') && ok;
-      ok = erreurChamp('p-mdp2', mdp2 !== mdp ? 'Les deux mots de passe diffèrent.' : '') && ok;
-      if (!ok) return;
-
-      afficher('statutPremiereFois', 'Enregistrement…');
-      appel('changer-mot-de-passe', { nouveau: mdp, email: email })
-        .then(function () { location.reload(); })
-        .catch(function (err) { afficher('statutPremiereFois', err.message, 'error'); });
-    });
-
-    $('btnDeconnexion').addEventListener('click', function () {
-      appel('deconnexion').then(function () { location.reload(); })
-        .catch(function () { location.reload(); });
-    });
-    return;
-  }
-
-  /* =========================================================
      Console
      ========================================================= */
   var etat = copie(CONFIG.donnees || {});
@@ -456,19 +428,25 @@
   /* ---- Mot de passe ---- */
   $('formMotDePasse').addEventListener('submit', function (e) {
     e.preventDefault();
+    var email = $('m-email').value.trim();
     var actuel = $('m-actuel').value;
     var nouveau = $('m-nouveau').value;
 
-    var ok = erreurChamp('m-actuel', actuel ? '' : 'Indiquez votre mot de passe actuel.');
+    var ok = erreurChamp('m-email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : 'Adresse e-mail invalide.');
+    ok = erreurChamp('m-actuel', actuel ? '' : 'Indiquez votre mot de passe actuel.') && ok;
     ok = erreurChamp('m-nouveau', nouveau.length < 10 ? 'Au moins 10 caractères.' : '') && ok;
     if (!ok) return;
 
     afficher('statutMotDePasse', 'Enregistrement…');
-    appel('changer-mot-de-passe', { actuel: actuel, nouveau: nouveau })
-      .then(function () {
+    appel('changer-mot-de-passe', { actuel: actuel, nouveau: nouveau, email: email })
+      .then(function (r) {
         $('m-actuel').value = '';
         $('m-nouveau').value = '';
-        afficher('statutMotDePasse', 'Mot de passe modifié.', 'ok');
+        var barre = document.querySelector('.admin-user');
+        if (barre && r.email) barre.textContent = r.email;
+        var rappel = document.querySelector('#panel-compte .callout');
+        if (rappel) rappel.remove();
+        afficher('statutMotDePasse', 'Identifiants enregistrés.', 'ok');
       })
       .catch(function (err) { afficher('statutMotDePasse', err.message, 'error'); });
   });
