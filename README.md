@@ -93,7 +93,7 @@ Deux points à confirmer :
 | --- | --- |
 | Adresse | 14 rue des Bons-Enfants, 76000 Rouen |
 | Téléphone | 02 35 71 66 79 |
-| Horaires | Lundi – samedi, 7 h – 20 h · fermé le dimanche |
+| Horaires | Lundi – vendredi 7 h – 20 h · samedi 8 h 30 – 20 h · fermé le dimanche |
 | Activité | Bar, tabac, Française des Jeux, terrasse |
 | Facebook | [Le P'tit Ravisé](https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/) |
 | Note Google | 4,6 / 5 — une cinquantaine d'avis (relevé en août 2026) |
@@ -216,11 +216,20 @@ Rien n'est alors public.
 | La carte | Rubriques, intitulés, prix, descriptions — ajout, modification, suppression |
 | Événements | Dates, titres, heures, tarifs. Les dates passées disparaissent du site |
 | Photos | Retirer une photo de la galerie pour libérer son emplacement |
+| | *La carte se modifie aussi depuis un bandeau sur la page « La carte », visible uniquement quand vous êtes connecté.* |
 | Mon compte | Adresse de connexion et mot de passe |
 
 Enregistrer réécrit `js/donnees.js`, que les pages publiques lisent. Dès qu'un prix est
 saisi, la mention « Tarifs affichés au comptoir » disparaît d'elle-même ; dès que
 l'adresse e-mail est renseignée, le formulaire de contact s'en sert.
+
+**Les prix sont facultatifs, ligne par ligne** : une boisson sans prix s'affiche seule,
+une autre avec son prix aligné à droite. Rien n'oblige à tout remplir.
+
+Quand une session est ouverte, la page « La carte » affiche en haut un bandeau
+*Vous êtes connecté — Modifier la carte* qui mène directement au bon onglet. Un
+visiteur ordinaire ne le voit pas : la page interroge `admin/session.php` et ne
+dévoile ce bandeau qu'en cas de session valide.
 
 ### Ce qu'il faut pour que ça marche : un hébergement PHP
 
@@ -309,8 +318,9 @@ depuis minuit, `null` = fermé) :
 
 ```js
 var SCHEDULE = {
-  0: null,                              // dimanche : fermé
-  1: { open: 7 * 60, close: 20 * 60 }   // lundi 7 h → 20 h
+  0: null,                                  // dimanche : fermé
+  1: { open: 7 * 60, close: 20 * 60 },      // lundi 7 h → 20 h
+  6: { open: 8 * 60 + 30, close: 20 * 60 }  // samedi 8 h 30 → 20 h
 };
 ```
 

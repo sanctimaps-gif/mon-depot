@@ -14,6 +14,11 @@ header('X-Frame-Options: DENY');
 header('Referrer-Policy: same-origin');
 
 $donnees = $connecte ? lire_donnees() : null;
+
+// ?onglet=carte permet d'arriver directement sur la bonne section depuis
+// le site ; toute valeur inconnue retombe sur les réglages.
+$ongletsValides = ['reglages', 'carte', 'agenda', 'photos', 'compte'];
+$onglet = in_array($_GET['onglet'] ?? '', $ongletsValides, true) ? $_GET['onglet'] : 'reglages';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -249,6 +254,7 @@ $donnees = $connecte ? lire_donnees() : null;
   window.ADMIN = {
     mode: <?= json_encode($installation ? 'installation' : ($connecte ? 'console' : 'connexion')) ?>,
     csrf: <?= json_encode($connecte ? jeton_csrf() : '') ?>,
+    onglet: <?= json_encode($onglet) ?>,
     donnees: <?= json_encode($donnees ?? new stdClass(), JSON_UNESCAPED_UNICODE) ?>
   };
 </script>

@@ -59,6 +59,14 @@
   <main id="contenu" class="section">
     <div class="wrap">
 
+      <!-- Visible uniquement lorsqu'une session d'administration est ouverte
+           (voir js/main.js et admin/session.php). -->
+      <div class="bandeau-admin" data-si-connecte hidden>
+        <p><strong>Vous êtes connecté.</strong> La carte se modifie depuis la console :
+          rubriques, intitulés, descriptions, et les prix si vous souhaitez les afficher.</p>
+        <a class="btn btn-small" href="admin/?onglet=carte">Modifier la carte</a>
+      </div>
+
       <nav class="menu-nav" id="carte-nav" aria-label="Catégories de la carte"></nav>
 
       <p class="note" id="carte-mention" style="margin:-1.2rem 0 2.4rem"></p>

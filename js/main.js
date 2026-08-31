@@ -26,7 +26,7 @@
     3: { open: 7 * 60, close: 20 * 60 },     // mercredi
     4: { open: 7 * 60, close: 20 * 60 },     // jeudi
     5: { open: 7 * 60, close: 20 * 60 },     // vendredi
-    6: { open: 7 * 60, close: 20 * 60 }      // samedi
+    6: { open: 8 * 60 + 30, close: 20 * 60 } // samedi : ouverture plus tardive
   };
 
   var DAY_NAMES = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
@@ -479,6 +479,26 @@
           statut.className = 'form-status depot-statut is-error';
         });
     });
+  }
+
+  /* =========================================================
+     5 bis bis. Commandes réservées à l'administrateur
+     ---------------------------------------------------------
+     Les pages publiques étant statiques, elles demandent au
+     serveur si une session est ouverte, et ne dévoilent les
+     éléments marqués data-si-connecte que dans ce cas. Sans
+     PHP, ou hors session, ils restent masqués.
+     ========================================================= */
+  var reserves = document.querySelectorAll('[data-si-connecte]');
+
+  if (reserves.length) {
+    fetch('admin/session.php', { credentials: 'same-origin' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (etat) {
+        if (!etat || !etat.connecte) return;
+        Array.prototype.forEach.call(reserves, function (el) { el.hidden = false; });
+      })
+      .catch(function () { /* pas de PHP : rien à dévoiler */ });
   }
 
   /* =========================================================

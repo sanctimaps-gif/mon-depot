@@ -747,3 +747,23 @@ p { margin: 0 0 1rem; }
 /* Entrée « Compte » du menu : discrète, réservée au bar. */
 .nav a.nav-compte { color: var(--ink-faint); font-size: 0.86rem; }
 .nav a.nav-compte:hover { color: var(--green); }
+
+/* Bandeau réservé à l'administrateur connecté.
+   La règle [hidden] doit être répétée : un `display` posé par une classe
+   l'emporte sur celle de la feuille du navigateur, et l'élément resterait
+   visible malgré l'attribut. */
+.bandeau-admin[hidden] { display: none; }
+.bandeau-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 1rem 1.3rem;
+  margin-bottom: 2rem;
+  border: 1px solid rgba(31, 77, 61, 0.3);
+  background: rgba(31, 77, 61, 0.06);
+  border-radius: var(--radius);
+}
+.bandeau-admin p { margin: 0; font-size: 0.92rem; }
+.bandeau-admin strong { color: var(--green); }

@@ -529,4 +529,8 @@
   }
 
   dessinerTout();
+
+  // Onglet demandé par l'adresse (?onglet=carte depuis le site).
+  var ongletDemande = $('tab-' + (CONFIG.onglet || 'reglages'));
+  if (ongletDemande) choisirOnglet(ongletDemande, false);
 })();
