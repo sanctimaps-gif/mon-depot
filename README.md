@@ -4,6 +4,20 @@ Site vitrine du **Petit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 R
 Six pages en HTML, CSS et JavaScript natifs : **aucune dépendance, aucune étape de
 build**.
 
+## Ouvrir le site tout de suite (sans hébergement)
+
+Double-cliquez sur **`apercu-du-site.html`** : les six pages s'ouvrent dans le
+navigateur, hors ligne, sans serveur ni mise en ligne. C'est le moyen le plus rapide
+de montrer le site à quelqu'un.
+
+Ce fichier est reconstruit à partir des vraies pages, il ne peut donc pas se décaler.
+Après une modification :
+
+```bash
+pip install beautifulsoup4
+python3 tools/build-apercu.py
+```
+
 ## Mise en ligne (GitHub Pages)
 
 Les fichiers du site sont **à la racine du dépôt** — c'est ce que GitHub Pages sert par
@@ -11,12 +25,25 @@ défaut. Dans *Settings → Pages* : source = cette branche, dossier = **`/ (roo
 
 > Si Pages est réglé sur `/docs`, la page publiée est le README et non le site : le
 > visiteur voit alors de la documentation et des blocs de code. Le réglage doit être
-> `/ (root)`, ou bien il faut déplacer les fichiers : `mkdir docs && git mv *.html css js img CNAME docs/`
+> `/ (root)`, ou bien il faut déplacer les fichiers : `mkdir docs && git mv *.html css js img docs/`
 
-Le fichier `CNAME` (racine) déclare le domaine **barlepetitravisé.fr**
-(`xn--barlepetitravis-pnb.fr`). Côté registrar, faites pointer le domaine vers GitHub
-Pages (enregistrements A/ALIAS documentés par GitHub), puis activez « Enforce HTTPS ».
-Au moment de la rédaction, ce domaine ne résolvait pas encore.
+### Le domaine personnalisé — à réactiver plus tard
+
+Le fichier `CNAME` a été **retiré volontairement**. Tant qu'il est présent, GitHub
+Pages redirige l'adresse `sanctimaps-gif.github.io/mon-depot/` vers
+`barlepetitravisé.fr` : si ce domaine ne pointe encore nulle part, plus rien ne
+s'ouvre — le navigateur affiche « site inaccessible ». C'était le cas.
+
+Marche à suivre, dans cet ordre :
+
+1. Chez le registrar, faire pointer `barlepetitravisé.fr` vers GitHub Pages
+   (enregistrements A/ALIAS documentés par GitHub).
+2. Attendre que le domaine résolve (`ping barlepetitravisé.fr` doit répondre).
+3. Seulement ensuite, renseigner le domaine dans *Settings → Pages → Custom domain* :
+   GitHub recrée le fichier `CNAME` tout seul.
+
+Si le champ « Custom domain » est déjà rempli dans les réglages, videz-le : sinon
+GitHub recrée le fichier et la redirection casse à nouveau l'accès.
 
 `.nojekyll` désactive Jekyll : les fichiers sont servis tels quels.
 
@@ -77,13 +104,14 @@ Ouvrir `index.html` directement fonctionne aussi.
 
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
-CNAME                       Domaine personnalisé
+apercu-du-site.html         Tout le site en un fichier autonome (double-clic)
 .nojekyll                   Désactive Jekyll sur GitHub Pages
 css/style.css               Thème, mise en page, responsive, impression
 js/main.js                  Horaires, menu mobile, agenda, formulaire
 js/evenements.js            Les dates à annoncer
 img/qr-carte.svg            QR code vers la carte
 tools/make-qr.py            Régénère le QR code
+tools/build-apercu.py       Reconstruit l'aperçu en un fichier
 ```
 
 ## Modifier le site
