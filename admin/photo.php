@@ -1,6 +1,6 @@
 <?php
 /**
- * Le Petit Ravisé — dépôt d'une photo depuis la page publique.
+ * Le P’tit Ravisé — dépôt d'une photo depuis la page publique.
  *
  * Une photo manquante affiche un bouton sur le site ; ce bouton demande le
  * mot de passe de l'administration puis envoie le fichier ici.

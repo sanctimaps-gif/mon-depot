@@ -1,6 +1,6 @@
 <?php
 /**
- * Le Petit Ravisé — changement de mot de passe depuis le site public.
+ * Le P’tit Ravisé — changement de mot de passe depuis le site public.
  *
  * L'entrée « Compte » du menu ouvre une fenêtre qui envoie ici l'ancien
  * et le nouveau mot de passe. C'est la connaissance de l'ancien qui fait

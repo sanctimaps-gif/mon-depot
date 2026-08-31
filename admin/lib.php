@@ -1,6 +1,6 @@
 <?php
 /**
- * Le Petit Ravisé — fonctions communes de l'administration.
+ * Le P’tit Ravisé — fonctions communes de l'administration.
  *
  * Aucune dépendance, aucune base de données : le compte est un fichier
  * PHP contenant un mot de passe haché, le contenu du site est le fichier
@@ -254,7 +254,7 @@ function ecrire_tentatives(array $tentatives): void
 
 const ENTETE_DONNEES = <<<'TXT'
 /* =========================================================
-   Le Petit Ravisé — contenu modifiable du site
+   Le P’tit Ravisé — contenu modifiable du site
    ---------------------------------------------------------
    CE FICHIER EST LA SOURCE UNIQUE du contenu : réglages,
    carte et agenda. Les pages du site le lisent, la console

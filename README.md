@@ -1,6 +1,6 @@
-# Le Petit Ravisé — site du bar-tabac
+# Le P’tit Ravisé — site du bar-tabac
 
-Site vitrine du **Petit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 Rouen.
+Site vitrine du **P’tit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 Rouen.
 Six pages en HTML, CSS et JavaScript natifs : **aucune dépendance, aucune étape de
 build**. Un espace d'administration en PHP, sans base de données, permet de modifier le
 contenu sans toucher au code.
@@ -82,7 +82,7 @@ en attendant, le site reste présentable — rien n'affiche « à compléter » 
 
 Deux points à confirmer :
 
-- **L'orthographe du nom.** Le site utilise « Le Petit Ravisé ». La page Facebook et le
+- **L'orthographe du nom.** Le site utilise « Le P’tit Ravisé ». La page Facebook et le
   registre des entreprises écrivent « Le P'tit Ravisé ».
 - **Les horaires** (lundi–samedi 7 h – 20 h, fermé le dimanche) proviennent de fiches
   publiques, pas du bar lui-même.
@@ -169,7 +169,7 @@ Le site est livré avec un compte administrateur :
 
 | | |
 | --- | --- |
-| Adresse | `admin@lepetitravise.fr` |
+| Adresse | `admin@leptitravise.fr` |
 | Mot de passe | `PetitRavise-2026` |
 
 Ce mot de passe reste valable tant qu'il n'a pas été changé. Le changement se fait
@@ -462,10 +462,12 @@ La fiche existe déjà — 4,6/5, une cinquantaine d'avis. Par ordre d'impact :
    pratiquement jamais sur cette recherche. Mettre *Bar-tabac*, *Bureau de tabac* et
    *Café* en catégories secondaires.
 3. **Nom, adresse, téléphone strictement identiques** partout : fiche Google, site,
-   Facebook, annuaires. ⚠️ Aujourd'hui la fiche et Facebook écrivent « Le P'tit
-   Ravisé » tandis que d'autres annuaires écrivent « Le Petit Ravisé » : cette
-   incohérence dessert le référencement local. Choisir une orthographe et l'appliquer
-   partout, à commencer par ce site.
+   Facebook, annuaires. L'orthographe retenue est **« Le P'tit Ravisé »**, celle de la
+   fiche Google et de Facebook ; le site l'applique désormais partout, et les données
+   structurées déclarent « Le Petit Ravisé » en `alternateName` pour que Google
+   rapproche les deux graphies. Reste à corriger les annuaires qui écrivent encore la
+   forme longue (PagesJaunes, Petit Futé, bureau-de-tabac.fr…) : chaque variante
+   affaiblit le signal.
 4. **Horaires complets** sur la fiche, samedi 8 h 30 inclus, plus les horaires
    exceptionnels (jours fériés) — Google valorise les fiches tenues à jour.
 5. **Attributs** : terrasse, accessibilité, moyens de paiement, Wi-Fi le cas échéant.
@@ -483,11 +485,14 @@ La fiche existe déjà — 4,6/5, une cinquantaine d'avis. Par ordre d'impact :
 1. Déclarer le site dans **Google Search Console**, y soumettre `sitemap.xml`.
 2. Faire de même dans **Bing Webmaster Tools** (Bing alimente aussi certains
    assistants).
-3. Vérifier les annuaires existants : PagesJaunes, Petit Futé, TripAdvisor, acceslibre.
-   ⚠️ Une page `le-ptit-ravise.eatbu.com` existe déjà et fait doublon avec ce site :
-   mieux vaut la mettre à jour pour qu'elle pointe vers le nouveau domaine, ou la
-   fermer, plutôt que laisser deux sites se concurrencer.
-4. Contrôler le rendu des données structurées avec le *Test des résultats enrichis* de
+3. Vérifier les annuaires existants : PagesJaunes, Petit Futé, TripAdvisor, acceslibre,
+   et y harmoniser l'orthographe du nom.
+4. **Le site `le-ptit-ravise.eatbu.com`** porte le même nom et la même adresse. Quel que
+   soit son auteur, deux sites pour un même établissement se concurrencent sur les mêmes
+   recherches et divisent les signaux. Pour que celui-ci prenne la place, il faut que
+   **la fiche Google pointe vers lui** (champ « Site Web ») ; sans cela l'autre restera
+   devant, indépendamment de sa qualité. Idéalement, l'ancien est fermé ou redirigé.
+5. Contrôler le rendu des données structurées avec le *Test des résultats enrichis* de
    Google.
 
 ### Ce qu'il ne faut pas faire

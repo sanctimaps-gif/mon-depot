@@ -1,5 +1,5 @@
 /* =========================================================
-   Le Petit Ravisé — script commun aux six pages.
+   Le P’tit Ravisé — script commun aux six pages.
    Vanilla JS, aucune dépendance.
    ========================================================= */
 (function () {

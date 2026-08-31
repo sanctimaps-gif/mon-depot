@@ -1,6 +1,6 @@
 <?php
 /**
- * Le Petit Ravisé — points d'entrée de l'administration.
+ * Le P’tit Ravisé — points d'entrée de l'administration.
  *
  * Toutes les actions passent en POST et renvoient du JSON.
  * Chaque action qui modifie quelque chose exige une session ouverte

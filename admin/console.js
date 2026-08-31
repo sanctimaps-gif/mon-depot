@@ -1,5 +1,5 @@
 /* =========================================================
-   Le Petit Ravisé — console d'administration (côté navigateur)
+   Le P’tit Ravisé — console d'administration (côté navigateur)
    ---------------------------------------------------------
    Dialogue avec admin/api.php. Aucun service extérieur :
    le compte, la session et le contenu vivent sur le serveur

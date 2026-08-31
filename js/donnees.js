@@ -1,5 +1,5 @@
 /* =========================================================
-   Le Petit Ravisé — contenu modifiable du site
+   Le P’tit Ravisé — contenu modifiable du site
    ---------------------------------------------------------
    CE FICHIER EST LA SOURCE UNIQUE du contenu : réglages,
    carte et agenda. Les pages du site le lisent, la console

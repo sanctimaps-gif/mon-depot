@@ -25,7 +25,7 @@ $onglet = in_array($_GET['onglet'] ?? '', $ongletsValides, true) ? $_GET['onglet
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administration — Le Petit Ravisé</title>
+  <title>Administration — Le P’tit Ravisé</title>
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#1f4d3d">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔑</text></svg>">
@@ -47,7 +47,7 @@ $onglet = in_array($_GET['onglet'] ?? '', $ongletsValides, true) ? $_GET['onglet
       </span>
       <span class="brand-text">
         <span class="brand-name">Administration</span>
-        <span class="brand-sub">Le Petit Ravisé</span>
+        <span class="brand-sub">Le P’tit Ravisé</span>
       </span>
     </div>
     <?php if ($connecte): ?>

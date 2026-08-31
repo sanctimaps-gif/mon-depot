@@ -1,6 +1,6 @@
 <?php
 /**
- * Le Petit Ravisé — état de la session.
+ * Le P’tit Ravisé — état de la session.
  *
  * Les pages publiques sont des fichiers statiques : elles ne savent pas si
  * une session d'administration est ouverte. Ce point d'entrée le leur dit,
