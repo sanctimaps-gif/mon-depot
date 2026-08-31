@@ -3,42 +3,44 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Le Comptoir Doré — Bar à cocktails, Lyon</title>
-  <meta name="description" content="Le Comptoir Doré, bar à cocktails au cœur de Lyon. Cocktails signature, bières artisanales, planches à partager et concerts live du mercredi au samedi.">
-  <meta name="theme-color" content="#12100e">
+  <title>Le Petit Ravisé — Bar-tabac à Rouen, rue des Bons-Enfants</title>
+  <meta name="description" content="Le Petit Ravisé, bar-tabac de quartier au 14 rue des Bons-Enfants à Rouen. Café dès 7 h, terrasse, tabac et Française des Jeux. Ouvert du lundi au samedi, 7 h – 20 h.">
+  <meta name="theme-color" content="#1f4d3d">
 
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Le Comptoir Doré — Bar à cocktails, Lyon">
-  <meta property="og:description" content="Cocktails signature, bières artisanales et concerts live au cœur de Lyon.">
+  <meta property="og:type" content="business.business">
+  <meta property="og:title" content="Le Petit Ravisé — Bar-tabac à Rouen">
+  <meta property="og:description" content="Bar-tabac de quartier au 14 rue des Bons-Enfants, Rouen. Café dès 7 h, terrasse et FDJ, du lundi au samedi.">
   <meta property="og:locale" content="fr_FR">
 
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍸</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BarOrPub",
-    "name": "Le Comptoir Doré",
-    "description": "Bar à cocktails au cœur de Lyon : cocktails signature, bières artisanales et concerts live.",
+    "name": "Le Petit Ravisé",
+    "description": "Bar-tabac de quartier au cœur de Rouen : café, terrasse, tabac et Française des Jeux.",
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "14 rue des Capucins",
-      "postalCode": "69001",
-      "addressLocality": "Lyon",
+      "streetAddress": "14 rue des Bons-Enfants",
+      "postalCode": "76000",
+      "addressLocality": "Rouen",
+      "addressRegion": "Normandie",
       "addressCountry": "FR"
     },
-    "telephone": "+33 4 78 00 00 00",
-    "email": "bonjour@lecomptoirdore.fr",
-    "servesCuisine": "Cocktails, tapas",
-    "priceRange": "€€",
+    "telephone": "+33235716679",
+    "sameAs": ["https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/"],
     "openingHoursSpecification": [
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Tuesday", "Wednesday", "Thursday"], "opens": "17:00", "closes": "01:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday", "Saturday"], "opens": "17:00", "closes": "03:00" },
-      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Sunday"], "opens": "18:00", "closes": "00:00" }
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "07:00",
+        "closes": "20:00"
+      }
     ]
   }
   </script>
@@ -46,17 +48,19 @@
 <body>
   <a class="skip-link" href="#contenu">Aller au contenu principal</a>
 
-  <header class="site-header" id="header">
+  <header class="site-header">
     <div class="wrap header-inner">
-      <a class="brand" href="#accueil">
+      <a class="brand" href="index.html">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16l-8 8v7"/><path d="M8 20h8"/><path d="M7.5 7.5h9"/>
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 8h14v6a5 5 0 01-5 5H8a5 5 0 01-5-5z"/>
+            <path d="M17 10h2a2.5 2.5 0 010 5h-2"/>
+            <path d="M6 4.5V3M10 4.5V3M14 4.5V3"/>
           </svg>
         </span>
         <span class="brand-text">
-          <span class="brand-name">Le Comptoir Doré</span>
-          <span class="brand-sub">Bar à cocktails · Lyon</span>
+          <span class="brand-name">Le Petit Ravisé</span>
+          <span class="brand-sub">Bar · Tabac · Rouen</span>
         </span>
       </a>
 
@@ -66,396 +70,218 @@
 
       <nav class="nav" id="nav" aria-label="Navigation principale">
         <ul>
-          <li><a href="#maison">La maison</a></li>
-          <li><a href="#carte">La carte</a></li>
-          <li><a href="#agenda">Agenda</a></li>
-          <li><a href="#infos">Infos</a></li>
-          <li><a class="btn btn-small" href="#reserver">Réserver</a></li>
+          <li><a href="index.html" aria-current="page">Accueil</a></li>
+          <li><a href="carte.html">La carte</a></li>
+          <li><a href="le-bar.html">Le bar</a></li>
+          <li><a href="evenements.html">Événements</a></li>
+          <li><a href="infos.html">Infos pratiques</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a class="btn btn-small" href="tel:+33235716679">02 35 71 66 79</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
   <main id="contenu">
-    <!-- ================= HERO ================= -->
-    <section class="hero" id="accueil">
-      <div class="hero-bg" aria-hidden="true"></div>
-      <div class="wrap hero-inner">
-        <p class="eyebrow reveal">Depuis 2014 · Pentes de la Croix-Rousse</p>
-        <h1 class="reveal">Un comptoir,<br>quelques glaçons,<br><em>et le reste suit.</em></h1>
-        <p class="lead reveal">Bar à cocktails et petite cuisine de partage, ouvert du mardi au dimanche.
-          Vingt-quatre places au comptoir, un piano droit désaccordé, et une carte qui change avec les saisons.</p>
-        <div class="hero-actions reveal">
-          <a class="btn" href="#reserver">Réserver une table</a>
-          <a class="btn btn-ghost" href="#carte">Voir la carte</a>
+    <!-- ================= ACCUEIL ================= -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <p class="eyebrow">Bar-tabac · Quartier des Bons-Enfants, Rouen</p>
+          <h1>Le Petit Ravisé</h1>
+          <p class="hero-tagline">Le café du matin, le verre de midi, la terrasse au soleil.</p>
+          <p class="lead">Un bar de quartier comme on n'en fait plus beaucoup : on y entre pour un
+            express au comptoir, on y reste pour la terrasse. Tabac, Française des Jeux et
+            visages connus depuis l'ouverture des portes à 7 h.</p>
+
+          <div class="hero-actions">
+            <a class="btn" href="carte.html">Voir la carte</a>
+            <a class="btn btn-red" href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" target="_blank" rel="noopener noreferrer">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 11l19-9-9 19-2-8z"/>
+              </svg>
+              Itinéraire
+            </a>
+            <a class="btn btn-outline" href="tel:+33235716679">Appeler</a>
+          </div>
+
+          <ul class="hero-facts">
+            <li>
+              <span class="ico" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1116 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </span>
+              <span>14 rue des Bons-Enfants, 76000 Rouen</span>
+            </li>
+            <li>
+              <span class="ico" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+              </span>
+              <span>Du lundi au samedi, 7 h – 20 h · Fermé le dimanche</span>
+            </li>
+            <li>
+              <span class="ico" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1 1 .4 1.9.7 2.8a2 2 0 01-.5 2.1L8.1 9.9a16 16 0 006 6l1.3-1.2a2 2 0 012.1-.5c.9.3 1.8.6 2.8.7a2 2 0 011.7 2z"/></svg>
+              </span>
+              <span><a href="tel:+33235716679">02 35 71 66 79</a></span>
+            </li>
+          </ul>
+
+          <p class="status" data-status style="margin-top:1.4rem">
+            <span class="dot"></span><span class="status-text">Horaires en cours de chargement…</span>
+          </p>
         </div>
-        <p class="hero-status reveal" id="statusLine" aria-live="polite">
-          <span class="dot" id="statusDot"></span><span id="statusText">Horaires en cours de chargement…</span>
-        </p>
+
+        <div>
+          <figure class="illu illu-devanture" role="img" aria-label="Illustration de la devanture du bar : store, terrasse et enseigne tabac">
+            <svg viewBox="0 0 480 380" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <!-- façade -->
+              <path d="M64 40h352v260H64z"/>
+              <path d="M64 40l24-22h304l24 22" opacity=".6"/>
+              <!-- store rayé -->
+              <path d="M46 158l26-46h336l26 46z"/>
+              <path d="M98 112l-14 46M146 112l-9 46M194 112l-5 46M242 112v46M290 112l5 46M338 112l9 46M386 112l14 46" opacity=".45"/>
+              <path d="M46 158h388" />
+              <!-- vitrine et porte -->
+              <path d="M96 190h108v88H96zM236 190h68v110h-68z"/>
+              <path d="M96 234h108M150 190v88" opacity=".4"/>
+              <circle cx="248" cy="248" r="4"/>
+              <path d="M330 190h54v58h-54z" opacity=".8"/>
+              <!-- enseigne « carotte » tabac -->
+              <path d="M404 66v18"/>
+              <path d="M404 84c9 0 15 6 15 15v14c0 9-6 15-15 15s-15-6-15-15v-14c0-9 6-15 15-15z"/>
+              <!-- sol et terrasse -->
+              <path d="M20 300h440"/>
+              <ellipse cx="120" cy="318" rx="34" ry="8"/>
+              <path d="M120 326v34M104 360h32"/>
+              <path d="M60 316v30M52 346h16M60 316q-12-2-12-14"/>
+              <ellipse cx="382" cy="318" rx="30" ry="7" opacity=".75"/>
+              <path d="M382 325v34M368 359h28" opacity=".75"/>
+            </svg>
+          </figure>
+        </div>
       </div>
     </section>
 
-    <!-- ================= LA MAISON ================= -->
-    <section class="section" id="maison">
+    <!-- ================= APERÇU DES PAGES ================= -->
+    <section class="section section-alt">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <p class="eyebrow">En deux mots</p>
+          <h2>Ce que vous trouverez ici</h2>
+        </div>
+        <div class="cards">
+          <a class="card card-link reveal" href="carte.html">
+            <h3>🍺 La carte</h3>
+            <p>Bières, cocktails, softs, boissons chaudes et de quoi grignoter.</p>
+          </a>
+          <a class="card card-link reveal" href="le-bar.html">
+            <h3>🪑 Le bar</h3>
+            <p>L'ambiance, la terrasse et l'histoire du lieu.</p>
+          </a>
+          <a class="card card-link reveal" href="evenements.html">
+            <h3>📅 Événements</h3>
+            <p>Retransmissions et soirées annoncées au fil de l'eau.</p>
+          </a>
+          <a class="card card-link reveal" href="infos.html">
+            <h3>📍 Infos pratiques</h3>
+            <p>Plan, horaires, transports et stationnement à proximité.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= PRÉSENTATION ================= -->
+    <section class="section">
       <div class="wrap grid-2">
         <div class="reveal">
-          <p class="eyebrow">La maison</p>
-          <h2>Un bar de quartier qui prend les cocktails au sérieux — et rien d'autre.</h2>
-          <p>On a ouvert Le Comptoir Doré dans une ancienne mercerie, en gardant les tiroirs en chêne
-            et le carrelage d'origine. Depuis, on y sert des cocktails travaillés sans chichi :
-            sirops maison, agrumes pressés le jour même, glace taillée derrière le bar.</p>
-          <p>Pas de carte de trois cents références, pas de mixologue en blouse blanche.
-            Dites-nous ce que vous aimez, on s'occupe du reste.</p>
-          <ul class="facts">
-            <li><strong>24</strong><span>places au comptoir</span></li>
-            <li><strong>12</strong><span>cocktails signature</span></li>
-            <li><strong>3</strong><span>concerts par semaine</span></li>
-          </ul>
+          <p class="eyebrow">Le lieu</p>
+          <h2>Un vrai bar de quartier, à deux pas du Vieux-Marché</h2>
+          <p>Le Petit Ravisé, c'est d'abord un comptoir : celui où l'on prend son café debout avant
+            le travail, où l'on achète son paquet et sa grille, où l'on discute avec le patron sans
+            avoir besoin de commander quoi que ce soit.</p>
+          <p>La rue des Bons-Enfants est une des plus anciennes du centre de Rouen. Le bar y tient
+            son rôle depuis longtemps : ouvrir tôt, fermer tard le samedi, et laisser la terrasse
+            au soleil dès qu'il pointe.</p>
+          <p><a class="btn btn-outline" href="le-bar.html">Découvrir le bar</a></p>
         </div>
         <div class="reveal">
-          <div class="art art-bar" role="img" aria-label="Illustration du comptoir, ses bouteilles en étagère et ses suspensions dorées">
-            <svg viewBox="0 0 400 480" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <!-- suspensions -->
-              <path d="M110 0v54M290 0v34"/>
-              <path d="M78 54h64l14 36H64z"/>
-              <path d="M258 34h64l14 36h-92z"/>
-              <path d="M96 104q14 10 28 0M276 84q14 10 28 0" opacity=".55"/>
-              <!-- étagère du fond -->
-              <path d="M40 196h320M40 268h320" opacity=".75"/>
-              <path d="M76 196v-46q0-8 6-12v-14h14v14q6 4 6 12v46zM126 196v-52q0-10 8-14v-12h12v12q8 4 8 14v52zM180 196v-40q0-9 7-13v-15h13v15q7 4 7 13v40zM240 196v-56q0-8 6-11v-13h13v13q6 3 6 11v56zM292 196v-44q0-9 7-13v-13h13v13q7 4 7 13v44z"/>
-              <path d="M96 268v-40q0-8 6-11v-12h13v12q6 3 6 11v40zM160 268v-48q0-9 7-12v-13h12v13q7 3 7 12v48zM228 268v-36q0-8 6-11v-12h13v12q6 3 6 11v36z" opacity=".7"/>
-              <!-- comptoir -->
-              <path d="M24 324h352v22H24z"/>
-              <path d="M44 346v58M356 346v58M24 404h352" opacity=".6"/>
-              <!-- tabourets -->
-              <path d="M112 388h60M142 396v58M120 454h44M228 388h60M258 396v58M236 454h44"/>
-              <!-- verre posé sur le comptoir -->
-              <path d="M186 324l14-24h-28z" opacity=".9"/>
-            </svg>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= LA CARTE ================= -->
-    <section class="section section-alt" id="carte">
-      <div class="wrap">
-        <header class="section-head reveal">
-          <p class="eyebrow">La carte</p>
-          <h2>Ce qu'on sert ce soir</h2>
-          <p class="lead">La carte tourne tous les deux mois. Ci-dessous, la sélection de la saison —
-            les classiques, eux, sont toujours disponibles.</p>
-        </header>
-
-        <div class="tabs reveal">
-          <div class="tablist" role="tablist" aria-label="Catégories de la carte">
-            <button role="tab" id="tab-signature" aria-controls="panel-signature" aria-selected="true" class="tab">Signatures</button>
-            <button role="tab" id="tab-classiques" aria-controls="panel-classiques" aria-selected="false" class="tab" tabindex="-1">Classiques</button>
-            <button role="tab" id="tab-sansalcool" aria-controls="panel-sansalcool" aria-selected="false" class="tab" tabindex="-1">Sans alcool</button>
-            <button role="tab" id="tab-bieres" aria-controls="panel-bieres" aria-selected="false" class="tab" tabindex="-1">Bières &amp; vins</button>
-            <button role="tab" id="tab-manger" aria-controls="panel-manger" aria-selected="false" class="tab" tabindex="-1">À grignoter</button>
-          </div>
-
-          <div role="tabpanel" id="panel-signature" aria-labelledby="tab-signature" class="tabpanel" tabindex="0">
-            <ul class="menu">
-              <li>
-                <div class="menu-head"><h3>Croix-Rousse Sour</h3><span class="price">13 €</span></div>
-                <p>Whisky de seigle, sirop de miel de châtaignier, citron jaune, blanc d'œuf, trait d'amer maison.</p>
-              </li>
-              <li>
-                <div class="menu-head"><h3>Le Doré</h3><span class="price">14 €</span></div>
-                <p>Gin infusé camomille, vermouth blanc, liqueur de sureau, zeste de pamplemousse. Notre maison en un verre.</p>
-              </li>
-              <li>
-                <div class="menu-head"><h3>Fenêtre sur cour</h3><span class="price">12 €</span></div>
-                <p>Mezcal, jus d'ananas rôti, piment doux, lime. Fumé, sucré, un peu piquant.</p>
-              </li>
-              <li>
-                <div class="menu-head"><h3>Traboule</h3><span class="price">13 €</span></div>
-                <p>Cognac VS, chartreuse verte, sirop de noix, absinthe en rinçage. À boire lentement.</p>
-              </li>
-              <li>
-                <div class="menu-head"><h3>Minuit rue Burdeau</h3><span class="price">14 €</span></div>
-                <p>Rhum ambré, café froid infusé à froid, cacao, crème légère. Le dernier verre, en principe.</p>
-              </li>
-              <li>
-                <div class="menu-head"><h3>Jardin d'hiver</h3><span class="price">12 €</span></div>
-                <p>Vodka, concombre, basilic, verjus, eau pétillante. Le plus frais de la carte.</p>
-              </li>
-            </ul>
-          </div>
-
-          <div role="tabpanel" id="panel-classiques" aria-labelledby="tab-classiques" class="tabpanel" tabindex="0" hidden>
-            <ul class="menu">
-              <li><div class="menu-head"><h3>Negroni</h3><span class="price">11 €</span></div><p>Gin, campari, vermouth rouge. Servi sur glace taillée.</p></li>
-              <li><div class="menu-head"><h3>Old Fashioned</h3><span class="price">12 €</span></div><p>Bourbon, sucre de canne, angostura, zeste d'orange.</p></li>
-              <li><div class="menu-head"><h3>Daiquiri</h3><span class="price">11 €</span></div><p>Rhum blanc agricole, lime, sucre. Trois ingrédients, aucune excuse.</p></li>
-              <li><div class="menu-head"><h3>Margarita</h3><span class="price">12 €</span></div><p>Tequila blanco, triple sec, lime, sel de Guérande sur demande.</p></li>
-              <li><div class="menu-head"><h3>Spritz maison</h3><span class="price">10 €</span></div><p>Apérol ou bitter maison, prosecco, eau gazeuse, olive.</p></li>
-              <li><div class="menu-head"><h3>Whisky Sour</h3><span class="price">11 €</span></div><p>Bourbon, citron, sucre, blanc d'œuf.</p></li>
-            </ul>
-          </div>
-
-          <div role="tabpanel" id="panel-sansalcool" aria-labelledby="tab-sansalcool" class="tabpanel" tabindex="0" hidden>
-            <ul class="menu">
-              <li><div class="menu-head"><h3>Verger d'octobre</h3><span class="price">8 €</span></div><p>Jus de pomme trouble, romarin, verjus, tonic.</p></li>
-              <li><div class="menu-head"><h3>Ginger Zéro</h3><span class="price">8 €</span></div><p>Gingembre frais pressé, lime, sirop de canne, soda.</p></li>
-              <li><div class="menu-head"><h3>Hibiscus Fizz</h3><span class="price">9 €</span></div><p>Infusion d'hibiscus, citron, miel, eau pétillante.</p></li>
-              <li><div class="menu-head"><h3>Kombucha du moment</h3><span class="price">6 €</span></div><p>Brassé à Villeurbanne. Demandez le parfum de la semaine.</p></li>
-              <li><div class="menu-head"><h3>Café tonic</h3><span class="price">7 €</span></div><p>Espresso, tonic, orange. Pour les longues soirées.</p></li>
-            </ul>
-          </div>
-
-          <div role="tabpanel" id="panel-bieres" aria-labelledby="tab-bieres" class="tabpanel" tabindex="0" hidden>
-            <ul class="menu">
-              <li><div class="menu-head"><h3>Pression du moment</h3><span class="price">5 € / 25 cl</span></div><p>Quatre becs, brasseries de la région. Le tableau noir fait foi.</p></li>
-              <li><div class="menu-head"><h3>IPA de la Guillotière</h3><span class="price">6,50 € / 33 cl</span></div><p>Amère, houblonnée, 6,2°.</p></li>
-              <li><div class="menu-head"><h3>Blanche aux agrumes</h3><span class="price">6 € / 33 cl</span></div><p>Légère, 4,5°. Celle qu'on commande en terrasse.</p></li>
-              <li><div class="menu-head"><h3>Côtes-du-Rhône, Domaine Bernard</h3><span class="price">6 € / verre</span></div><p>Rouge, grenache-syrah, servi frais.</p></li>
-              <li><div class="menu-head"><h3>Viognier, Ardèche</h3><span class="price">6,50 € / verre</span></div><p>Blanc sec, abricot et fleurs blanches.</p></li>
-              <li><div class="menu-head"><h3>Pét'nat rosé</h3><span class="price">7 € / verre</span></div><p>Bulles naturelles, un peu sauvage.</p></li>
-            </ul>
-          </div>
-
-          <div role="tabpanel" id="panel-manger" aria-labelledby="tab-manger" class="tabpanel" tabindex="0" hidden>
-            <ul class="menu">
-              <li><div class="menu-head"><h3>Planche de charcuterie</h3><span class="price">14 €</span></div><p>Rosette, coppa, jambon sec, cornichons, pain de campagne.</p></li>
-              <li><div class="menu-head"><h3>Planche de fromages</h3><span class="price">14 €</span></div><p>Saint-marcellin, comté 18 mois, chèvre cendré, confiture de figues.</p></li>
-              <li><div class="menu-head"><h3>Croquettes de comté</h3><span class="price">8 €</span></div><p>Six pièces, mayonnaise à l'estragon. <span class="tag">Végétarien</span></p></li>
-              <li><div class="menu-head"><h3>Houmous, huile de piment</h3><span class="price">7 €</span></div><p>Pain plat grillé, herbes fraîches. <span class="tag">Vegan</span></p></li>
-              <li><div class="menu-head"><h3>Olives &amp; amandes grillées</h3><span class="price">5 €</span></div><p>Pour patienter. <span class="tag">Vegan</span></p></li>
-              <li><div class="menu-head"><h3>Cookie du bar</h3><span class="price">4 €</span></div><p>Chocolat noir, fleur de sel. Fait le matin même.</p></li>
-            </ul>
-          </div>
-        </div>
-
-        <p class="note reveal">Allergènes et provenance sur demande. La vente d'alcool est interdite aux mineurs.</p>
-      </div>
-    </section>
-
-    <!-- ================= AGENDA ================= -->
-    <section class="section" id="agenda">
-      <div class="wrap">
-        <header class="section-head reveal">
-          <p class="eyebrow">Agenda</p>
-          <h2>Ce mois-ci au comptoir</h2>
-          <p class="lead">Entrée libre, chapeau à la fin pour les musiciens. On conseille de réserver les soirs de concert.</p>
-        </header>
-
-        <ul class="events">
-          <li class="event reveal">
-            <div class="event-date"><span class="day">04</span><span class="month">sept.</span></div>
-            <div class="event-body">
-              <h3>Trio Marceau — jazz manouche</h3>
-              <p>Guitare, contrebasse et beaucoup de reprises. Deux sets, 21 h et 22 h 30.</p>
-              <p class="event-meta">Jeudi · 21 h 00 · Entrée libre</p>
-            </div>
-          </li>
-          <li class="event reveal">
-            <div class="event-date"><span class="day">12</span><span class="month">sept.</span></div>
-            <div class="event-body">
-              <h3>Atelier cocktails : le sour parfait</h3>
-              <p>Deux heures derrière le comptoir avec Nadia. Trois cocktails réalisés et bus par participant. 12 places.</p>
-              <p class="event-meta">Vendredi · 18 h 30 · 45 € · Sur réservation</p>
-            </div>
-          </li>
-          <li class="event reveal">
-            <div class="event-date"><span class="day">19</span><span class="month">sept.</span></div>
-            <div class="event-body">
-              <h3>Carte blanche à Lila K. — DJ set vinyle</h3>
-              <p>Soul, funk et rarities, uniquement en 45 tours. Jusqu'à la fermeture.</p>
-              <p class="event-meta">Vendredi · 22 h 00 · Entrée libre</p>
-            </div>
-          </li>
-          <li class="event reveal">
-            <div class="event-date"><span class="day">27</span><span class="month">sept.</span></div>
-            <div class="event-body">
-              <h3>Dégustation : rhums agricoles</h3>
-              <p>Six rhums de Martinique et de Marie-Galante, commentés par notre fournisseur. Planche incluse.</p>
-              <p class="event-meta">Samedi · 19 h 00 · 35 € · Sur réservation</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- ================= GALERIE ================= -->
-    <section class="section section-alt" id="galerie">
-      <div class="wrap">
-        <header class="section-head reveal">
-          <p class="eyebrow">L'ambiance</p>
-          <h2>Un aperçu</h2>
-        </header>
-        <div class="gallery">
-          <figure class="art art-1 reveal" role="img" aria-label="Un cocktail servi coupe, olive et zeste">
-            <svg viewBox="0 0 200 260" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M46 74h108L100 140z"/>
-              <path d="M58 88h84" opacity=".6"/>
-              <path d="M100 140v62M72 208h56"/>
-              <path d="M104 60l24 30" opacity=".8"/>
-              <circle cx="130" cy="94" r="8"/>
-            </svg>
-          </figure>
-          <figure class="art art-2 reveal" role="img" aria-label="Whisky sur un glaçon taillé">
-            <svg viewBox="0 0 200 260" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M58 70h84l-8 128a10 10 0 01-10 9H76a10 10 0 01-10-9z"/>
-              <path d="M63 128h74" opacity=".6"/>
-              <path d="M84 146l24-14 22 14v26l-22 14-24-14z"/>
-              <path d="M84 146l24 14 22-14M108 160v26" opacity=".7"/>
-              <path d="M58 70q42-14 84 0" opacity=".5"/>
-            </svg>
-          </figure>
-          <figure class="art art-3 reveal" role="img" aria-label="Les suspensions dorées au-dessus des tables">
-            <svg viewBox="0 0 200 260" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M46 0v58M100 0v96M154 0v40"/>
-              <path d="M24 58h44l10 30H14zM78 96h44l10 30H68zM132 40h44l10 30h-64z"/>
-              <path d="M30 102q16 12 32 0M84 140q16 12 32 0M138 84q16 12 32 0" opacity=".5"/>
-              <path d="M20 232h160" opacity=".5"/>
-              <path d="M58 232v-24h84v24" opacity=".7"/>
-            </svg>
-          </figure>
-          <figure class="art art-4 reveal" role="img" aria-label="Concert acoustique dans la salle du fond">
-            <svg viewBox="0 0 200 260" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="82" y="40" width="36" height="66" rx="18"/>
-              <path d="M88 58h24M88 72h24M88 86h24" opacity=".5"/>
-              <path d="M68 96a32 32 0 0064 0" />
-              <path d="M100 128v76M72 214h56"/>
-              <path d="M150 78v46a12 12 0 11-8-11V78z" opacity=".75"/>
-              <path d="M42 96v40a11 11 0 11-8-10V96z" opacity=".55"/>
-            </svg>
-          </figure>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= RÉSERVATION ================= -->
-    <section class="section" id="reserver">
-      <div class="wrap grid-2 grid-form">
-        <div class="reveal">
-          <p class="eyebrow">Réservation</p>
-          <h2>Gardez-nous une place</h2>
-          <p>On prend les réservations jusqu'à 8 personnes en ligne. Au-delà (anniversaires, pots de départ,
-            privatisation), écrivez-nous directement à
-            <a href="mailto:bonjour@lecomptoirdore.fr">bonjour@lecomptoirdore.fr</a>.</p>
-          <p>Les tables réservées sont tenues 20 minutes. Le comptoir, lui, reste toujours en accès libre —
-            venez tenter votre chance.</p>
-          <p class="note">Vous recevrez une confirmation par e-mail. Pour annuler, un simple message suffit.</p>
-        </div>
-
-        <form class="form reveal" id="bookingForm" novalidate>
-          <div class="field">
-            <label for="nom">Nom</label>
-            <input type="text" id="nom" name="nom" autocomplete="name" required>
-            <p class="error" data-error-for="nom"></p>
-          </div>
-          <div class="field">
-            <label for="email">E-mail</label>
-            <input type="email" id="email" name="email" autocomplete="email" required>
-            <p class="error" data-error-for="email"></p>
-          </div>
-          <div class="field-row">
-            <div class="field">
-              <label for="date">Date</label>
-              <input type="date" id="date" name="date" required>
-              <p class="error" data-error-for="date"></p>
-            </div>
-            <div class="field">
-              <label for="heure">Heure</label>
-              <input type="time" id="heure" name="heure" value="20:00" step="900" required>
-              <p class="error" data-error-for="heure"></p>
-            </div>
-          </div>
-          <div class="field">
-            <label for="personnes">Nombre de personnes</label>
-            <select id="personnes" name="personnes">
-              <option value="1">1 personne</option>
-              <option value="2" selected>2 personnes</option>
-              <option value="3">3 personnes</option>
-              <option value="4">4 personnes</option>
-              <option value="5">5 personnes</option>
-              <option value="6">6 personnes</option>
-              <option value="7">7 personnes</option>
-              <option value="8">8 personnes</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="message">Un mot pour nous <span class="optional">(facultatif)</span></label>
-            <textarea id="message" name="message" rows="3" placeholder="Allergies, occasion particulière, table en terrasse…"></textarea>
-          </div>
-          <button class="btn btn-block" type="submit">Envoyer la demande</button>
-          <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
-        </form>
-      </div>
-    </section>
-
-    <!-- ================= INFOS ================= -->
-    <section class="section section-alt" id="infos">
-      <div class="wrap">
-        <header class="section-head reveal">
-          <p class="eyebrow">Infos pratiques</p>
-          <h2>Nous trouver</h2>
-        </header>
-
-        <div class="infos">
-          <div class="info-card reveal">
-            <h3>Horaires</h3>
-            <table class="hours" id="hoursTable">
+          <div class="card">
+            <h3>Les horaires</h3>
+            <table class="hours">
               <tbody>
-                <tr data-day="1"><th scope="row">Lundi</th><td>Fermé</td></tr>
-                <tr data-day="2"><th scope="row">Mardi</th><td>17 h – 1 h</td></tr>
-                <tr data-day="3"><th scope="row">Mercredi</th><td>17 h – 1 h</td></tr>
-                <tr data-day="4"><th scope="row">Jeudi</th><td>17 h – 1 h</td></tr>
-                <tr data-day="5"><th scope="row">Vendredi</th><td>17 h – 3 h</td></tr>
-                <tr data-day="6"><th scope="row">Samedi</th><td>17 h – 3 h</td></tr>
-                <tr data-day="0"><th scope="row">Dimanche</th><td>18 h – minuit</td></tr>
+                <tr data-day="1"><th scope="row">Lundi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="2"><th scope="row">Mardi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="3"><th scope="row">Mercredi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="4"><th scope="row">Jeudi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="5"><th scope="row">Vendredi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="6"><th scope="row">Samedi</th><td>7 h – 20 h</td></tr>
+                <tr data-day="0" class="is-closed"><th scope="row">Dimanche</th><td>Fermé</td></tr>
               </tbody>
             </table>
-            <p class="note">Happy hour tous les jours de 17 h à 19 h : −2 € sur les pressions et les signatures.</p>
-          </div>
-
-          <div class="info-card reveal">
-            <h3>Adresse</h3>
-            <p>
-              14 rue des Capucins<br>
-              69001 Lyon<br>
-              Pentes de la Croix-Rousse
-            </p>
-            <p><a class="link-arrow" href="https://www.openstreetmap.org/search?query=rue%20des%20Capucins%20Lyon" target="_blank" rel="noopener noreferrer">Ouvrir dans le plan</a></p>
-            <p class="note">Métro Hôtel de Ville (A, C) à 4 minutes. Parking Terreaux à 300 m.</p>
-          </div>
-
-          <div class="info-card reveal">
-            <h3>Contact</h3>
-            <p>
-              <a href="tel:+33478000000">04 78 00 00 00</a><br>
-              <a href="mailto:bonjour@lecomptoirdore.fr">bonjour@lecomptoirdore.fr</a>
-            </p>
-            <p class="note">Privatisation, groupes et presse : même adresse, on répond sous 48 h.</p>
-            <ul class="socials">
-              <li><a href="#" aria-label="Instagram">Instagram</a></li>
-              <li><a href="#" aria-label="Facebook">Facebook</a></li>
-            </ul>
+            <p class="note" style="margin-top:1rem">Horaires relevés sur les fiches publiques de
+              l'établissement. En cas de jour férié ou de fermeture exceptionnelle, un appel évite
+              le déplacement.</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- ================= AVIS ================= -->
+    <section class="section section-alt">
+      <div class="wrap wrap-narrow center">
+        <p class="eyebrow reveal">Ce qu'en disent les clients</p>
+        <h2 class="reveal">4,6 sur 5 sur Google</h2>
+        <div class="rating reveal" style="justify-content:center;margin-top:1.6rem">
+          <span class="rating-score">4,6</span>
+          <div style="text-align:left">
+            <div class="rating-stars" aria-hidden="true">★★★★★</div>
+            <p class="rating-meta" style="margin:0">D'après une cinquantaine d'avis publiés sur Google.<br>
+              Note relevée en août 2026 sur les fiches publiques de l'établissement.</p>
+          </div>
+        </div>
+        <p style="margin-top:1.6rem">
+          <a class="btn btn-outline" href="https://www.google.com/maps/search/?api=1&amp;query=Le%20Petit%20Ravis%C3%A9%2C%2014%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen" target="_blank" rel="noopener noreferrer">Lire ou laisser un avis</a>
+        </p>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="wrap footer-inner">
-      <div>
-        <p class="footer-brand">Le Comptoir Doré</p>
-        <p class="note">14 rue des Capucins, 69001 Lyon · 04 78 00 00 00</p>
+    <div class="wrap">
+      <div class="footer-grid">
+        <div>
+          <p class="footer-brand">Le Petit Ravisé</p>
+          <p style="margin-bottom:1rem">Bar · Tabac · Française des Jeux<br>
+            14 rue des Bons-Enfants, 76000 Rouen</p>
+          <p class="status" data-status>
+            <span class="dot"></span><span class="status-text">Horaires…</span>
+          </p>
+        </div>
+        <div>
+          <h3>Le site</h3>
+          <ul class="footer-list">
+            <li><a href="carte.html">La carte</a></li>
+            <li><a href="le-bar.html">Le bar</a></li>
+            <li><a href="evenements.html">Événements</a></li>
+            <li><a href="infos.html">Infos pratiques</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Nous joindre</h3>
+          <ul class="footer-list">
+            <li><a href="tel:+33235716679">02 35 71 66 79</a></li>
+            <li><a href="https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/" target="_blank" rel="noopener noreferrer">Page Facebook</a></li>
+            <li><a href="https://www.google.com/maps/dir/?api=1&amp;destination=14%20Rue%20des%20Bons-Enfants%2C%2076000%20Rouen%2C%20France" target="_blank" rel="noopener noreferrer">Itinéraire</a></li>
+          </ul>
+        </div>
       </div>
-      <nav aria-label="Navigation de pied de page">
-        <ul class="footer-nav">
-          <li><a href="#maison">La maison</a></li>
-          <li><a href="#carte">La carte</a></li>
-          <li><a href="#agenda">Agenda</a></li>
-          <li><a href="#reserver">Réserver</a></li>
-        </ul>
-      </nav>
-      <p class="note copy">© <span id="year">2026</span> Le Comptoir Doré. L'abus d'alcool est dangereux pour la santé, à consommer avec modération.</p>
+      <div class="footer-legal">
+        <p>© <span id="year">2026</span> Le Petit Ravisé. Tous droits réservés.</p>
+        <p>L'abus d'alcool est dangereux pour la santé, à consommer avec modération. La vente d'alcool
+          et de tabac est interdite aux mineurs de moins de 18 ans. Fumer nuit gravement à votre santé
+          et à celle de votre entourage.</p>
+      </div>
     </div>
   </footer>
 

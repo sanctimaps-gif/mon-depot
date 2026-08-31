@@ -1,11 +1,104 @@
 /* =========================================================
-   Le Comptoir Doré — interactions du site
+   Le Petit Ravisé — script commun aux six pages.
    Vanilla JS, aucune dépendance.
    ========================================================= */
 (function () {
   'use strict';
 
-  /* ---------- Menu mobile ---------- */
+  /* =========================================================
+     1. HORAIRES — source unique de vérité
+     ---------------------------------------------------------
+     Clés : 0 = dimanche, 1 = lundi … 6 = samedi.
+     Valeurs en minutes depuis minuit ; `null` = fermé.
+     Une fermeture supérieure à 24*60 signifie « ferme le
+     lendemain matin » (ex. 26*60 = 2 h du matin).
+
+     Cet objet pilote l'indicateur « ouvert / fermé » affiché
+     sur toutes les pages ET le surlignage du jour courant
+     dans le tableau des horaires. Pensez à mettre à jour en
+     parallèle le tableau HTML de infos.html et le bloc
+     Schema.org `openingHoursSpecification`.
+     ========================================================= */
+  var SCHEDULE = {
+    0: null,                                 // dimanche : fermé
+    1: { open: 7 * 60, close: 20 * 60 },     // lundi
+    2: { open: 7 * 60, close: 20 * 60 },     // mardi
+    3: { open: 7 * 60, close: 20 * 60 },     // mercredi
+    4: { open: 7 * 60, close: 20 * 60 },     // jeudi
+    5: { open: 7 * 60, close: 20 * 60 },     // vendredi
+    6: { open: 7 * 60, close: 20 * 60 }      // samedi
+  };
+
+  var DAY_NAMES = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
+  function formatMinutes(total) {
+    var m = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
+    var h = Math.floor(m / 60);
+    var mins = m % 60;
+    if (h === 0 && mins === 0) return 'minuit';
+    return mins === 0 ? h + ' h' : h + ' h ' + String(mins).padStart(2, '0');
+  }
+
+  function nextOpening(fromDay) {
+    for (var i = 1; i <= 7; i++) {
+      var day = (fromDay + i) % 7;
+      if (SCHEDULE[day]) return { day: day, open: SCHEDULE[day].open, inDays: i };
+    }
+    return null;
+  }
+
+  // Renvoie { open: bool, message: string } pour l'instant présent.
+  function currentStatus(now) {
+    var day = now.getDay();
+    var minutes = now.getHours() * 60 + now.getMinutes();
+
+    // Le service de la veille peut déborder après minuit.
+    var yesterday = (day + 6) % 7;
+    var yShift = SCHEDULE[yesterday];
+    if (yShift && yShift.close > 24 * 60 && minutes < yShift.close - 24 * 60) {
+      return { open: true, message: 'Ouvert — jusqu’à ' + formatMinutes(yShift.close) };
+    }
+
+    var today = SCHEDULE[day];
+    if (today && minutes >= today.open && minutes < today.close) {
+      return { open: true, message: 'Ouvert — jusqu’à ' + formatMinutes(today.close) };
+    }
+    if (today && minutes < today.open) {
+      return { open: false, message: 'Fermé — ouvre aujourd’hui à ' + formatMinutes(today.open) };
+    }
+
+    var next = nextOpening(day);
+    return {
+      open: false,
+      message: next
+        ? 'Fermé — réouverture ' + (next.inDays === 1 ? 'demain' : DAY_NAMES[next.day]) +
+          ' à ' + formatMinutes(next.open)
+        : 'Fermé'
+    };
+  }
+
+  function updateStatusWidgets() {
+    var widgets = document.querySelectorAll('[data-status]');
+    if (!widgets.length) return;
+    var state = currentStatus(new Date());
+    Array.prototype.forEach.call(widgets, function (widget) {
+      var dot = widget.querySelector('.dot');
+      var text = widget.querySelector('.status-text');
+      if (dot) dot.className = 'dot ' + (state.open ? 'is-open' : 'is-closed');
+      if (text) text.textContent = state.message;
+    });
+  }
+
+  updateStatusWidgets();
+  setInterval(updateStatusWidgets, 60 * 1000);
+
+  // Surlignage du jour courant dans le tableau des horaires.
+  var todayRow = document.querySelector('.hours tr[data-day="' + new Date().getDay() + '"]');
+  if (todayRow) todayRow.classList.add('is-today');
+
+  /* =========================================================
+     2. Menu mobile
+     ========================================================= */
   var nav = document.getElementById('nav');
   var navToggle = document.getElementById('navToggle');
 
@@ -22,182 +115,127 @@
       navToggle.setAttribute('aria-expanded', String(open));
       navToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
     });
-
-    nav.addEventListener('click', function (e) {
-      if (e.target.closest('a')) closeNav();
-    });
-
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeNav();
-    });
+    nav.addEventListener('click', function (e) { if (e.target.closest('a')) closeNav(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNav(); });
   }
 
-  /* ---------- En-tête au défilement ---------- */
-  var header = document.getElementById('header');
-  function onScroll() {
-    if (header) header.classList.toggle('is-scrolled', window.scrollY > 20);
-  }
+  /* =========================================================
+     3. Ombre de l'en-tête au défilement
+     ========================================================= */
+  var header = document.querySelector('.site-header');
+  function onScroll() { if (header) header.classList.toggle('is-scrolled', window.scrollY > 12); }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  /* ---------- Lien de navigation actif ---------- */
-  var sections = Array.prototype.slice.call(document.querySelectorAll('main section[id]'));
-  var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav a[href^="#"]'));
-
-  if ('IntersectionObserver' in window && sections.length) {
-    var spy = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        navLinks.forEach(function (link) {
-          link.classList.toggle('is-active', link.getAttribute('href') === '#' + entry.target.id);
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach(function (section) { spy.observe(section); });
-  }
-
-  /* ---------- Apparition progressive ---------- */
+  /* =========================================================
+     4. Apparition progressive
+     ========================================================= */
   var revealables = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (reduceMotion || !('IntersectionObserver' in window)) {
     revealables.forEach(function (el) { el.classList.add('is-visible'); });
   } else {
-    var revealObserver = new IntersectionObserver(function (entries, observer) {
+    var observer = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (entry, i) {
         if (!entry.isIntersecting) return;
-        var delay = Math.min(i, 4) * 80;
-        setTimeout(function () { entry.target.classList.add('is-visible'); }, delay);
-        observer.unobserve(entry.target);
+        setTimeout(function () { entry.target.classList.add('is-visible'); }, Math.min(i, 4) * 70);
+        obs.unobserve(entry.target);
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-    revealables.forEach(function (el) { revealObserver.observe(el); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    revealables.forEach(function (el) { observer.observe(el); });
   }
 
-  /* ---------- Onglets de la carte ---------- */
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  /* =========================================================
+     5. Calendrier des événements
+     ---------------------------------------------------------
+     Les données vivent dans js/evenements.js. Les dates
+     passées sont masquées automatiquement ; s'il ne reste
+     rien à annoncer, un état vide s'affiche.
+     ========================================================= */
+  var eventsHost = document.getElementById('events');
 
-  function selectTab(tab, focus) {
-    tabs.forEach(function (t) {
-      var selected = t === tab;
-      t.setAttribute('aria-selected', String(selected));
-      t.tabIndex = selected ? 0 : -1;
-      var panel = document.getElementById(t.getAttribute('aria-controls'));
-      if (panel) panel.hidden = !selected;
-    });
-    if (focus) tab.focus();
-  }
+  if (eventsHost) {
+    var data = Array.isArray(window.EVENEMENTS) ? window.EVENEMENTS : [];
+    var startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
 
-  tabs.forEach(function (tab, index) {
-    tab.addEventListener('click', function () { selectTab(tab, false); });
-    tab.addEventListener('keydown', function (e) {
-      var next = null;
-      if (e.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
-      else if (e.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
-      else if (e.key === 'Home') next = tabs[0];
-      else if (e.key === 'End') next = tabs[tabs.length - 1];
-      if (next) { e.preventDefault(); selectTab(next, true); }
-    });
-  });
+    var upcoming = data
+      .filter(function (ev) {
+        var d = new Date(ev.date + 'T00:00:00');
+        return !isNaN(d) && d >= startOfToday;
+      })
+      .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
 
-  /* ---------- Horaires : ouvert / fermé ---------- */
-  // Clés : 0 = dimanche … 6 = samedi. Une fermeture inférieure à l'ouverture
-  // signifie que le bar ferme le lendemain matin.
-  var SCHEDULE = {
-    0: { open: 18 * 60, close: 24 * 60 },
-    1: null,
-    2: { open: 17 * 60, close: 25 * 60 },
-    3: { open: 17 * 60, close: 25 * 60 },
-    4: { open: 17 * 60, close: 25 * 60 },
-    5: { open: 17 * 60, close: 27 * 60 },
-    6: { open: 17 * 60, close: 27 * 60 }
-  };
-  var DAY_NAMES = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+    if (!upcoming.length) {
+      eventsHost.innerHTML =
+        '<div class="empty-state">' +
+        '<svg class="ico" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+        '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>' +
+        '<h3>Aucune date annoncée pour le moment</h3>' +
+        '<p>Les prochaines soirées et retransmissions seront publiées ici. ' +
+        'En attendant, la page Facebook du bar reste la source la plus à jour.</p>' +
+        '</div>';
+    } else {
+      var MOIS = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+      var list = document.createElement('ul');
+      list.className = 'events';
 
-  function formatMinutes(total) {
-    var m = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
-    var h = Math.floor(m / 60);
-    var mins = m % 60;
-    if (h === 0 && mins === 0) return 'minuit';
-    return mins === 0 ? h + ' h' : h + ' h ' + String(mins).padStart(2, '0');
-  }
+      upcoming.forEach(function (ev) {
+        var d = new Date(ev.date + 'T00:00:00');
+        var item = document.createElement('li');
+        item.className = 'event';
 
-  function nextOpening(fromDay) {
-    for (var i = 1; i <= 7; i++) {
-      var day = (fromDay + i) % 7;
-      if (SCHEDULE[day]) {
-        return { day: day, open: SCHEDULE[day].open, inDays: i };
-      }
+        var meta = [DAY_NAMES[d.getDay()]];
+        if (ev.heure) meta.push(ev.heure);
+        if (ev.prix) meta.push(ev.prix);
+
+        // textContent partout : aucune donnée n'est injectée en HTML.
+        var dateBox = document.createElement('div');
+        dateBox.className = 'event-date';
+        var day = document.createElement('span');
+        day.className = 'day';
+        day.textContent = String(d.getDate()).padStart(2, '0');
+        var month = document.createElement('span');
+        month.className = 'month';
+        month.textContent = MOIS[d.getMonth()];
+        dateBox.appendChild(day);
+        dateBox.appendChild(month);
+
+        var body = document.createElement('div');
+        body.className = 'event-body';
+        var title = document.createElement('h3');
+        title.textContent = ev.titre || 'Événement';
+        body.appendChild(title);
+        if (ev.description) {
+          var desc = document.createElement('p');
+          desc.textContent = ev.description;
+          body.appendChild(desc);
+        }
+        var metaLine = document.createElement('p');
+        metaLine.className = 'event-meta';
+        metaLine.textContent = meta.join(' · ');
+        body.appendChild(metaLine);
+
+        item.appendChild(dateBox);
+        item.appendChild(body);
+        list.appendChild(item);
+      });
+
+      eventsHost.innerHTML = '';
+      eventsHost.appendChild(list);
     }
-    return null;
   }
 
-  function updateStatus() {
-    var dot = document.getElementById('statusDot');
-    var text = document.getElementById('statusText');
-    if (!dot || !text) return;
-
-    var now = new Date();
-    var day = now.getDay();
-    var minutes = now.getHours() * 60 + now.getMinutes();
-
-    // Le service de la veille peut déborder après minuit.
-    var yesterday = (day + 6) % 7;
-    var yShift = SCHEDULE[yesterday];
-    if (yShift && yShift.close > 24 * 60 && minutes < yShift.close - 24 * 60) {
-      dot.className = 'dot is-open';
-      text.textContent = 'Ouvert en ce moment — jusqu’à ' + formatMinutes(yShift.close);
-      return;
-    }
-
-    var today = SCHEDULE[day];
-    if (today && minutes >= today.open && minutes < today.close) {
-      dot.className = 'dot is-open';
-      text.textContent = 'Ouvert en ce moment — jusqu’à ' + formatMinutes(today.close);
-      return;
-    }
-
-    if (today && minutes < today.open) {
-      dot.className = 'dot is-closed';
-      text.textContent = 'Fermé — on ouvre aujourd’hui à ' + formatMinutes(today.open);
-      return;
-    }
-
-    var next = nextOpening(day);
-    dot.className = 'dot is-closed';
-    text.textContent = next
-      ? 'Fermé — réouverture ' + (next.inDays === 1 ? 'demain' : DAY_NAMES[next.day]) + ' à ' + formatMinutes(next.open)
-      : 'Fermé pour le moment';
-  }
-
-  updateStatus();
-  setInterval(updateStatus, 60 * 1000);
-
-  // Mise en évidence du jour dans le tableau des horaires.
-  var todayRow = document.querySelector('#hoursTable tr[data-day="' + new Date().getDay() + '"]');
-  if (todayRow) todayRow.classList.add('is-today');
-
-  /* ---------- Formulaire de réservation ---------- */
-  var form = document.getElementById('bookingForm');
+  /* =========================================================
+     6. Formulaire de contact
+     ---------------------------------------------------------
+     La validation est complète ; l'envoi est une démonstration
+     (voir le bloc « Démo statique » plus bas).
+     ========================================================= */
+  var form = document.getElementById('contactForm');
 
   if (form) {
-    var pad = function (n) { return String(n).padStart(2, '0'); };
-    var toISO = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
-
-    var dateInput = form.querySelector('#date');
-    var defaultDate = '';
-    if (dateInput) {
-      var today = new Date();
-      // Le lundi est fermé : on propose d'emblée le prochain jour d'ouverture.
-      var suggestion = new Date(today);
-      while (!SCHEDULE[suggestion.getDay()]) {
-        suggestion.setDate(suggestion.getDate() + 1);
-      }
-      defaultDate = toISO(suggestion);
-      dateInput.min = toISO(today);
-      if (!dateInput.value) dateInput.value = defaultDate;
-    }
-
     var setError = function (name, message) {
       var field = form.querySelector('#' + name);
       var slot = form.querySelector('[data-error-for="' + name + '"]');
@@ -213,28 +251,11 @@
       var ok = true;
       var nom = form.querySelector('#nom').value.trim();
       var email = form.querySelector('#email').value.trim();
-      var date = form.querySelector('#date').value;
-      var heure = form.querySelector('#heure').value;
+      var message = form.querySelector('#message').value.trim();
 
       ok = setError('nom', nom.length < 2 ? 'Merci d’indiquer votre nom.' : '') && ok;
       ok = setError('email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : 'Adresse e-mail invalide.') && ok;
-
-      if (!date) {
-        ok = setError('date', 'Choisissez une date.') && ok;
-      } else {
-        var chosen = new Date(date + 'T00:00:00');
-        var startOfToday = new Date();
-        startOfToday.setHours(0, 0, 0, 0);
-        if (chosen < startOfToday) {
-          ok = setError('date', 'La date doit être aujourd’hui ou plus tard.') && ok;
-        } else if (!SCHEDULE[chosen.getDay()]) {
-          ok = setError('date', 'Le bar est fermé le ' + DAY_NAMES[chosen.getDay()] + '. Choisissez un autre jour.') && ok;
-        } else {
-          ok = setError('date', '') && ok;
-        }
-      }
-
-      ok = setError('heure', heure ? '' : 'Indiquez une heure d’arrivée.') && ok;
+      ok = setError('message', message.length < 10 ? 'Votre message est un peu court.' : '') && ok;
       return ok;
     };
 
@@ -250,23 +271,19 @@
         return;
       }
 
-      // Démo statique : aucune donnée n'est envoyée.
-      // Branchez ici votre back-end ou votre service de formulaire.
+      // --- Démo statique : rien n'est envoyé. ---------------
+      // Pour brancher l'envoi, remplacez ce bloc par un
+      // fetch() vers votre back-end ou un service de
+      // formulaires (Formspree, Netlify Forms, etc.).
       var nom = form.querySelector('#nom').value.trim();
-      var personnes = form.querySelector('#personnes').value;
-      var date = new Date(form.querySelector('#date').value + 'T00:00:00');
-      var jolieDate = date.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-
-      status.textContent = 'Merci ' + nom + ' ! Demande enregistrée pour ' + personnes +
-        ' personne' + (Number(personnes) > 1 ? 's' : '') + ' le ' + jolieDate +
-        ' à ' + form.querySelector('#heure').value.replace(':', ' h ') +
-        '. Nous confirmons par e-mail sous quelques heures.';
+      status.textContent = 'Merci ' + nom + ' ! Votre message est prêt à partir. ' +
+        'Attention : l’envoi n’est pas encore branché — pour une réponse immédiate, ' +
+        'appelez le 02 35 71 66 79.';
       status.className = 'form-status is-ok';
       form.reset();
-      if (dateInput) dateInput.value = defaultDate;
     });
 
-    ['nom', 'email', 'date', 'heure'].forEach(function (name) {
+    ['nom', 'email', 'message'].forEach(function (name) {
       var field = form.querySelector('#' + name);
       if (!field) return;
       field.addEventListener('blur', function () {
@@ -279,7 +296,9 @@
     });
   }
 
-  /* ---------- Année courante ---------- */
+  /* =========================================================
+     7. Année courante dans le pied de page
+     ========================================================= */
   var year = document.getElementById('year');
   if (year) year.textContent = String(new Date().getFullYear());
 })();
