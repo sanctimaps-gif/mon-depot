@@ -652,7 +652,7 @@ p { margin: 0 0 1rem; }
     font-size: 1.02rem;
   }
   .nav a:not(.btn)::after { display: none; }
-  .nav .btn { margin-top: 1rem; }
+  .nav .btn { margin-top: 1rem; width: 100%; }
 }
 
 @media (max-width: 560px) {
@@ -743,3 +743,7 @@ p { margin: 0 0 1rem; }
 .depot-actions { display: flex; gap: 0.6rem; margin-top: 1.2rem; }
 .depot-actions .btn { flex: 1; }
 .depot-statut:empty { display: none; }
+
+/* Entrée « Compte » du menu : discrète, réservée au bar. */
+.nav a.nav-compte { color: var(--ink-faint); font-size: 0.86rem; }
+.nav a.nav-compte:hover { color: var(--green); }

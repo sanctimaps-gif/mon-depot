@@ -125,6 +125,7 @@ index.html … contact.html   Les six pages (en-tête et pied de page identiques
 admin/                      Espace d'administration (PHP) — voir plus bas
   index.php                 Connexion et console
   photo.php                 Réception des photos déposées depuis le site
+  motdepasse.php            Changement de mot de passe depuis l'entrée « Compte »
   compte-initial.php        Compte livré avec le site
   api.php                   Actions : connexion, enregistrement, mot de passe
   lib.php                   Compte, session, écriture du contenu
@@ -146,9 +147,10 @@ tools/creer-compte.php      Crée un compte avec un mot de passe unique
 
 ## L'espace d'administration
 
-**Comment y accéder :** un lien discret *Administration du site* figure tout en bas de
-chaque page, ou directement à l'adresse **`/admin/`** (par exemple
-`votre-domaine.fr/admin/`).
+**Comment y accéder :** l'entrée **Compte** du menu (visible aussi dans le menu
+dépliant sur téléphone) ouvre directement le changement de mot de passe. Pour la
+console complète : le lien *Administration du site* en bas de chaque page, ou
+l'adresse **`/admin/`** (par exemple `votre-domaine.fr/admin/`).
 
 > ⚠️ **Cette page ne fonctionne que sur un hébergement PHP.** Sur GitHub Pages, PHP
 > n'est pas exécuté : `/admin/` n'ouvrira rien d'utile. C'est la raison la plus
@@ -185,6 +187,15 @@ relais de `admin/compte-initial.php`.
 Le mot de passe n'est jamais stocké en clair, pas même sur le serveur : seule son
 empreinte l'est (`password_hash`, bcrypt). Oublié, il suffit de supprimer
 `admin/compte.php` par FTP pour revenir au mot de passe provisoire.
+
+### Changer le mot de passe depuis le site
+
+L'entrée **Compte** du menu ouvre une fenêtre demandant l'ancien mot de passe puis le
+nouveau. C'est la connaissance de l'ancien qui autorise le changement : aucune session
+n'est nécessaire, et la limite de cinq tentatives par quart d'heure s'applique aussi.
+
+Le même réglage existe dans l'onglet *Mon compte* de la console, où l'adresse de
+connexion se modifie également.
 
 ### Donner un mot de passe unique à chaque client
 
@@ -326,16 +337,26 @@ Dans le tableau `evenements` de `js/donnees.js` :
 
 Les dates passées disparaissent toutes seules. Liste vide = « Aucune date annoncée ».
 
-### Les photos de la galerie
+### Les photos
 
-Quatre emplacements : *Le comptoir*, *La terrasse*, *Tabac & FDJ*, *Le demi*. Tant
-qu'un emplacement est vide, la page « Le bar » y affiche une illustration au trait et
-un bouton **Ajouter une photo**.
+**Six emplacements**, partout où le site affiche une illustration au trait :
+
+| Emplacement | Où |
+| --- | --- |
+| La devanture | Accueil, grande image |
+| Le café du matin | Page « Le bar », section *L'esprit de la maison* |
+| Le comptoir · La terrasse · Tabac & FDJ · Le demi | Page « Le bar », galerie |
+
+Tant qu'un emplacement est vide, le dessin reste affiché avec un bouton
+**Ajouter une photo**.
 
 Le dépôt se fait depuis le site lui-même, sans passer par la console : le bouton
 demande le mot de passe de l'administration, puis ouvre la photothèque de l'appareil
 (téléphone ou ordinateur). Une fois la photo en place, le bouton disparaît — cet
 emplacement est occupé et le serveur refuse de l'écraser.
+
+Une photo de devanture ou d'ambiance est recadrée en carré comme les autres : cadrez
+large, le centre est conservé.
 
 Pour changer une photo : onglet **Photos** de la console → *Retirer la photo*.
 L'emplacement redevient libre et le bouton réapparaît sur le site.

@@ -316,39 +316,85 @@
   }
 
   /* =========================================================
-     5 ter. Galerie photos
+     5 ter. Emplacements photo
      ---------------------------------------------------------
-     Chaque emplacement affiche la photo déposée, ou à défaut
-     l'illustration au trait accompagnée d'un bouton de dépôt.
-     Le bouton disparaît dès qu'une photo est en place.
+     Deux formes : la galerie de la page « Le bar », et les
+     illustrations isolées marquées data-emplacement. Dans les
+     deux cas, un emplacement vide montre son dessin au trait
+     et un bouton de dépôt ; le bouton disparaît dès qu'une
+     photo est en place.
      ========================================================= */
+  var PHOTOS = Array.isArray(DONNEES.photos) ? DONNEES.photos : [];
+
+  function photoParId(id) {
+    for (var i = 0; i < PHOTOS.length; i++) {
+      if (PHOTOS[i].id === id) return PHOTOS[i];
+    }
+    return null;
+  }
+
+  // Remplit une vignette : la photo si elle existe, sinon l'illustration
+  // et son bouton. Le <template> reste en place pour un éventuel retrait.
+  function remplirEmplacement(figure, photo) {
+    Array.prototype.slice.call(figure.children).forEach(function (enfant) {
+      if (enfant.tagName !== 'TEMPLATE') enfant.remove();
+    });
+
+    if (photo.fichier) {
+      var image = document.createElement('img');
+      image.src = 'img/photos/' + photo.fichier;
+      image.alt = photo.legende || 'Photo du bar';
+      image.loading = 'lazy';
+      figure.appendChild(image);
+      figure.classList.add('illu-photo');
+      figure.removeAttribute('role');
+      figure.removeAttribute('aria-label');
+      return;
+    }
+
+    figure.classList.remove('illu-photo');
+    var modele = figure.querySelector('template[data-illustration]')
+      || document.querySelector('template[data-illustration="' + photo.id + '"]');
+    if (modele) figure.appendChild(modele.content.cloneNode(true));
+    figure.setAttribute('role', 'img');
+    if (!figure.getAttribute('aria-label')) {
+      figure.setAttribute('aria-label', 'Illustration — ' + (photo.legende || ''));
+    }
+
+    var bouton = document.createElement('button');
+    bouton.type = 'button';
+    bouton.className = 'btn-photo';
+    bouton.textContent = 'Ajouter une photo';
+    bouton.addEventListener('click', function () { ouvrirDepot(photo); });
+    figure.appendChild(bouton);
+  }
+
+  // Illustrations isolées (accueil, page « Le bar »).
+  var dejaPlaces = {};
+  Array.prototype.forEach.call(document.querySelectorAll('[data-emplacement]'), function (figure) {
+    var id = figure.getAttribute('data-emplacement');
+    var photo = photoParId(id);
+    if (!photo) return;
+    dejaPlaces[id] = true;
+    remplirEmplacement(figure, photo);
+  });
+
+  // Galerie : les vignettes sont créées à partir des données.
   var galerie = document.getElementById('galerie');
 
-  if (galerie && Array.isArray(DONNEES.photos)) {
-    DONNEES.photos.forEach(function (photo) {
+  if (galerie) {
+    PHOTOS.forEach(function (photo) {
+      // La galerie n'accueille que les emplacements qui ont un dessin à ce
+      // niveau : ni ceux déjà rendus ailleurs dans la page, ni ceux dont le
+      // dessin n'existe que sur une autre page.
+      if (dejaPlaces[photo.id]) return;
+      var modeleGalerie = galerie.parentNode.querySelector(
+        ':scope > template[data-illustration="' + photo.id + '"]');
+      if (!modeleGalerie) return;
+
       var figure = document.createElement('figure');
       figure.className = 'illu';
-
-      if (photo.fichier) {
-        var image = document.createElement('img');
-        image.src = 'img/photos/' + photo.fichier;
-        image.alt = photo.legende || 'Photo du bar';
-        image.loading = 'lazy';
-        figure.appendChild(image);
-        figure.classList.add('illu-photo');
-      } else {
-        var modele = document.querySelector('template[data-illustration="' + photo.id + '"]');
-        if (modele) figure.appendChild(modele.content.cloneNode(true));
-        figure.setAttribute('role', 'img');
-        figure.setAttribute('aria-label', 'Illustration — ' + (photo.legende || ''));
-
-        var bouton = document.createElement('button');
-        bouton.type = 'button';
-        bouton.className = 'btn-photo';
-        bouton.textContent = 'Ajouter une photo';
-        bouton.addEventListener('click', function () { ouvrirDepot(photo); });
-        figure.appendChild(bouton);
-      }
+      remplirEmplacement(figure, photo);
 
       var legende = document.createElement('figcaption');
       legende.textContent = photo.legende || '';
@@ -431,6 +477,110 @@
             : err.message;
           statut.textContent = message;
           statut.className = 'form-status depot-statut is-error';
+        });
+    });
+  }
+
+  /* =========================================================
+     5 quater. Entrée « Compte » du menu
+     ---------------------------------------------------------
+     Ouvre une fenêtre de changement de mot de passe. Le lien
+     pointe vers /admin/ : sans JavaScript, ou si le clic est
+     fait avec Ctrl, on atterrit sur la console, ce qui reste
+     une réponse utile.
+     ========================================================= */
+  var lienCompte = document.getElementById('lienCompte');
+
+  if (lienCompte) {
+    lienCompte.addEventListener('click', function (e) {
+      if (e.ctrlKey || e.metaKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      closeNav();
+      ouvrirCompte();
+    });
+  }
+
+  function ouvrirCompte() {
+    var fond = document.createElement('div');
+    fond.className = 'depot-fond';
+    fond.innerHTML =
+      '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="compte-titre">' +
+        '<h2 id="compte-titre">Changer le mot de passe</h2>' +
+        '<p class="note">Réservé au bar. Le mot de passe actuel est demandé ; ' +
+          'c’est lui qui autorise le changement.</p>' +
+        '<form>' +
+          '<div class="field">' +
+            '<label for="compte-actuel">Mot de passe actuel</label>' +
+            '<input type="password" id="compte-actuel" autocomplete="current-password">' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="compte-nouveau">Nouveau mot de passe</label>' +
+            '<input type="password" id="compte-nouveau" autocomplete="new-password">' +
+            '<p class="note">Au moins 10 caractères.</p>' +
+          '</div>' +
+          '<div class="field">' +
+            '<label for="compte-nouveau2">Confirmer le nouveau mot de passe</label>' +
+            '<input type="password" id="compte-nouveau2" autocomplete="new-password">' +
+          '</div>' +
+          '<div class="depot-actions">' +
+            '<button type="button" class="btn btn-outline depot-annuler">Annuler</button>' +
+            '<button type="submit" class="btn">Enregistrer</button>' +
+          '</div>' +
+          '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
+          '<p class="note" style="margin:1rem 0 0">Pour modifier la carte, les événements ' +
+            'ou les réglages : <a href="admin/">console d’administration</a>.</p>' +
+        '</form>' +
+      '</div>';
+
+    document.body.appendChild(fond);
+
+    var statut = fond.querySelector('.depot-statut');
+    var actuel = fond.querySelector('#compte-actuel');
+    var nouveau = fond.querySelector('#compte-nouveau');
+    var nouveau2 = fond.querySelector('#compte-nouveau2');
+    actuel.focus();
+
+    function fermer() { fond.remove(); document.removeEventListener('keydown', surEchap); }
+    function surEchap(ev) { if (ev.key === 'Escape') fermer(); }
+    document.addEventListener('keydown', surEchap);
+    fond.querySelector('.depot-annuler').addEventListener('click', fermer);
+    fond.addEventListener('click', function (ev) { if (ev.target === fond) fermer(); });
+
+    function erreur(message) {
+      statut.textContent = message;
+      statut.className = 'form-status depot-statut is-error';
+    }
+
+    fond.querySelector('form').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      if (!actuel.value) return erreur('Indiquez le mot de passe actuel.');
+      if (nouveau.value.length < 10) return erreur('Le nouveau mot de passe doit faire au moins 10 caractères.');
+      if (nouveau.value !== nouveau2.value) return erreur('Les deux nouveaux mots de passe diffèrent.');
+
+      statut.textContent = 'Enregistrement…';
+      statut.className = 'form-status depot-statut';
+
+      fetch('admin/motdepasse.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ actuel: actuel.value, nouveau: nouveau.value })
+      })
+        .then(function (reponse) {
+          return reponse.json().catch(function () { return {}; }).then(function (r) {
+            if (!reponse.ok) throw new Error(r.erreur || 'Erreur ' + reponse.status + '.');
+            return r;
+          });
+        })
+        .then(function () {
+          statut.textContent = 'Mot de passe modifié.';
+          statut.className = 'form-status depot-statut is-ok';
+          actuel.value = nouveau.value = nouveau2.value = '';
+        })
+        .catch(function (err) {
+          erreur(err instanceof TypeError
+            ? 'Impossible : cette page doit être servie par un hébergement PHP.'
+            : err.message);
         });
     });
   }

@@ -40,6 +40,7 @@
           <li><a href="evenements.html">Événements</a></li>
           <li><a href="infos.html">Infos pratiques</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <li><a class="nav-compte" href="admin/" id="lienCompte">Compte</a></li>
           <li><a class="btn btn-small" href="tel:+33235716679">02 35 71 66 79</a></li>
         </ul>
       </nav>
@@ -71,8 +72,9 @@
             remplissent — et la conversation avec.</p>
         </div>
         <div class="reveal">
-          <figure class="illu" style="aspect-ratio:4/3" role="img" aria-label="Illustration : une tasse de café et un journal sur le comptoir">
-            <svg viewBox="0 0 400 300" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <figure class="illu" data-emplacement="ambiance" style="aspect-ratio:4/3" role="img" aria-label="Illustration : une tasse de café et un journal sur le comptoir">
+            <template data-illustration="ambiance">
+              <svg viewBox="0 0 400 300" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
               <!-- journal -->
               <path d="M40 128h150v122H40z" opacity=".85"/>
               <path d="M56 150h60M56 168h118M56 186h118M56 204h118M56 222h80" opacity=".45"/>
@@ -86,6 +88,7 @@
               <path d="M348 214v-38" opacity=".7"/>
               <ellipse cx="348" cy="164" rx="9" ry="13" opacity=".7"/>
             </svg>
+            </template>
           </figure>
         </div>
       </div>

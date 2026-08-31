@@ -78,6 +78,7 @@
           <li><a href="evenements.html">Événements</a></li>
           <li><a href="infos.html">Infos pratiques</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <li><a class="nav-compte" href="admin/" id="lienCompte">Compte</a></li>
           <li><a class="btn btn-small" href="tel:+33235716679">02 35 71 66 79</a></li>
         </ul>
       </nav>
@@ -134,8 +135,9 @@
         </div>
 
         <div>
-          <figure class="illu illu-devanture" role="img" aria-label="Illustration de la devanture du bar : store, terrasse et enseigne tabac">
-            <svg viewBox="0 0 480 380" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <figure class="illu illu-devanture" data-emplacement="devanture" role="img" aria-label="Illustration de la devanture du bar : store, terrasse et enseigne tabac">
+            <template data-illustration="devanture">
+              <svg viewBox="0 0 480 380" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
               <!-- façade -->
               <path d="M64 40h352v260H64z"/>
               <path d="M64 40l24-22h304l24 22" opacity=".6"/>
@@ -159,6 +161,7 @@
               <ellipse cx="382" cy="318" rx="30" ry="7" opacity=".75"/>
               <path d="M382 325v34M368 359h28" opacity=".75"/>
             </svg>
+            </template>
           </figure>
         </div>
       </div>

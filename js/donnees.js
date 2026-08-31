@@ -251,6 +251,16 @@ window.DONNEES = {
     "evenements": [],
     "photos": [
         {
+            "id": "devanture",
+            "legende": "La devanture",
+            "fichier": ""
+        },
+        {
+            "id": "ambiance",
+            "legende": "Le café du matin",
+            "fichier": ""
+        },
+        {
             "id": "comptoir",
             "legende": "Le comptoir",
             "fichier": ""
