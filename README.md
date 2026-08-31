@@ -1,13 +1,14 @@
 # Le P’tit Ravisé — site du bar-tabac
 
 Site vitrine du **P’tit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 Rouen.
-Six pages en HTML, CSS et JavaScript natifs : **aucune dépendance, aucune étape de
-build**. Un espace d'administration en PHP, sans base de données, permet de modifier le
-contenu sans toucher au code.
+Six pages en français, six en anglais, en HTML, CSS et JavaScript natifs : **aucune
+dépendance, aucune étape de build**. Un espace d'administration en PHP, sans base de
+données, permet de modifier le contenu sans toucher au code, et le formulaire de contact
+envoie réellement les messages.
 
 ## Ouvrir le site tout de suite (sans hébergement)
 
-Double-cliquez sur **`apercu-du-site.html`** : les six pages s'ouvrent dans le
+Double-cliquez sur **`apercu-du-site.html`** : les six pages françaises s'ouvrent dans le
 navigateur, hors ligne, sans serveur ni mise en ligne. C'est le moyen le plus rapide
 de montrer le site à quelqu'un.
 
@@ -76,7 +77,6 @@ en attendant, le site reste présentable — rien n'affiche « à compléter » 
 | À fournir | Où le saisir | Comportement actuel |
 | --- | --- | --- |
 | **Les prix** | `/admin/` → La carte | La carte s'affiche sans prix, avec « Tarifs affichés au comptoir » |
-| **Une adresse e-mail** | `/admin/` → Réglages | Le formulaire renvoie vers le téléphone |
 | **Les dates d'événements** | `/admin/` → Événements | « Aucune date annoncée pour le moment » |
 | **Des photos** | Page « Le bar » → *Ajouter une photo* | Illustrations au trait (dessins, pas des photos du lieu) |
 
@@ -98,16 +98,45 @@ Deux points à confirmer :
 | Facebook | [Le P'tit Ravisé](https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/) |
 | Note Google | 4,6 / 5 — une cinquantaine d'avis (relevé en août 2026) |
 
-## Les six pages
+## Les pages
 
-| Fichier | Contenu |
-| --- | --- |
-| `index.html` | Présentation, adresse, horaires, boutons « Voir la carte » et « Itinéraire », note Google |
-| `carte.html` | Bières, cocktails & apéritifs, softs, boissons chaudes, à grignoter, QR code |
-| `le-bar.html` | Ambiance, quartier, galerie |
-| `evenements.html` | Agenda automatique + fil Facebook |
-| `infos.html` | Plan, horaires, téléphone, transports, stationnement, avis |
-| `contact.html` | Téléphone, réseaux sociaux, formulaire |
+Le site existe en **français** (à la racine) et en **anglais** (dans `en/`).
+
+| Fichier | Équivalent anglais | Contenu |
+| --- | --- | --- |
+| `index.html` | `en/index.html` | Présentation, adresse, horaires, boutons « Voir la carte » et « Itinéraire », note Google |
+| `carte.html` | `en/menu.html` | Bières, cocktails & apéritifs, softs, boissons chaudes, à grignoter, QR code |
+| `le-bar.html` | `en/the-bar.html` | Ambiance, quartier, galerie |
+| `evenements.html` | `en/events.html` | Agenda automatique + fil Facebook |
+| `infos.html` | `en/visit.html` | Plan, horaires, téléphone, transports, stationnement, avis |
+| `contact.html` | `en/contact.html` | Téléphone, réseaux sociaux, formulaire |
+
+## Les deux langues
+
+Le français est la version de référence ; l'anglais vit dans `en/` avec ses propres
+adresses (`menu.html`, `the-bar.html`, `visit.html`…), meilleures pour le référencement
+anglophone que des noms français.
+
+**Ce qui relie les deux :** chaque page déclare ses balises `hreflang` (`fr`, `en` et
+`x-default` sur le français), le `sitemap.xml` les déclare deux fois avec leurs
+`xhtml:link`, et une bascule **English / Français** figure dans le menu de chaque page.
+Google comprend ainsi qu'il s'agit de deux versions d'une même page, et non de deux
+contenus qui se font concurrence.
+
+**Ce qui n'est pas traduit, et pourquoi.** La carte et l'agenda sont saisis par le bar
+dans la console ; ils s'affichent tels qu'ils ont été écrits, dans les deux langues. Les
+noms des consommations (*Kir*, *Monaco*, *Croque-monsieur*) n'auraient d'ailleurs pas
+grand sens traduits. En revanche tout ce que produit le site — statut d'ouverture, jours,
+mois, boutons, messages du formulaire — suit la langue de la page.
+
+**Comment le script sait dans quelle langue il travaille :** les pages anglaises portent
+`<html lang="en" data-racine="../">`. `lang` choisit le dictionnaire en tête de
+`js/main.js`, `data-racine` indique où trouver `css/`, `js/`, `img/` et `admin/` depuis
+un dossier plus bas. Une page qui ne déclare rien reste française et à la racine.
+
+**Ajouter une page anglaise :** copiez la page française correspondante, remplacez la
+balise `<html>`, le `<head>` (titre, description, `canonical`, `hreflang`) et les textes,
+puis ajoutez-la au `sitemap.xml` et aux deux menus.
 
 ## Lancer le site en local
 
@@ -121,12 +150,16 @@ Ouvrir `index.html` directement fonctionne aussi.
 ## Structure
 
 ```
-index.html … contact.html   Les six pages (en-tête et pied de page identiques)
+index.html … contact.html   Les six pages françaises (en-tête et pied de page identiques)
+en/                         Les mêmes pages en anglais
+  index.html menu.html the-bar.html events.html visit.html contact.html
+contact.php                 Reçoit et expédie les messages du formulaire
 admin/                      Espace d'administration (PHP) — voir plus bas
   index.php                 Connexion et console
   photo.php                 Réception des photos déposées depuis le site
   motdepasse.php            Changement de mot de passe depuis l'entrée « Compte »
   compte-initial.php        Compte livré avec le site
+  destinataire-initial.php  Adresse qui reçoit les messages du formulaire
   api.php                   Actions : connexion, enregistrement, mot de passe
   lib.php                   Compte, session, écriture du contenu
   console.js                Interface de la console
@@ -306,13 +339,34 @@ aux virgules : une erreur de syntaxe et le contenu ne s'affiche plus).
 
 ### Le formulaire de contact
 
-Il utilise `reglages.email`. Renseignée, l'adresse déclenche l'ouverture de la
-messagerie du visiteur avec un message pré-rempli (objet, texte, coordonnées) — aucun
-serveur ni service tiers. Vide, le formulaire renvoie vers le téléphone.
+Le message part vraiment : le formulaire envoie en POST à `contact.php`, qui expédie
+le courriel au bar. Aucun service tiers, aucun compte à créer.
 
-Pour un envoi qui ne passe pas par la messagerie du visiteur, remplacez l'appel
-`window.location.href = 'mailto:…'` de `js/main.js` par un `fetch()` vers Formspree,
-Netlify Forms ou votre back-end.
+**L'adresse du bar n'apparaît nulle part dans les pages publiques.** Une adresse écrite
+dans un fichier servi au public est moissonnée par les robots à spam en quelques jours ;
+celle-ci vit dans `admin/destinataire.php`, lu côté serveur uniquement. Les pages ne
+publient que le fait qu'un formulaire est configuré (`reglages.formulaire`). On la
+change depuis `/admin/` → Réglages, comme n'importe quel autre réglage.
+
+Protections en place :
+
+| Contre | Comment |
+| --- | --- |
+| Robots à spam | Champ-piège masqué, hors du parcours clavier — et refus de tout envoi arrivé en moins de trois secondes. Dans les deux cas la réponse reste positive, pour ne pas renseigner l'automate |
+| Injection d'en-tête | Les retours à la ligne sont refusés dans le nom, le sujet, l'e-mail et le téléphone : c'est ainsi qu'on ajoute des destinataires cachés |
+| Envois en rafale | Cinq messages par heure et par adresse IP |
+| Données falsifiées | Toute la validation est refaite côté serveur, jamais seulement dans le navigateur |
+| Rejet par le destinataire | `From` sur le domaine du site et `Reply-To` sur le visiteur : un `From` au nom du visiteur est rejeté par SPF et DMARC |
+
+**Rien ne se perd.** Chaque message est écrit dans `admin/messages.php` *avant* la
+tentative d'envoi. Si l'hébergeur refuse d'expédier, le visiteur en est informé (au lieu
+d'être invité à recommencer dans le vide) et le message reste lisible sur le serveur.
+
+Si l'hébergeur refuse les envois, créez chez lui une vraie adresse (`contact@votre-domaine`)
+et inscrivez-la dans le champ `expediteur` de `admin/destinataire.php`.
+
+Sans PHP (hébergement statique, GitHub Pages), `contact.php` n'est pas exécuté : le
+formulaire retombe alors sur le téléphone plutôt que de faire semblant d'envoyer.
 
 ### Les horaires — un seul endroit
 
@@ -453,6 +507,9 @@ système prennent le relais sans casser la mise en page.
 - **Alternatives textuelles** des photos déposées : la légende est complétée
   automatiquement par « Le P'tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen »
   (voir `remplirEmplacement()` dans `js/main.js`).
+- **Version anglaise** dans `en/`, reliée au français par des balises `hreflang`
+  réciproques et déclarée dans le `sitemap.xml` : utile pour les touristes qui cherchent
+  *bar in Rouen* ou *pub Rouen city centre*, sans créer de contenu dupliqué.
 - Site rapide, responsive, sans dépendance : trois critères que Google mesure vraiment.
 
 ### Performance mesurée

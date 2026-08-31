@@ -665,6 +665,16 @@ p { margin: 0 0 1rem; }
   }
   .nav a:not(.btn)::after { display: none; }
   .nav .btn { margin-top: 1rem; width: 100%; }
+
+  /* Dans le menu déplié, la bascule de langue reste une pastille : sans
+     cela elle s'étirerait sur toute la largeur comme les autres liens. */
+  .nav li:has(> .nav-langue) { padding: 0.6rem 0.25rem; }
+  .nav a.nav-langue {
+    display: inline-block;
+    border-bottom: 1px solid var(--line);
+    padding: 0.3rem 0.9rem;
+    font-size: 0.95rem;
+  }
 }
 
 @media (max-width: 560px) {
@@ -759,6 +769,18 @@ p { margin: 0 0 1rem; }
 /* Entrée « Compte » du menu : discrète, réservée au bar. */
 .nav a.nav-compte { color: var(--ink-faint); font-size: 0.86rem; }
 .nav a.nav-compte:hover { color: var(--green); }
+
+/* Bascule français / anglais : discrète, mais reconnaissable au premier
+   coup d'œil grâce au cadre. */
+.nav a.nav-langue {
+  color: var(--ink-faint);
+  font-size: 0.82rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.18rem 0.6rem;
+}
+.nav a.nav-langue:hover { color: var(--green); border-color: var(--green); }
+.nav a.nav-langue::after { display: none; }
 
 /* Bandeau réservé à l'administrateur connecté.
    La règle [hidden] doit être répétée : un `display` posé par une classe

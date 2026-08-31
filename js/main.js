@@ -6,6 +6,127 @@
   'use strict';
 
   /* =========================================================
+     0. LANGUE
+     ---------------------------------------------------------
+     Le même script sert les pages françaises (racine) et les
+     pages anglaises (/en/). Deux choses en dépendent :
+
+       - les textes produits par le script (statut d'ouverture,
+         agenda, boutons, messages du formulaire) ;
+       - les chemins vers les ressources communes, puisque les
+         pages anglaises sont un dossier plus bas.
+
+     Les deux se lisent sur la balise <html> : `lang` et
+     `data-racine`. Une page qui n'annonce rien reste française
+     et à la racine.
+     ========================================================= */
+  var LANGUE = (document.documentElement.lang || 'fr').slice(0, 2).toLowerCase();
+  var RACINE = document.documentElement.getAttribute('data-racine') || '';
+
+  var TEXTES = {
+    fr: {
+      jours: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+      mois: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'],
+      minuit: 'minuit',
+      ouvertJusqu: 'Ouvert — jusqu’à ',
+      ouvreAujourdhui: 'Fermé — ouvre aujourd’hui à ',
+      reouverture: 'Fermé — réouverture ',
+      demain: 'demain',
+      a: ' à ',
+      ferme: 'Fermé',
+      ouvrirMenu: 'Ouvrir le menu',
+      fermerMenu: 'Fermer le menu',
+      agendaVideTitre: 'Aucune date annoncée pour le moment',
+      agendaVideTexte: 'Les prochaines soirées et retransmissions seront publiées ici. ' +
+        'En attendant, la page Facebook du bar reste la source la plus à jour.',
+      evenement: 'Événement',
+      ajouterPhoto: 'Ajouter une photo',
+      illustration: 'Illustration — ',
+      altPhoto: ' — Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen',
+      altPhotoSeule: 'Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen',
+      depotEmplacement: 'Emplacement : ',
+      depotReserve: 'Réservé au bar : le mot de passe de l’administration est demandé.',
+      motDePasse: 'Mot de passe',
+      photo: 'Photo',
+      depotFormats: 'JPEG, PNG ou WebP, 8 Mo maximum. La photo est recadrée en carré.',
+      annuler: 'Annuler',
+      envoyer: 'Envoyer',
+      indiquezMdp: 'Indiquez le mot de passe.',
+      choisissezPhoto: 'Choisissez une photo.',
+      envoiEnCours: 'Envoi en cours…',
+      photoEnregistree: 'Photo enregistrée.',
+      sansPhp: 'Envoi impossible : cette page doit être servie par un hébergement PHP.',
+      erreur: 'Erreur ',
+      formErreurs: 'Le formulaire contient des erreurs. Merci de les corriger.',
+      formNom: 'Merci d’indiquer votre nom.',
+      formEmail: 'Adresse e-mail invalide.',
+      formMessage: 'Votre message est un peu court.',
+      formEnvoye: 'Message envoyé, merci !',
+      formEchec: 'L’envoi a échoué. Merci de nous appeler au ',
+      formTelephone: function (nom, tel) {
+        return 'Merci ' + nom + ' ! Le plus rapide pour nous joindre reste le téléphone : ' +
+          tel + ', du lundi au samedi aux heures d’ouverture.';
+      },
+      formMailto: function (nom) {
+        return 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec le message ' +
+          'pré-rempli — il ne reste qu’à l’envoyer.';
+      },
+      sujetMail: '[Site] '
+    },
+    en: {
+      jours: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      mois: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      minuit: 'midnight',
+      ouvertJusqu: 'Open — until ',
+      ouvreAujourdhui: 'Closed — opens today at ',
+      reouverture: 'Closed — reopens ',
+      demain: 'tomorrow',
+      a: ' at ',
+      ferme: 'Closed',
+      ouvrirMenu: 'Open menu',
+      fermerMenu: 'Close menu',
+      agendaVideTitre: 'No dates announced yet',
+      agendaVideTexte: 'Upcoming nights and screenings will be posted here. ' +
+        'In the meantime, the bar’s Facebook page is the most up-to-date source.',
+      evenement: 'Event',
+      ajouterPhoto: 'Add a photo',
+      illustration: 'Illustration — ',
+      altPhoto: ' — Le P’tit Ravisé, bar and tobacconist at 14 rue des Bons-Enfants, Rouen',
+      altPhotoSeule: 'Le P’tit Ravisé, bar and tobacconist at 14 rue des Bons-Enfants, Rouen',
+      depotEmplacement: 'Slot: ',
+      depotReserve: 'Staff only: the administration password is required.',
+      motDePasse: 'Password',
+      photo: 'Photo',
+      depotFormats: 'JPEG, PNG or WebP, 8 MB maximum. The photo is cropped to a square.',
+      annuler: 'Cancel',
+      envoyer: 'Send',
+      indiquezMdp: 'Please enter the password.',
+      choisissezPhoto: 'Please choose a photo.',
+      envoiEnCours: 'Sending…',
+      photoEnregistree: 'Photo saved.',
+      sansPhp: 'Upload failed: this page must be served by PHP hosting.',
+      erreur: 'Error ',
+      formErreurs: 'The form contains errors. Please correct them.',
+      formNom: 'Please give your name.',
+      formEmail: 'Invalid e-mail address.',
+      formMessage: 'Your message is a little short.',
+      formEnvoye: 'Message sent, thank you!',
+      formEchec: 'Sending failed. Please call us on ',
+      formTelephone: function (nom, tel) {
+        return 'Thank you ' + nom + '! The quickest way to reach us is the phone: ' +
+          tel + ', Monday to Saturday during opening hours.';
+      },
+      formMailto: function (nom) {
+        return 'Thank you ' + nom + '! Your e-mail app is opening with the message ' +
+          'ready — all that is left is to send it.';
+      },
+      sujetMail: '[Website] '
+    }
+  };
+
+  var T = TEXTES[LANGUE] || TEXTES.fr;
+
+  /* =========================================================
      1. HORAIRES — source unique de vérité
      ---------------------------------------------------------
      Clés : 0 = dimanche, 1 = lundi … 6 = samedi.
@@ -29,13 +150,18 @@
     6: { open: 8 * 60 + 30, close: 20 * 60 } // samedi : ouverture plus tardive
   };
 
-  var DAY_NAMES = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
 
   function formatMinutes(total) {
     var m = ((total % (24 * 60)) + 24 * 60) % (24 * 60);
     var h = Math.floor(m / 60);
     var mins = m % 60;
-    if (h === 0 && mins === 0) return 'minuit';
+    if (h === 0 && mins === 0) return T.minuit;
+    if (LANGUE === 'en') {
+      // Format anglais : 7 am, 8:30 am, 8 pm.
+      var suffixe = h < 12 ? ' am' : ' pm';
+      var h12 = h % 12 === 0 ? 12 : h % 12;
+      return (mins === 0 ? String(h12) : h12 + ':' + String(mins).padStart(2, '0')) + suffixe;
+    }
     return mins === 0 ? h + ' h' : h + ' h ' + String(mins).padStart(2, '0');
   }
 
@@ -56,24 +182,24 @@
     var yesterday = (day + 6) % 7;
     var yShift = SCHEDULE[yesterday];
     if (yShift && yShift.close > 24 * 60 && minutes < yShift.close - 24 * 60) {
-      return { open: true, message: 'Ouvert — jusqu’à ' + formatMinutes(yShift.close) };
+      return { open: true, message: T.ouvertJusqu + formatMinutes(yShift.close) };
     }
 
     var today = SCHEDULE[day];
     if (today && minutes >= today.open && minutes < today.close) {
-      return { open: true, message: 'Ouvert — jusqu’à ' + formatMinutes(today.close) };
+      return { open: true, message: T.ouvertJusqu + formatMinutes(today.close) };
     }
     if (today && minutes < today.open) {
-      return { open: false, message: 'Fermé — ouvre aujourd’hui à ' + formatMinutes(today.open) };
+      return { open: false, message: T.ouvreAujourdhui + formatMinutes(today.open) };
     }
 
     var next = nextOpening(day);
     return {
       open: false,
       message: next
-        ? 'Fermé — réouverture ' + (next.inDays === 1 ? 'demain' : DAY_NAMES[next.day]) +
-          ' à ' + formatMinutes(next.open)
-        : 'Fermé'
+        ? T.reouverture + (next.inDays === 1 ? T.demain : T.jours[next.day]) +
+          T.a + formatMinutes(next.open)
+        : T.ferme
     };
   }
 
@@ -106,14 +232,14 @@
     if (!nav || !navToggle) return;
     nav.classList.remove('is-open');
     navToggle.setAttribute('aria-expanded', 'false');
-    navToggle.setAttribute('aria-label', 'Ouvrir le menu');
+    navToggle.setAttribute('aria-label', T.ouvrirMenu);
   }
 
   if (nav && navToggle) {
     navToggle.addEventListener('click', function () {
       var open = nav.classList.toggle('is-open');
       navToggle.setAttribute('aria-expanded', String(open));
-      navToggle.setAttribute('aria-label', open ? 'Fermer le menu' : 'Ouvrir le menu');
+      navToggle.setAttribute('aria-label', open ? T.fermerMenu : T.ouvrirMenu);
     });
     nav.addEventListener('click', function (e) { if (e.target.closest('a')) closeNav(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeNav(); });
@@ -173,12 +299,11 @@
         '<div class="empty-state">' +
         '<svg class="ico" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
         '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>' +
-        '<h3>Aucune date annoncée pour le moment</h3>' +
-        '<p>Les prochaines soirées et retransmissions seront publiées ici. ' +
-        'En attendant, la page Facebook du bar reste la source la plus à jour.</p>' +
+        '<h3></h3><p></p>' +
         '</div>';
+      eventsHost.querySelector('h3').textContent = T.agendaVideTitre;
+      eventsHost.querySelector('p').textContent = T.agendaVideTexte;
     } else {
-      var MOIS = ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
       var list = document.createElement('ul');
       list.className = 'events';
 
@@ -187,7 +312,7 @@
         var item = document.createElement('li');
         item.className = 'event';
 
-        var meta = [DAY_NAMES[d.getDay()]];
+        var meta = [T.jours[d.getDay()]];
         if (ev.heure) meta.push(ev.heure);
         if (ev.prix) meta.push(ev.prix);
 
@@ -199,14 +324,14 @@
         day.textContent = String(d.getDate()).padStart(2, '0');
         var month = document.createElement('span');
         month.className = 'month';
-        month.textContent = MOIS[d.getMonth()];
+        month.textContent = T.mois[d.getMonth()];
         dateBox.appendChild(day);
         dateBox.appendChild(month);
 
         var body = document.createElement('div');
         body.className = 'event-body';
         var title = document.createElement('h3');
-        title.textContent = ev.titre || 'Événement';
+        title.textContent = ev.titre || T.evenement;
         body.appendChild(title);
         if (ev.description) {
           var desc = document.createElement('p');
@@ -342,11 +467,10 @@
 
     if (photo.fichier) {
       var image = document.createElement('img');
-      image.src = 'img/photos/' + photo.fichier;
+      image.src = RACINE + 'img/photos/' + photo.fichier;
       // L'alternative textuelle nomme l'établissement et la ville : elle sert
       // aux lecteurs d'écran comme à la recherche d'images locale.
-      image.alt = (photo.legende ? photo.legende + ' — ' : '')
-        + 'Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen';
+      image.alt = photo.legende ? photo.legende + T.altPhoto : T.altPhotoSeule;
       image.loading = 'lazy';
       figure.appendChild(image);
       figure.classList.add('illu-photo');
@@ -361,13 +485,13 @@
     if (modele) figure.appendChild(modele.content.cloneNode(true));
     figure.setAttribute('role', 'img');
     if (!figure.getAttribute('aria-label')) {
-      figure.setAttribute('aria-label', 'Illustration — ' + (photo.legende || ''));
+      figure.setAttribute('aria-label', T.illustration + (photo.legende || ''));
     }
 
     var bouton = document.createElement('button');
     bouton.type = 'button';
     bouton.className = 'btn-photo';
-    bouton.textContent = 'Ajouter une photo';
+    bouton.textContent = T.ajouterPhoto;
     bouton.addEventListener('click', function () { ouvrirDepot(photo); });
     figure.appendChild(bouton);
   }
@@ -413,27 +537,40 @@
     fond.className = 'depot-fond';
     fond.innerHTML =
       '<div class="depot" role="dialog" aria-modal="true" aria-labelledby="depot-titre">' +
-        '<h2 id="depot-titre">Ajouter une photo</h2>' +
-        '<p class="note">Emplacement : <strong class="depot-emplacement"></strong>. ' +
-          'Réservé au bar : le mot de passe de l’administration est demandé.</p>' +
+        '<h2 id="depot-titre" class="depot-titre"></h2>' +
+        '<p class="note"><span class="depot-intro"></span><strong class="depot-emplacement"></strong>. ' +
+          '<span class="depot-reserve"></span></p>' +
         '<form>' +
           '<div class="field">' +
-            '<label for="depot-mdp">Mot de passe</label>' +
+            '<label for="depot-mdp" class="depot-l-mdp"></label>' +
             '<input type="password" id="depot-mdp" autocomplete="current-password">' +
           '</div>' +
           '<div class="field">' +
-            '<label for="depot-fichier">Photo</label>' +
+            '<label for="depot-fichier" class="depot-l-photo"></label>' +
             '<input type="file" id="depot-fichier" accept="image/jpeg,image/png,image/webp">' +
-            '<p class="note">JPEG, PNG ou WebP, 8 Mo maximum. La photo est recadrée en carré.</p>' +
+            '<p class="note depot-formats"></p>' +
           '</div>' +
           '<div class="depot-actions">' +
-            '<button type="button" class="btn btn-outline depot-annuler">Annuler</button>' +
-            '<button type="submit" class="btn">Envoyer</button>' +
+            '<button type="button" class="btn btn-outline depot-annuler"></button>' +
+            '<button type="submit" class="btn depot-envoyer"></button>' +
           '</div>' +
           '<p class="form-status depot-statut" role="status" aria-live="polite"></p>' +
         '</form>' +
       '</div>';
 
+    var libelles = {
+      '.depot-titre': T.ajouterPhoto,
+      '.depot-intro': T.depotEmplacement,
+      '.depot-reserve': T.depotReserve,
+      '.depot-l-mdp': T.motDePasse,
+      '.depot-l-photo': T.photo,
+      '.depot-formats': T.depotFormats,
+      '.depot-annuler': T.annuler,
+      '.depot-envoyer': T.envoyer
+    };
+    Object.keys(libelles).forEach(function (sel) {
+      fond.querySelector(sel).textContent = libelles[sel];
+    });
     fond.querySelector('.depot-emplacement').textContent = photo.legende || photo.id;
     document.body.appendChild(fond);
 
@@ -450,33 +587,33 @@
 
     fond.querySelector('form').addEventListener('submit', function (e) {
       e.preventDefault();
-      if (!champMdp.value) { statut.textContent = 'Indiquez le mot de passe.'; statut.className = 'form-status depot-statut is-error'; return; }
-      if (!champFichier.files.length) { statut.textContent = 'Choisissez une photo.'; statut.className = 'form-status depot-statut is-error'; return; }
+      if (!champMdp.value) { statut.textContent = T.indiquezMdp; statut.className = 'form-status depot-statut is-error'; return; }
+      if (!champFichier.files.length) { statut.textContent = T.choisissezPhoto; statut.className = 'form-status depot-statut is-error'; return; }
 
       var donnees = new FormData();
       donnees.append('emplacement', photo.id);
       donnees.append('motDePasse', champMdp.value);
       donnees.append('photo', champFichier.files[0]);
 
-      statut.textContent = 'Envoi en cours…';
+      statut.textContent = T.envoiEnCours;
       statut.className = 'form-status depot-statut';
 
-      fetch('admin/photo.php', { method: 'POST', body: donnees, credentials: 'same-origin' })
+      fetch(RACINE + 'admin/photo.php', { method: 'POST', body: donnees, credentials: 'same-origin' })
         .then(function (reponse) {
           return reponse.json().catch(function () { return {}; }).then(function (r) {
-            if (!reponse.ok) throw new Error(r.erreur || 'Erreur ' + reponse.status + '.');
+            if (!reponse.ok) throw new Error(r.erreur || T.erreur + reponse.status + '.');
             return r;
           });
         })
         .then(function () {
-          statut.textContent = 'Photo enregistrée.';
+          statut.textContent = T.photoEnregistree;
           statut.className = 'form-status depot-statut is-ok';
           setTimeout(function () { location.reload(); }, 700);
         })
         .catch(function (err) {
           // Sans PHP (ouverture locale, GitHub Pages), la requête n'aboutit pas.
           var message = err instanceof TypeError
-            ? 'Envoi impossible : cette page doit être servie par un hébergement PHP.'
+            ? T.sansPhp
             : err.message;
           statut.textContent = message;
           statut.className = 'form-status depot-statut is-error';
@@ -495,7 +632,7 @@
   var reserves = document.querySelectorAll('[data-si-connecte]');
 
   if (reserves.length) {
-    fetch('admin/session.php', { credentials: 'same-origin' })
+    fetch(RACINE + 'admin/session.php', { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (etat) {
         if (!etat || !etat.connecte) return;
@@ -580,7 +717,7 @@
       if (nouveau.value.length < 10) return erreur('Le nouveau mot de passe doit faire au moins 10 caractères.');
       if (nouveau.value !== nouveau2.value) return erreur('Les deux nouveaux mots de passe diffèrent.');
 
-      statut.textContent = 'Enregistrement…';
+      statut.textContent = T.envoiEnCours;
       statut.className = 'form-status depot-statut';
 
       fetch('admin/motdepasse.php', {
@@ -591,12 +728,12 @@
       })
         .then(function (reponse) {
           return reponse.json().catch(function () { return {}; }).then(function (r) {
-            if (!reponse.ok) throw new Error(r.erreur || 'Erreur ' + reponse.status + '.');
+            if (!reponse.ok) throw new Error(r.erreur || T.erreur + reponse.status + '.');
             return r;
           });
         })
         .then(function () {
-          statut.textContent = 'Mot de passe modifié.';
+          statut.textContent = LANGUE === 'en' ? 'Password changed.' : 'Mot de passe modifié.';
           statut.className = 'form-status depot-statut is-ok';
           actuel.value = nouveau.value = nouveau2.value = '';
         })
@@ -628,9 +765,11 @@
   var form = document.getElementById('contactForm');
 
   if (form) {
-    // Heure d'affichage du formulaire : un envoi arrivé en moins de trois
-    // secondes vient d'un automate, pas d'une personne qui écrit.
-    var instantAffichage = Date.now();
+    // Temps passé sur le formulaire : un envoi expédié en moins de trois
+    // secondes vient d'un automate, pas d'une personne qui écrit. On mesure
+    // une durée, non une heure : une horloge de téléphone mal réglée ne doit
+    // pas faire passer un visiteur pour un robot.
+    var ouvertureFormulaire = Date.now();
 
     var setError = function (name, message) {
       var field = form.querySelector('#' + name);
@@ -649,9 +788,9 @@
       var email = form.querySelector('#email').value.trim();
       var message = form.querySelector('#message').value.trim();
 
-      ok = setError('nom', nom.length < 2 ? 'Merci d’indiquer votre nom.' : '') && ok;
-      ok = setError('email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : 'Adresse e-mail invalide.') && ok;
-      ok = setError('message', message.length < 10 ? 'Votre message est un peu court.' : '') && ok;
+      ok = setError('nom', nom.length < 2 ? T.formNom : '') && ok;
+      ok = setError('email', /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? '' : T.formEmail) && ok;
+      ok = setError('message', message.length < 10 ? T.formMessage : '') && ok;
       return ok;
     };
 
@@ -660,7 +799,7 @@
       var status = document.getElementById('formStatus');
 
       if (!validate()) {
-        status.textContent = 'Le formulaire contient des erreurs. Merci de les corriger.';
+        status.textContent = T.formErreurs;
         status.className = 'form-status is-error';
         var firstInvalid = form.querySelector('[aria-invalid="true"]');
         if (firstInvalid) firstInvalid.focus();
@@ -678,19 +817,16 @@
       // téléphone si aucune adresse n'est disponible côté client.
       var repli = function (raison) {
         if (!EMAIL_CONTACT) {
-          status.textContent = raison || ('Merci ' + nom + ' ! Le plus rapide pour nous ' +
-            'joindre reste le téléphone : ' + TEL_AFFICHE + ', du lundi au samedi aux ' +
-            'heures d’ouverture.');
+          status.textContent = raison || T.formTelephone(nom, TEL_AFFICHE);
           status.className = 'form-status is-ok';
           return;
         }
         var corps = [champ('message'), '', '— ' + nom, champ('email'), champ('telephone')]
           .filter(Boolean).join('\n');
         window.location.href = 'mailto:' + EMAIL_CONTACT +
-          '?subject=' + encodeURIComponent('[Site] ' + champ('sujet')) +
+          '?subject=' + encodeURIComponent(T.sujetMail + champ('sujet')) +
           '&body=' + encodeURIComponent(corps);
-        status.textContent = 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec ' +
-          'le message pré-rempli — il ne reste qu’à l’envoyer.';
+        status.textContent = T.formMailto(nom);
         status.className = 'form-status is-ok';
         form.reset();
       };
@@ -701,7 +837,7 @@
       status.className = 'form-status';
       if (bouton) bouton.disabled = true;
 
-      fetch('contact.php', {
+      fetch(RACINE + 'contact.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -711,7 +847,8 @@
           sujet: champ('sujet'),
           message: champ('message'),
           societe: champ('societe'),     // piège à robots, toujours vide
-          instant: instantAffichage
+          duree: Date.now() - ouvertureFormulaire,
+          langue: LANGUE                 // pour que la réponse soit dans la bonne langue
         })
       })
         .then(function (r) {
@@ -727,20 +864,20 @@
 
           if (r.data.erreurs) {
             Object.keys(r.data.erreurs).forEach(function (k) { setError(k, r.data.erreurs[k]); });
-            status.textContent = 'Le formulaire contient des erreurs. Merci de les corriger.';
+            status.textContent = T.formErreurs;
             status.className = 'form-status is-error';
             return;
           }
           if (!r.data.ok) {
-            status.textContent = r.data.erreur || 'L’envoi a échoué. Merci de nous appeler au ' + TEL_AFFICHE + '.';
+            status.textContent = r.data.erreur || (T.formEchec + TEL_AFFICHE + '.');
             status.className = 'form-status is-error';
             return;
           }
 
-          status.textContent = r.data.message || 'Message envoyé, merci !';
+          status.textContent = r.data.message || T.formEnvoye;
           status.className = 'form-status is-ok';
           form.reset();
-          instantAffichage = Date.now();
+          ouvertureFormulaire = Date.now();
         })
         .catch(function () {
           if (bouton) bouton.disabled = false;

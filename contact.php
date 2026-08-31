@@ -26,6 +26,59 @@ if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
 }
 
 /* ---------------------------------------------------------------
+   Lecture de la requête et langue de la réponse
+   --------------------------------------------------------------- */
+
+$corps = json_decode((string) file_get_contents('php://input'), true);
+$corps = is_array($corps) ? $corps : [];
+
+$champ = static function (string $cle) use ($corps): string {
+    return is_string($corps[$cle] ?? null) ? trim($corps[$cle]) : '';
+};
+
+/*
+ * Le site existe en français et en anglais : les réponses suivent la langue
+ * de la page qui a envoyé le message. Toute autre valeur retombe sur le
+ * français.
+ */
+$langue = $champ('langue') === 'en' ? 'en' : 'fr';
+$TEXTES = [
+    'fr' => [
+        'recu'      => 'Message reçu, merci !',
+        'nom'       => 'Merci d’indiquer votre nom.',
+        'email'     => 'Adresse e-mail invalide.',
+        'court'     => 'Votre message est un peu court.',
+        'long'      => 'Message trop long : 5000 caractères au maximum.',
+        'interdit'  => 'Ce champ contient un caractère interdit.',
+        'trop'      => 'Vous avez déjà envoyé plusieurs messages. Merci de patienter '
+            . 'une heure, ou de nous appeler directement.',
+        'inactif'   => 'Le formulaire n’est pas encore configuré. '
+            . 'Merci de nous joindre par téléphone.',
+        'methode'   => 'Méthode non autorisée.',
+        'panne'     => 'Votre message a bien été enregistré, mais notre serveur n’a pas pu '
+            . 'l’expédier à l’instant. Si c’est urgent, appelez-nous.',
+        'partiA'    => 'Merci ',
+        'partiB'    => ' ! Votre message est parti, nous vous répondons au plus vite.',
+    ],
+    'en' => [
+        'recu'      => 'Message received, thank you!',
+        'nom'       => 'Please give your name.',
+        'email'     => 'Invalid e-mail address.',
+        'court'     => 'Your message is a little short.',
+        'long'      => 'Message too long: 5000 characters maximum.',
+        'interdit'  => 'This field contains a forbidden character.',
+        'trop'      => 'You have already sent several messages. Please wait an hour, '
+            . 'or call us directly.',
+        'inactif'   => 'The form is not configured yet. Please reach us by phone.',
+        'methode'   => 'Method not allowed.',
+        'panne'     => 'Your message has been saved, but our server could not send it just '
+            . 'now. If it is urgent, please call us.',
+        'partiA'    => 'Thank you ',
+        'partiB'    => '! Your message is on its way, we will reply as soon as we can.',
+    ],
+][$langue];
+
+/* ---------------------------------------------------------------
    Limitation : cinq messages par heure et par adresse IP.
    De quoi écrire plusieurs fois dans la journée sans permettre
    à un robot de vider un carnet d'adresses dans la boîte du bar.
@@ -65,8 +118,7 @@ function enregistrer_envoi(): void
 $entree = envois_recents()[cle_client()] ?? null;
 if (($entree['nombre'] ?? 0) >= MAX_ENVOIS) {
     reponse_json([
-        'erreur' => 'Vous avez déjà envoyé plusieurs messages. Merci de patienter '
-            . 'une heure, ou de nous appeler directement.',
+        'erreur' => $TEXTES['trop'],
     ], 429);
 }
 
@@ -74,25 +126,25 @@ if (($entree['nombre'] ?? 0) >= MAX_ENVOIS) {
    Lecture et validation
    --------------------------------------------------------------- */
 
-$corps = json_decode((string) file_get_contents('php://input'), true);
-$corps = is_array($corps) ? $corps : [];
-
-$champ = static function (string $cle) use ($corps): string {
-    return is_string($corps[$cle] ?? null) ? trim($corps[$cle]) : '';
-};
 
 /*
  * Deux pièges à robots, invisibles pour un visiteur :
  *   - « societe » est un champ masqué que seul un automate remplit ;
- *   - « instant » est l'heure d'affichage du formulaire ; un humain met
- *     plus de trois secondes à écrire un message, un script en met zéro.
- * On répond « ok » dans ces deux cas : un robot informé de son échec
+ *   - « duree » est le temps passé sur le formulaire, mesuré par la page
+ *     elle-même. Un humain met plus de trois secondes à écrire un message,
+ *     un script en met zéro.
+ *
+ * On demande une DURÉE et non l'heure d'affichage : une durée est la
+ * différence entre deux lectures de la même horloge, donc insensible à un
+ * téléphone mal réglé. Un horodatage absolu, lui, ferait passer pour un
+ * robot tout visiteur dont l'horloge avance de quelques secondes.
+ *
+ * On répond « ok » dans les deux cas : un robot informé de son échec
  * réessaie, un robot qui croit avoir réussi passe à autre chose.
  */
-$instant = (int) ($corps['instant'] ?? 0);
-$ecoule = $instant > 0 ? (time() * 1000 - $instant) / 1000 : -1;
-if ($champ('societe') !== '' || $ecoule < 3 || $ecoule > 43200) {
-    reponse_json(['ok' => true, 'message' => 'Message reçu, merci !']);
+$duree = (int) ($corps['duree'] ?? 0) / 1000;
+if ($champ('societe') !== '' || $duree < 3 || $duree > 43200) {
+    reponse_json(['ok' => true, 'message' => $TEXTES['recu']]);
 }
 
 $nom = $champ('nom');
@@ -103,22 +155,22 @@ $message = $champ('message');
 
 $erreurs = [];
 if (mb_strlen($nom) < 2) {
-    $erreurs['nom'] = 'Merci d’indiquer votre nom.';
+    $erreurs['nom'] = $TEXTES['nom'];
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $erreurs['email'] = 'Adresse e-mail invalide.';
+    $erreurs['email'] = $TEXTES['email'];
 }
 if (mb_strlen($message) < 10) {
-    $erreurs['message'] = 'Votre message est un peu court.';
+    $erreurs['message'] = $TEXTES['court'];
 }
 if (mb_strlen($nom) > 120 || mb_strlen($message) > 5000) {
-    $erreurs['message'] = 'Message trop long : 5000 caractères au maximum.';
+    $erreurs['message'] = $TEXTES['long'];
 }
 // Un en-tête de courriel se termine par un retour à la ligne : en glisser un
 // dans le nom ou le sujet permettrait d'ajouter des destinataires cachés.
 foreach (['nom' => $nom, 'email' => $email, 'sujet' => $sujet, 'telephone' => $telephone] as $cle => $valeur) {
     if (preg_match('/[\r\n]/', $valeur)) {
-        $erreurs[$cle] = 'Ce champ contient un caractère interdit.';
+        $erreurs[$cle] = $TEXTES['interdit'];
     }
 }
 
@@ -129,8 +181,7 @@ if ($erreurs) {
 $destinataire = lire_destinataire();
 if ($destinataire === '' || !filter_var($destinataire, FILTER_VALIDATE_EMAIL)) {
     reponse_json([
-        'erreur' => 'Le formulaire n’est pas encore configuré. '
-            . 'Merci de nous joindre par téléphone.',
+        'erreur' => $TEXTES['inactif'],
     ], 503);
 }
 
@@ -205,13 +256,12 @@ if (!$envoye) {
     reponse_json([
         'ok'      => true,
         'envoye'  => false,
-        'message' => 'Votre message a bien été enregistré, mais notre serveur n’a pas pu '
-            . 'l’expédier à l’instant. Si c’est urgent, appelez-nous.',
+        'message' => $TEXTES['panne'],
     ]);
 }
 
 reponse_json([
     'ok'      => true,
     'envoye'  => true,
-    'message' => 'Merci ' . $nom . ' ! Votre message est parti, nous vous répondons au plus vite.',
+    'message' => $TEXTES['partiA'] . $nom . $TEXTES['partiB'],
 ]);
