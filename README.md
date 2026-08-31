@@ -444,7 +444,37 @@ système prennent le relais sans casser la mise en page.
 - **Contenu local** : quartier Vieux-Marché – Cathédrale, rue Jeanne d'Arc,
   Gros-Horloge, métro Palais de Justice et Théâtre des Arts, parkings — écrits dans des
   phrases normales, pas en liste de mots-clés.
+- **Titres `<h1>` porteurs d'intention** sur les pages secondaires (« Un bar avec
+  terrasse au centre-ville de Rouen », « Horaires et accès — 14 rue des Bons-Enfants,
+  Rouen ») plutôt que des étiquettes de menu.
+- **Maillage interne** : chaque page renvoie en toutes lettres vers les deux ou trois
+  autres qui l'intéressent (carte ↔ terrasse ↔ horaires ↔ contact), en plus du menu et
+  du pied de page.
+- **Alternatives textuelles** des photos déposées : la légende est complétée
+  automatiquement par « Le P'tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen »
+  (voir `remplirEmplacement()` dans `js/main.js`).
 - Site rapide, responsive, sans dépendance : trois critères que Google mesure vraiment.
+
+### Performance mesurée
+
+Mesures faites dans Chromium, en émulation téléphone (390 × 844, processeur
+quatre fois plus lent), sur les six pages :
+
+| Mesure | Valeur |
+| --- | --- |
+| Premier affichage (FCP) | 128 – 172 ms |
+| Plus grand élément (LCP) | 152 – 780 ms |
+| Décalage visuel cumulé (CLS) | **0,000** sur les six pages |
+| Poids transféré | 8 – 53 Ko |
+| Requêtes | 4 à 6 |
+
+Un point corrigé au passage : la feuille de styles Google Fonts était **bloquante**.
+Tant qu'elle n'était pas reçue, la page restait blanche — dans un test où le domaine
+`fonts.googleapis.com` était injoignable, le premier affichage tombait à **12,7 s**.
+Elle est désormais chargée en `media="print"` puis basculée en `all` au chargement
+(avec repli `<noscript>`) : le même test donne **152 ms**. Les polices de repli
+(Georgia, system-ui) sont déclarées dans `css/style.css`, l'affichage reste correct
+si Google Fonts ne répond jamais.
 
 ### Ce qui ne se joue pas ici : le pack local et Google Maps
 

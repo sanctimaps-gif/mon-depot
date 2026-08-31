@@ -343,7 +343,10 @@
     if (photo.fichier) {
       var image = document.createElement('img');
       image.src = 'img/photos/' + photo.fichier;
-      image.alt = photo.legende || 'Photo du bar';
+      // L'alternative textuelle nomme l'établissement et la ville : elle sert
+      // aux lecteurs d'écran comme à la recherche d'images locale.
+      image.alt = (photo.legende ? photo.legende + ' — ' : '')
+        + 'Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen';
       image.loading = 'lazy';
       figure.appendChild(image);
       figure.classList.add('illu-photo');

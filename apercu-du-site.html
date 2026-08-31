@@ -980,7 +980,7 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </main></section><section id="page-carte"><div class="page-head">
 <div class="wrap">
 <p class="breadcrumb"><a href="#page-accueil">Accueil</a> · La carte</p>
-<h1>La carte</h1>
+<h1>La carte du P’tit Ravisé, bar à Rouen</h1>
 <p class="lead">Ce qu'on sert au comptoir et en terrasse, du café de 7 h au dernier demi
         avant la fermeture.</p>
 </div>
@@ -1012,6 +1012,10 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <p><strong>Au comptoir également :</strong> tabac et Française des Jeux.
           Allergènes et provenance des produits sur demande auprès du bar.</p>
 </div>
+<p class="note" style="margin-top:1.6rem">On sert la même carte en salle et sur
+        <a href="#page-le-bar">la terrasse du bar</a>. Pour venir :
+        <a href="#page-infos">horaires et accès rue des Bons-Enfants</a>, en plein centre-ville
+        de Rouen.</p>
 <!-- ================= QR CODE ================= -->
 <section style="margin-top:3rem">
 <div class="qr-block">
@@ -1028,7 +1032,7 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </main></section><section id="page-le-bar"><div class="page-head">
 <div class="wrap">
 <p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Le bar</p>
-<h1>Le bar et sa terrasse</h1>
+<h1>Un bar avec terrasse au centre-ville de Rouen</h1>
 <p class="lead">Un comptoir, une terrasse ensoleillée, un buraliste et beaucoup d'habitués, au centre-ville de Rouen.</p>
 </div>
 </div><main>
@@ -1175,7 +1179,7 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </main></section><section id="page-evenements"><div class="page-head">
 <div class="wrap">
 <p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Événements</p>
-<h1>Événements</h1>
+<h1>Événements et soirées du bar, à Rouen</h1>
 <p class="lead">Les rendez-vous annoncés par le bar. Les dates passées disparaissent
         automatiquement de cette page.</p>
 </div>
@@ -1206,12 +1210,16 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
             intégré selon le navigateur ou le type de page.
             <a href="https://www.facebook.com/people/Le-Ptit-Ravis%C3%A9/100057174890968/" rel="noopener noreferrer" target="_blank">Ouvrir la page Facebook directement</a>.</p>
 </div>
+<p class="note" style="margin-top:2rem">Avant de venir, jetez un œil à
+          <a href="#page-carte">la carte</a> et aux
+          <a href="#page-infos">horaires du bar, rue des Bons-Enfants à Rouen</a>.
+          Une soirée à proposer ? <a href="#page-contact">Écrivez-nous</a>.</p>
 </section>
 </div>
 </main></section><section id="page-infos"><div class="page-head">
 <div class="wrap">
 <p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Infos pratiques</p>
-<h1>Infos pratiques</h1>
+<h1>Horaires et accès — 14 rue des Bons-Enfants, Rouen</h1>
 <p class="lead">Où nous trouver, quand venir, comment s'y rendre et où se garer.</p>
 </div>
 </div><main class="section">
@@ -1337,7 +1345,7 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </main></section><section id="page-contact"><div class="page-head">
 <div class="wrap">
 <p class="breadcrumb"><a href="#page-accueil">Accueil</a> · Contact</p>
-<h1>Contact</h1>
+<h1>Contacter Le P’tit Ravisé à Rouen</h1>
 <p class="lead">Le plus simple reste le téléphone — mais le formulaire fonctionne aussi.</p>
 </div>
 </div><main class="section">
@@ -1384,6 +1392,10 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 <h2>Nous écrire</h2>
 <p class="lead">Une question, une table à réserver, un objet oublié : écrivez-nous ici.
           Pour une réponse immédiate, le téléphone reste le plus rapide.</p>
+<p class="note">Avant d'écrire, la réponse est peut-être déjà sur
+          <a href="#page-infos">la page horaires et accès</a>, sur
+          <a href="#page-carte">la carte</a> ou dans
+          <a href="#page-evenements">l'agenda des soirées</a>.</p>
 <form class="form" id="contactForm" novalidate="">
 <div class="field">
 <label for="nom">Nom</label>
@@ -2097,7 +2109,10 @@ window.DONNEES = {
     if (photo.fichier) {
       var image = document.createElement('img');
       image.src = 'img/photos/' + photo.fichier;
-      image.alt = photo.legende || 'Photo du bar';
+      // L'alternative textuelle nomme l'établissement et la ville : elle sert
+      // aux lecteurs d'écran comme à la recherche d'images locale.
+      image.alt = (photo.legende ? photo.legende + ' — ' : '')
+        + 'Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen';
       image.loading = 'lazy';
       figure.appendChild(image);
       figure.classList.add('illu-photo');

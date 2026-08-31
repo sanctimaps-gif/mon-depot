@@ -20,11 +20,16 @@
   <meta property="og:image:alt" content="Le P’tit Ravisé, bar-tabac au 14 rue des Bons-Enfants à Rouen">
   <meta name="twitter:card" content="summary_large_image">
 
-  <link rel="canonical" href="https://xn--barlepetitravis-pnb.com/index.html">
+  <link rel="canonical" href="https://xn--barlepetitravis-pnb.com/">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Polices chargées sans bloquer l'affichage : si Google Fonts est lent ou
+       injoignable, la page s'affiche quand même avec les polices de repli
+       (--font-display / --font-body dans css/style.css). -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"></noscript>
   <link rel="stylesheet" href="css/style.css">
 
   <script type="application/ld+json">
@@ -36,6 +41,7 @@
     "alternateName": "Le Petit Ravisé",
     "description": "Bar-tabac convivial au centre-ville de Rouen : comptoir, terrasse ensoleillée, café dès 7 h, tabac et Française des Jeux.",
     "url": "https://xn--barlepetitravis-pnb.com/",
+    "image": "https://xn--barlepetitravis-pnb.com/img/partage.jpg",
     "telephone": "+33235716679",
     "priceRange": "€",
     "currenciesAccepted": "EUR",

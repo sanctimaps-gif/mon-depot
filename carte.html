@@ -22,7 +22,12 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Polices chargées sans bloquer l'affichage : si Google Fonts est lent ou
+       injoignable, la page s'affiche quand même avec les polices de repli
+       (--font-display / --font-body dans css/style.css). -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap"></noscript>
   <link rel="stylesheet" href="css/style.css">
 
   <script type="application/ld+json">
@@ -73,7 +78,7 @@
   <div class="page-head">
     <div class="wrap">
       <p class="breadcrumb"><a href="index.html">Accueil</a> · La carte</p>
-      <h1>La carte</h1>
+      <h1>La carte du P’tit Ravisé, bar à Rouen</h1>
       <p class="lead">Ce qu'on sert au comptoir et en terrasse, du café de 7 h au dernier demi
         avant la fermeture.</p>
     </div>
@@ -113,6 +118,11 @@
         <p><strong>Au comptoir également :</strong> tabac et Française des Jeux.
           Allergènes et provenance des produits sur demande auprès du bar.</p>
       </div>
+
+      <p class="note" style="margin-top:1.6rem">On sert la même carte en salle et sur
+        <a href="le-bar.html">la terrasse du bar</a>. Pour venir :
+        <a href="infos.html">horaires et accès rue des Bons-Enfants</a>, en plein centre-ville
+        de Rouen.</p>
 
       <!-- ================= QR CODE ================= -->
       <section style="margin-top:3rem">
