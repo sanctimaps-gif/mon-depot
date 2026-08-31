@@ -149,14 +149,15 @@
   /* =========================================================
      5. Calendrier des événements
      ---------------------------------------------------------
-     Les données vivent dans js/evenements.js. Les dates
-     passées sont masquées automatiquement ; s'il ne reste
-     rien à annoncer, un état vide s'affiche.
+     Les données vivent dans js/donnees.js. Les dates passées
+     sont masquées automatiquement ; s'il ne reste rien à
+     annoncer, un état vide s'affiche.
      ========================================================= */
+  var DONNEES = window.DONNEES || {};
   var eventsHost = document.getElementById('events');
 
   if (eventsHost) {
-    var data = Array.isArray(window.EVENEMENTS) ? window.EVENEMENTS : [];
+    var data = Array.isArray(DONNEES.evenements) ? DONNEES.evenements : [];
     var startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -228,18 +229,104 @@
   }
 
   /* =========================================================
+     5 bis. La carte
+     ---------------------------------------------------------
+     Rendue à partir de js/donnees.js : rubriques, intitulés,
+     prix et descriptions. Le prix est omis quand il est vide,
+     ce qui évite une colonne de tirets.
+     ========================================================= */
+  var carteHost = document.getElementById('carte');
+
+  if (carteHost && Array.isArray(DONNEES.carte)) {
+    var navCarte = document.getElementById('carte-nav');
+    if (navCarte) navCarte.innerHTML = '';
+
+    DONNEES.carte.forEach(function (rubrique) {
+      if (!rubrique.items || !rubrique.items.length) return;
+
+      if (navCarte) {
+        var lien = document.createElement('a');
+        lien.href = '#' + rubrique.id;
+        lien.textContent = (rubrique.emoji ? rubrique.emoji + ' ' : '') + rubrique.titre;
+        navCarte.appendChild(lien);
+      }
+
+      var bloc = document.createElement('section');
+      bloc.className = 'menu-block';
+      bloc.id = rubrique.id;
+
+      var titre = document.createElement('h2');
+      if (rubrique.emoji) {
+        var emoji = document.createElement('span');
+        emoji.className = 'emoji';
+        emoji.setAttribute('aria-hidden', 'true');
+        emoji.textContent = rubrique.emoji;
+        titre.appendChild(emoji);
+        titre.appendChild(document.createTextNode(' '));
+      }
+      titre.appendChild(document.createTextNode(rubrique.titre));
+      bloc.appendChild(titre);
+
+      var liste = document.createElement('ul');
+      liste.className = 'menu';
+
+      rubrique.items.forEach(function (item) {
+        if (!item.nom) return;
+        var li = document.createElement('li');
+
+        var ligne = document.createElement('p');
+        ligne.className = 'menu-line';
+        var nom = document.createElement('span');
+        nom.className = 'name';
+        nom.textContent = item.nom;                 // textContent : jamais d'HTML injecté
+        ligne.appendChild(nom);
+
+        if (item.prix) {
+          var points = document.createElement('span');
+          points.className = 'dots';
+          var prix = document.createElement('span');
+          prix.className = 'price';
+          prix.textContent = item.prix;
+          ligne.appendChild(points);
+          ligne.appendChild(prix);
+        }
+        li.appendChild(ligne);
+
+        if (item.description) {
+          var desc = document.createElement('p');
+          desc.textContent = item.description;
+          li.appendChild(desc);
+        }
+        liste.appendChild(li);
+      });
+
+      bloc.appendChild(liste);
+      carteHost.appendChild(bloc);
+    });
+
+    // La mention « tarifs au comptoir » n'a de sens que si aucun prix n'est saisi.
+    var mention = document.getElementById('carte-mention');
+    if (mention) {
+      var auMoinsUnPrix = DONNEES.carte.some(function (r) {
+        return (r.items || []).some(function (i) { return i.prix; });
+      });
+      if (auMoinsUnPrix) mention.remove();
+      else mention.textContent = (DONNEES.reglages && DONNEES.reglages.mentionTarifs) || '';
+    }
+  }
+
+  /* =========================================================
      6. Formulaire de contact
      ---------------------------------------------------------
-     Renseignez l'adresse e-mail du bar ci-dessous : le
-     formulaire ouvrira alors le logiciel de messagerie du
-     visiteur avec un message déjà rempli (objet, coordonnées,
-     texte). Aucun serveur ni service tiers n'est nécessaire.
-
-     Tant que la constante est vide, le formulaire renvoie
-     poliment vers le téléphone.
+     L'adresse e-mail se renseigne dans js/donnees.js (ou via
+     la console d'administration). Dès qu'elle existe, le
+     formulaire ouvre le logiciel de messagerie du visiteur
+     avec un message déjà rempli. Sinon, il renvoie poliment
+     vers le téléphone.
      ========================================================= */
-  var EMAIL_CONTACT = '';          // ex. 'contact@barlepetitravise.fr'
-  var TEL_AFFICHE = '02 35 71 66 79';
+  var REGLAGES = DONNEES.reglages || {};
+  var EMAIL_CONTACT = REGLAGES.email || '';
+  var TEL_AFFICHE = REGLAGES.telephone || '02 35 71 66 79';
 
   var form = document.getElementById('contactForm');
 

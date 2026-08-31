@@ -87,7 +87,7 @@ def main() -> int:
     css = (RACINE / "css" / "style.css").read_text(encoding="utf-8")
     js = "\n".join(
         (RACINE / "js" / nom).read_text(encoding="utf-8")
-        for nom in ("evenements.js", "main.js")
+        for nom in ("donnees.js", "main.js")
     )
 
     # QR code en data-URI pour que le fichier reste autonome.

@@ -899,83 +899,18 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </div>
 </div><main class="section">
 <div class="wrap">
-<nav aria-label="Catégories de la carte" class="menu-nav">
-<a href="#bieres">🍺 Bières</a>
-<a href="#cocktails">🍹 Cocktails &amp; apéritifs</a>
-<a href="#softs">🥤 Softs</a>
-<a href="#chaudes">☕ Boissons chaudes</a>
-<a href="#manger">🥖 À grignoter</a>
-</nav>
-<p class="note" style="margin:-1.2rem 0 2.4rem">Tarifs affichés au comptoir et en terrasse.</p>
-<!-- ================= BIÈRES ================= -->
-<section class="menu-block" id="bieres">
-<h2><span aria-hidden="true" class="emoji">🍺</span> Bières</h2>
-<ul class="menu">
-<li><p class="menu-line"><span class="name">Pression — 25 cl</span></p></li>
-<li><p class="menu-line"><span class="name">Pression — 50 cl</span></p></li>
-<li><p class="menu-line"><span class="name">Blonde en bouteille</span></p></li>
-<li><p class="menu-line"><span class="name">Blanche</span></p></li>
-<li><p class="menu-line"><span class="name">Ambrée</span></p></li>
-<li><p class="menu-line"><span class="name">Bière sans alcool</span></p></li>
-<li><p class="menu-line"><span class="name">Panaché</span></p></li>
-<li><p class="menu-line"><span class="name">Monaco</span></p><p>Bière, limonade et grenadine.</p></li>
-</ul>
-</section>
-<!-- ================= COCKTAILS ================= -->
-<section class="menu-block" id="cocktails">
-<h2><span aria-hidden="true" class="emoji">🍹</span> Cocktails &amp; apéritifs</h2>
-<ul class="menu">
-<li><p class="menu-line"><span class="name">Kir</span></p><p>Cassis, mûre ou pêche.</p></li>
-<li><p class="menu-line"><span class="name">Kir royal</span></p></li>
-<li><p class="menu-line"><span class="name">Spritz</span></p></li>
-<li><p class="menu-line"><span class="name">Mojito</span></p></li>
-<li><p class="menu-line"><span class="name">Anisé</span></p><p>Servi avec sa carafe d'eau fraîche.</p></li>
-<li><p class="menu-line"><span class="name">Punch maison</span></p></li>
-<li><p class="menu-line"><span class="name">Cocktail sans alcool</span></p></li>
-<li><p class="menu-line"><span class="name">Vin au verre — rouge, blanc, rosé</span></p></li>
-</ul>
-</section>
-<!-- ================= SOFTS ================= -->
-<section class="menu-block" id="softs">
-<h2><span aria-hidden="true" class="emoji">🥤</span> Softs</h2>
-<ul class="menu">
-<li><p class="menu-line"><span class="name">Sodas — 33 cl</span></p></li>
-<li><p class="menu-line"><span class="name">Jus de fruits</span></p></li>
-<li><p class="menu-line"><span class="name">Eau plate — 50 cl</span></p></li>
-<li><p class="menu-line"><span class="name">Eau pétillante — 50 cl</span></p></li>
-<li><p class="menu-line"><span class="name">Limonade</span></p></li>
-<li><p class="menu-line"><span class="name">Sirop à l'eau</span></p></li>
-<li><p class="menu-line"><span class="name">Diabolo</span></p></li>
-<li><p class="menu-line"><span class="name">Perrier</span></p></li>
-</ul>
-</section>
-<!-- ================= BOISSONS CHAUDES ================= -->
-<section class="menu-block" id="chaudes">
-<h2><span aria-hidden="true" class="emoji">☕</span> Boissons chaudes</h2>
-<ul class="menu">
-<li><p class="menu-line"><span class="name">Express</span></p></li>
-<li><p class="menu-line"><span class="name">Café allongé</span></p></li>
-<li><p class="menu-line"><span class="name">Double express</span></p></li>
-<li><p class="menu-line"><span class="name">Noisette</span></p></li>
-<li><p class="menu-line"><span class="name">Café crème</span></p></li>
-<li><p class="menu-line"><span class="name">Cappuccino</span></p></li>
-<li><p class="menu-line"><span class="name">Chocolat chaud</span></p></li>
-<li><p class="menu-line"><span class="name">Thé &amp; infusions</span></p></li>
-</ul>
-</section>
-<!-- ================= À GRIGNOTER ================= -->
-<section class="menu-block" id="manger">
-<h2><span aria-hidden="true" class="emoji">🥖</span> À grignoter</h2>
-<ul class="menu">
-<li><p class="menu-line"><span class="name">Croissant, pain au chocolat</span></p><p>Le matin, avec le café.</p></li>
-<li><p class="menu-line"><span class="name">Sandwich jambon-beurre</span></p></li>
-<li><p class="menu-line"><span class="name">Sandwich poulet crudités</span></p></li>
-<li><p class="menu-line"><span class="name">Croque-monsieur</span></p></li>
-<li><p class="menu-line"><span class="name">Planche de charcuterie</span></p></li>
-<li><p class="menu-line"><span class="name">Planche mixte charcuterie &amp; fromage</span></p></li>
-<li><p class="menu-line"><span class="name">Chips, cacahuètes, olives</span></p></li>
-</ul>
-</section>
+<nav aria-label="Catégories de la carte" class="menu-nav" id="carte-nav"></nav>
+<p class="note" id="carte-mention" style="margin:-1.2rem 0 2.4rem"></p>
+<!-- La carte est rendue par js/main.js à partir de js/donnees.js,
+           modifiable depuis la console d'administration (admin.html). -->
+<div id="carte"></div>
+<noscript>
+<div class="callout">
+<p>La carte s'affiche avec JavaScript activé. Sans lui, appelez le
+            <a href="tel:+33235716679">02 35 71 66 79</a> ou passez au comptoir :
+            l'ardoise fait foi.</p>
+</div>
+</noscript>
 <div class="callout callout-info">
 <span aria-hidden="true" class="ico">
 <svg fill="none" height="20" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="20"><circle cx="12" cy="12" r="9"></circle><path d="M12 16v-5M12 7.5v.01"></path></svg>
@@ -1434,36 +1369,116 @@ section[id^="page-"] + section[id^="page-"] { border-top: 1px solid var(--line);
 </footer>
 <script>
 /* =========================================================
-   Le Petit Ravisé — agenda du bar
+   Le Petit Ravisé — contenu modifiable du site
    ---------------------------------------------------------
-   Un seul endroit à modifier pour publier une date. Les
-   événements passés disparaissent tout seuls ; quand la liste
-   est vide, la page affiche « Aucune date annoncée ».
+   CE FICHIER EST LA SOURCE UNIQUE du contenu : réglages,
+   carte et agenda. Les pages du site le lisent, la console
+   d'administration (admin.html) l'écrit.
 
-   Format d'une entrée :
-     {
-       date: "2026-09-12",     // AAAA-MM-JJ (obligatoire)
-       titre: "…",             // (obligatoire)
-       description: "…",       // facultatif
-       heure: "20 h 00",       // facultatif
-       prix: "Entrée libre"    // facultatif
-     }
+   Vous pouvez le modifier à la main, mais la console est plus
+   sûre : elle valide les champs et écrit un fichier toujours
+   correct. Si vous éditez à la main, respectez la structure —
+   une virgule oubliée et le contenu ne s'affiche plus.
 
-   Exemple à copier-coller, puis à décommenter :
-
-     {
-       date: "2026-09-12",
-       titre: "Retransmission — Rouen / Le Havre",
-       description: "Match diffusé sur l'écran de la salle.",
-       heure: "21 h 00",
-       prix: "Entrée libre"
-     }
-
-   NOTE : cette liste est volontairement vide. Aucune date n'a
-   été inventée — remplissez-la avec les vraies soirées du bar.
+   Format : un objet JavaScript, pas du JSON. Ce choix permet
+   d'ouvrir le site en double-cliquant sur un fichier, sans
+   serveur (fetch() est interdit sur file://).
    ========================================================= */
 
-window.EVENEMENTS = [];
+window.DONNEES = {
+
+  /* ---- Réglages généraux ---- */
+  "reglages": {
+    "email": "",
+    "telephone": "02 35 71 66 79",
+    "telephoneLien": "+33235716679",
+    "mentionTarifs": "Tarifs affichés au comptoir et en terrasse."
+  },
+
+  /* ---- La carte ----
+     Chaque rubrique : id (ancre), emoji, titre, items.
+     Chaque item : nom, prix (vide = non affiché), description. */
+  "carte": [
+    {
+      "id": "bieres",
+      "emoji": "🍺",
+      "titre": "Bières",
+      "items": [
+        { "nom": "Pression — 25 cl", "prix": "", "description": "" },
+        { "nom": "Pression — 50 cl", "prix": "", "description": "" },
+        { "nom": "Blonde en bouteille", "prix": "", "description": "" },
+        { "nom": "Blanche", "prix": "", "description": "" },
+        { "nom": "Ambrée", "prix": "", "description": "" },
+        { "nom": "Bière sans alcool", "prix": "", "description": "" },
+        { "nom": "Panaché", "prix": "", "description": "" },
+        { "nom": "Monaco", "prix": "", "description": "Bière, limonade et grenadine." }
+      ]
+    },
+    {
+      "id": "cocktails",
+      "emoji": "🍹",
+      "titre": "Cocktails & apéritifs",
+      "items": [
+        { "nom": "Kir", "prix": "", "description": "Cassis, mûre ou pêche." },
+        { "nom": "Kir royal", "prix": "", "description": "" },
+        { "nom": "Spritz", "prix": "", "description": "" },
+        { "nom": "Mojito", "prix": "", "description": "" },
+        { "nom": "Anisé", "prix": "", "description": "Servi avec sa carafe d'eau fraîche." },
+        { "nom": "Punch maison", "prix": "", "description": "" },
+        { "nom": "Cocktail sans alcool", "prix": "", "description": "" },
+        { "nom": "Vin au verre — rouge, blanc, rosé", "prix": "", "description": "" }
+      ]
+    },
+    {
+      "id": "softs",
+      "emoji": "🥤",
+      "titre": "Softs",
+      "items": [
+        { "nom": "Sodas — 33 cl", "prix": "", "description": "" },
+        { "nom": "Jus de fruits", "prix": "", "description": "" },
+        { "nom": "Eau plate — 50 cl", "prix": "", "description": "" },
+        { "nom": "Eau pétillante — 50 cl", "prix": "", "description": "" },
+        { "nom": "Limonade", "prix": "", "description": "" },
+        { "nom": "Sirop à l'eau", "prix": "", "description": "" },
+        { "nom": "Diabolo", "prix": "", "description": "" },
+        { "nom": "Perrier", "prix": "", "description": "" }
+      ]
+    },
+    {
+      "id": "chaudes",
+      "emoji": "☕",
+      "titre": "Boissons chaudes",
+      "items": [
+        { "nom": "Express", "prix": "", "description": "" },
+        { "nom": "Café allongé", "prix": "", "description": "" },
+        { "nom": "Double express", "prix": "", "description": "" },
+        { "nom": "Noisette", "prix": "", "description": "" },
+        { "nom": "Café crème", "prix": "", "description": "" },
+        { "nom": "Cappuccino", "prix": "", "description": "" },
+        { "nom": "Chocolat chaud", "prix": "", "description": "" },
+        { "nom": "Thé & infusions", "prix": "", "description": "" }
+      ]
+    },
+    {
+      "id": "manger",
+      "emoji": "🥖",
+      "titre": "À grignoter",
+      "items": [
+        { "nom": "Croissant, pain au chocolat", "prix": "", "description": "Le matin, avec le café." },
+        { "nom": "Sandwich jambon-beurre", "prix": "", "description": "" },
+        { "nom": "Sandwich poulet crudités", "prix": "", "description": "" },
+        { "nom": "Croque-monsieur", "prix": "", "description": "" },
+        { "nom": "Planche de charcuterie", "prix": "", "description": "" },
+        { "nom": "Planche mixte charcuterie & fromage", "prix": "", "description": "" },
+        { "nom": "Chips, cacahuètes, olives", "prix": "", "description": "" }
+      ]
+    }
+  ],
+
+  /* ---- Agenda ----
+     date : AAAA-MM-JJ. Les dates passées disparaissent seules. */
+  "evenements": []
+};
 
 /* =========================================================
    Le Petit Ravisé — script commun aux six pages.
@@ -1616,14 +1631,15 @@ window.EVENEMENTS = [];
   /* =========================================================
      5. Calendrier des événements
      ---------------------------------------------------------
-     Les données vivent dans js/evenements.js. Les dates
-     passées sont masquées automatiquement ; s'il ne reste
-     rien à annoncer, un état vide s'affiche.
+     Les données vivent dans js/donnees.js. Les dates passées
+     sont masquées automatiquement ; s'il ne reste rien à
+     annoncer, un état vide s'affiche.
      ========================================================= */
+  var DONNEES = window.DONNEES || {};
   var eventsHost = document.getElementById('events');
 
   if (eventsHost) {
-    var data = Array.isArray(window.EVENEMENTS) ? window.EVENEMENTS : [];
+    var data = Array.isArray(DONNEES.evenements) ? DONNEES.evenements : [];
     var startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -1695,18 +1711,104 @@ window.EVENEMENTS = [];
   }
 
   /* =========================================================
+     5 bis. La carte
+     ---------------------------------------------------------
+     Rendue à partir de js/donnees.js : rubriques, intitulés,
+     prix et descriptions. Le prix est omis quand il est vide,
+     ce qui évite une colonne de tirets.
+     ========================================================= */
+  var carteHost = document.getElementById('carte');
+
+  if (carteHost && Array.isArray(DONNEES.carte)) {
+    var navCarte = document.getElementById('carte-nav');
+    if (navCarte) navCarte.innerHTML = '';
+
+    DONNEES.carte.forEach(function (rubrique) {
+      if (!rubrique.items || !rubrique.items.length) return;
+
+      if (navCarte) {
+        var lien = document.createElement('a');
+        lien.href = '#' + rubrique.id;
+        lien.textContent = (rubrique.emoji ? rubrique.emoji + ' ' : '') + rubrique.titre;
+        navCarte.appendChild(lien);
+      }
+
+      var bloc = document.createElement('section');
+      bloc.className = 'menu-block';
+      bloc.id = rubrique.id;
+
+      var titre = document.createElement('h2');
+      if (rubrique.emoji) {
+        var emoji = document.createElement('span');
+        emoji.className = 'emoji';
+        emoji.setAttribute('aria-hidden', 'true');
+        emoji.textContent = rubrique.emoji;
+        titre.appendChild(emoji);
+        titre.appendChild(document.createTextNode(' '));
+      }
+      titre.appendChild(document.createTextNode(rubrique.titre));
+      bloc.appendChild(titre);
+
+      var liste = document.createElement('ul');
+      liste.className = 'menu';
+
+      rubrique.items.forEach(function (item) {
+        if (!item.nom) return;
+        var li = document.createElement('li');
+
+        var ligne = document.createElement('p');
+        ligne.className = 'menu-line';
+        var nom = document.createElement('span');
+        nom.className = 'name';
+        nom.textContent = item.nom;                 // textContent : jamais d'HTML injecté
+        ligne.appendChild(nom);
+
+        if (item.prix) {
+          var points = document.createElement('span');
+          points.className = 'dots';
+          var prix = document.createElement('span');
+          prix.className = 'price';
+          prix.textContent = item.prix;
+          ligne.appendChild(points);
+          ligne.appendChild(prix);
+        }
+        li.appendChild(ligne);
+
+        if (item.description) {
+          var desc = document.createElement('p');
+          desc.textContent = item.description;
+          li.appendChild(desc);
+        }
+        liste.appendChild(li);
+      });
+
+      bloc.appendChild(liste);
+      carteHost.appendChild(bloc);
+    });
+
+    // La mention « tarifs au comptoir » n'a de sens que si aucun prix n'est saisi.
+    var mention = document.getElementById('carte-mention');
+    if (mention) {
+      var auMoinsUnPrix = DONNEES.carte.some(function (r) {
+        return (r.items || []).some(function (i) { return i.prix; });
+      });
+      if (auMoinsUnPrix) mention.remove();
+      else mention.textContent = (DONNEES.reglages && DONNEES.reglages.mentionTarifs) || '';
+    }
+  }
+
+  /* =========================================================
      6. Formulaire de contact
      ---------------------------------------------------------
-     Renseignez l'adresse e-mail du bar ci-dessous : le
-     formulaire ouvrira alors le logiciel de messagerie du
-     visiteur avec un message déjà rempli (objet, coordonnées,
-     texte). Aucun serveur ni service tiers n'est nécessaire.
-
-     Tant que la constante est vide, le formulaire renvoie
-     poliment vers le téléphone.
+     L'adresse e-mail se renseigne dans js/donnees.js (ou via
+     la console d'administration). Dès qu'elle existe, le
+     formulaire ouvre le logiciel de messagerie du visiteur
+     avec un message déjà rempli. Sinon, il renvoie poliment
+     vers le téléphone.
      ========================================================= */
-  var EMAIL_CONTACT = '';          // ex. 'contact@barlepetitravise.fr'
-  var TEL_AFFICHE = '02 35 71 66 79';
+  var REGLAGES = DONNEES.reglages || {};
+  var EMAIL_CONTACT = REGLAGES.email || '';
+  var TEL_AFFICHE = REGLAGES.telephone || '02 35 71 66 79';
 
   var form = document.getElementById('contactForm');
 

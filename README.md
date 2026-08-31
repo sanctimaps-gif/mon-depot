@@ -60,12 +60,12 @@ Apache/nginx.
 Le site ne contient **aucune information inventée**. Trois éléments restent à fournir ;
 en attendant, le site reste présentable — rien n'affiche « à compléter » côté visiteur.
 
-| À fournir | Où | Comportement actuel |
+| À fournir | Où le saisir | Comportement actuel |
 | --- | --- | --- |
-| **Les prix** | `carte.html` | La carte liste les boissons sans prix, avec la mention « Tarifs affichés au comptoir » |
-| **Des photos** | `le-bar.html` | Illustrations au trait (dessins, pas des photos du lieu) |
-| **Une adresse e-mail** | `js/main.js` | Le formulaire renvoie vers le téléphone |
-| **Les dates d'événements** | `js/evenements.js` | « Aucune date annoncée pour le moment » |
+| **Les prix** | Console → La carte | La carte s'affiche sans prix, avec « Tarifs affichés au comptoir » |
+| **Une adresse e-mail** | Console → Réglages | Le formulaire renvoie vers le téléphone |
+| **Les dates d'événements** | Console → Événements | « Aucune date annoncée pour le moment » |
+| **Des photos** | `le-bar.html` (à la main) | Illustrations au trait (dessins, pas des photos du lieu) |
 
 Deux points à confirmer :
 
@@ -109,51 +109,85 @@ Ouvrir `index.html` directement fonctionne aussi.
 
 ```
 index.html … contact.html   Les six pages (en-tête et pied de page identiques)
+admin.html                  Console d'administration (non référencée par le site)
 apercu-du-site.html         Tout le site en un fichier autonome (double-clic)
 CNAME.a-activer             Domaine personnalisé, en attente du DNS
 .nojekyll                   Désactive Jekyll sur GitHub Pages
 css/style.css               Thème, mise en page, responsive, impression
-js/main.js                  Horaires, menu mobile, agenda, formulaire
-js/evenements.js            Les dates à annoncer
+js/donnees.js               LE CONTENU : réglages, carte, agenda (écrit par la console)
+js/main.js                  Horaires, menu mobile, rendu de la carte et de l'agenda
+js/admin.js                 Logique de la console d'administration
+css/admin.css               Styles de la console
 img/qr-carte.svg            QR code vers la carte
 tools/make-qr.py            Régénère le QR code
 tools/build-apercu.py       Reconstruit l'aperçu en un fichier
 ```
 
-## Modifier le site
+## Modifier le site sans toucher au code
 
-### Ajouter les prix
+Ouvrez **`admin.html`** (par exemple `barlepetitravisé.com/admin.html`) : une console
+permet de modifier l'adresse e-mail, la carte et les événements, puis de publier. Les
+changements sont visibles par tous les visiteurs une minute plus tard.
 
-Dans `carte.html`, chaque ligne ressemble à :
+### Il n'y a pas de mot de passe — et c'est voulu
 
-```html
-<li><p class="menu-line"><span class="name">Express</span></p></li>
-```
+Le site est statique : pas de serveur, pas de base de données. Un mot de passe stocké
+dans la page serait lisible par n'importe qui dans le code source, et les modifications
+ne seraient enregistrées que dans votre navigateur, invisibles pour les visiteurs.
 
-Ajoutez la ligne de pointillés et le prix :
+Le compte administrateur est donc **votre compte GitHub**, où le site est hébergé. Vous
+collez une fois une *clé d'accès* ; la console écrit directement dans le dépôt.
 
-```html
-<li><p class="menu-line"><span class="name">Express</span><span class="dots"></span><span class="price">1,60 €</span></p></li>
-```
+### Créer la clé (une seule fois, 2 minutes)
 
-Le style (pointillés de raccord, prix aligné à droite en vert) est déjà prêt. Pensez
-alors à retirer la mention « Tarifs affichés au comptoir » en haut de la page.
+1. GitHub → **Settings → Developer settings → Personal access tokens → Fine-grained
+   tokens → Generate new token**.
+2. Nom : `Site du bar`. Expiration au choix.
+3. **Repository access** → *Only select repositories* → `mon-depot`.
+4. **Permissions → Repository permissions → Contents** → *Read and write*. Rien d'autre.
+5. Générer, copier, coller dans la console. GitHub ne la réaffichera plus.
 
-### Brancher le formulaire de contact
+La marche à suivre est également rappelée sur la page de connexion.
 
-Une seule ligne, en haut de la section 6 de `js/main.js` :
+### Ce qu'il faut savoir
 
-```js
-var EMAIL_CONTACT = 'contact@exemple.fr';
-```
+- La clé ne quitte pas votre navigateur : elle n'est envoyée qu'à `api.github.com`.
+  Elle est conservée dans le navigateur si vous cochez « rester connecté », sinon
+  oubliée à la fermeture de l'onglet.
+- **Sur un ordinateur partagé**, décochez « rester connecté ».
+- La clé n'ouvre que ce dépôt, et seulement ses fichiers. En cas de doute, révoquez-la
+  sur GitHub : elle cesse aussitôt de fonctionner.
+- `admin.html` est accessible publiquement (c'est un site statique), mais sans clé
+  valide la page ne peut rien faire ni rien afficher du contenu.
+- Publier écrit un commit dans `js/donnees.js` : l'historique GitHub garde chaque
+  version, donc rien n'est jamais perdu.
 
-Le formulaire ouvre alors le logiciel de messagerie du visiteur avec un message
-pré-rempli (objet, texte, nom, e-mail, téléphone). Aucun serveur ni service tiers.
-Tant que la constante est vide, le formulaire renvoie poliment vers le téléphone.
+### Ce que la console modifie
 
-Pour un envoi sans passer par le logiciel de messagerie du visiteur, remplacez
-l'appel `window.location.href = 'mailto:…'` par un `fetch()` vers Formspree, Netlify
-Forms ou votre back-end.
+| Onglet | Contenu |
+| --- | --- |
+| Réglages | Adresse e-mail de contact, téléphone affiché, mention en haut de la carte |
+| La carte | Rubriques, intitulés, prix, descriptions — ajout, modification, suppression |
+| Événements | Dates, titres, heures, tarifs. Les dates passées disparaissent du site |
+
+Dès qu'au moins un prix est saisi, la mention « Tarifs affichés au comptoir » disparaît
+toute seule. Dès que l'adresse e-mail est renseignée, le formulaire de contact s'en sert.
+
+## Modifier le site à la main
+
+La console couvre les cas courants. Pour le reste, tout le contenu éditable vit dans
+`js/donnees.js` — un objet JavaScript que vous pouvez modifier directement (attention
+aux virgules : une erreur de syntaxe et le contenu ne s'affiche plus).
+
+### Le formulaire de contact
+
+Il utilise `reglages.email`. Renseignée, l'adresse déclenche l'ouverture de la
+messagerie du visiteur avec un message pré-rempli (objet, texte, coordonnées) — aucun
+serveur ni service tiers. Vide, le formulaire renvoie vers le téléphone.
+
+Pour un envoi qui ne passe pas par la messagerie du visiteur, remplacez l'appel
+`window.location.href = 'mailto:…'` de `js/main.js` par un `fetch()` vers Formspree,
+Netlify Forms ou votre back-end.
 
 ### Les horaires — un seul endroit
 
@@ -174,20 +208,18 @@ lendemain matin » (`26 * 60` = 2 h du matin), le cas est géré.
 Mettez à jour en parallèle les tableaux d'horaires de `index.html` et `infos.html`,
 ainsi que le bloc `openingHoursSpecification` (Schema.org) de `index.html`.
 
-### Une date dans l'agenda
+### Une date dans l'agenda, à la main
 
-Une entrée dans `js/evenements.js`, rien d'autre :
+Dans le tableau `evenements` de `js/donnees.js` :
 
 ```js
-window.EVENEMENTS = [
-  {
-    date: "2026-09-12",
-    titre: "Retransmission — Rouen / Le Havre",
-    description: "Match diffusé sur l'écran de la salle.",
-    heure: "21 h 00",
-    prix: "Entrée libre"
-  }
-];
+{
+  "date": "2026-09-12",
+  "titre": "Retransmission — Rouen / Le Havre",
+  "description": "Match diffusé sur l'écran de la salle.",
+  "heure": "21 h 00",
+  "prix": "Entrée libre"
+}
 ```
 
 Les dates passées disparaissent toutes seules. Liste vide = « Aucune date annoncée ».
