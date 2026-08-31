@@ -230,9 +230,17 @@
   /* =========================================================
      6. Formulaire de contact
      ---------------------------------------------------------
-     La validation est complète ; l'envoi est une démonstration
-     (voir le bloc « Démo statique » plus bas).
+     Renseignez l'adresse e-mail du bar ci-dessous : le
+     formulaire ouvrira alors le logiciel de messagerie du
+     visiteur avec un message déjà rempli (objet, coordonnées,
+     texte). Aucun serveur ni service tiers n'est nécessaire.
+
+     Tant que la constante est vide, le formulaire renvoie
+     poliment vers le téléphone.
      ========================================================= */
+  var EMAIL_CONTACT = '';          // ex. 'contact@barlepetitravise.fr'
+  var TEL_AFFICHE = '02 35 71 66 79';
+
   var form = document.getElementById('contactForm');
 
   if (form) {
@@ -271,14 +279,34 @@
         return;
       }
 
-      // --- Démo statique : rien n'est envoyé. ---------------
-      // Pour brancher l'envoi, remplacez ce bloc par un
-      // fetch() vers votre back-end ou un service de
-      // formulaires (Formspree, Netlify Forms, etc.).
       var nom = form.querySelector('#nom').value.trim();
-      status.textContent = 'Merci ' + nom + ' ! Votre message est prêt à partir. ' +
-        'Attention : l’envoi n’est pas encore branché — pour une réponse immédiate, ' +
-        'appelez le 02 35 71 66 79.';
+
+      if (!EMAIL_CONTACT) {
+        status.textContent = 'Merci ' + nom + ' ! Le plus rapide pour nous joindre reste le ' +
+          'téléphone : ' + TEL_AFFICHE + ', du lundi au samedi aux heures d’ouverture.';
+        status.className = 'form-status is-ok';
+        return;
+      }
+
+      // Ouvre le logiciel de messagerie avec un message pré-rempli.
+      var champ = function (id) {
+        var el = form.querySelector('#' + id);
+        return el ? el.value.trim() : '';
+      };
+      var corps = [
+        champ('message'),
+        '',
+        '— ' + nom,
+        champ('email'),
+        champ('telephone')
+      ].filter(Boolean).join('\n');
+
+      window.location.href = 'mailto:' + EMAIL_CONTACT +
+        '?subject=' + encodeURIComponent('[Site] ' + champ('sujet')) +
+        '&body=' + encodeURIComponent(corps);
+
+      status.textContent = 'Merci ' + nom + ' ! Votre logiciel de messagerie s’ouvre avec le ' +
+        'message pré-rempli — il ne reste qu’à l’envoyer.';
       status.className = 'form-status is-ok';
       form.reset();
     });

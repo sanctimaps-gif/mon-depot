@@ -4,31 +4,43 @@ Site vitrine du **Petit Ravisé**, bar-tabac au 14 rue des Bons-Enfants, 76000 R
 Six pages en HTML, CSS et JavaScript natifs : **aucune dépendance, aucune étape de
 build**.
 
-Publié via **GitHub Pages depuis le dossier `docs/`**, sur le domaine
-**barlepetitravisé.fr** (`xn--barlepetitravis-pnb.fr` en punycode), conformément au
-fichier `docs/CNAME`. Si GitHub Pages est en réalité configuré sur la racine, il
-suffit de remonter le contenu : `git mv docs/* .`
+## Mise en ligne (GitHub Pages)
 
----
+Les fichiers du site sont **à la racine du dépôt** — c'est ce que GitHub Pages sert par
+défaut. Dans *Settings → Pages* : source = cette branche, dossier = **`/ (root)`**.
 
-## ⚠️ À compléter avant la mise en ligne
+> Si Pages est réglé sur `/docs`, la page publiée est le README et non le site : le
+> visiteur voit alors de la documentation et des blocs de code. Le réglage doit être
+> `/ (root)`, ou bien il faut déplacer les fichiers : `mkdir docs && git mv *.html css js img CNAME docs/`
 
-Le site ne contient **aucune information inventée**. Ce qui n'a pas pu être vérifié a
-été laissé vide et signalé sur la page elle-même. Quatre choses manquent :
+Le fichier `CNAME` (racine) déclare le domaine **barlepetitravisé.fr**
+(`xn--barlepetitravis-pnb.fr`). Côté registrar, faites pointer le domaine vers GitHub
+Pages (enregistrements A/ALIAS documentés par GitHub), puis activez « Enforce HTTPS ».
+Au moment de la rédaction, ce domaine ne résolvait pas encore.
 
-| À fournir | Où cela atterrit | État |
+`.nojekyll` désactive Jekyll : les fichiers sont servis tels quels.
+
+Les mêmes fichiers fonctionnent sur Netlify, Cloudflare Pages ou un dossier
+Apache/nginx.
+
+## À compléter
+
+Le site ne contient **aucune information inventée**. Trois éléments restent à fournir ;
+en attendant, le site reste présentable — rien n'affiche « à compléter » côté visiteur.
+
+| À fournir | Où | Comportement actuel |
 | --- | --- | --- |
-| **Les prix de la carte** | `docs/carte.html` | Tous les tarifs affichent `—` |
-| **Des photos du bar** | `docs/le-bar.html` | Illustrations au trait en attendant |
-| **Les vraies dates d'événements** | `docs/js/evenements.js` | Liste vide → « Aucune date annoncée » |
-| **Une adresse e-mail** | `docs/contact.html` | Formulaire non branché |
+| **Les prix** | `carte.html` | La carte liste les boissons sans prix, avec la mention « Tarifs affichés au comptoir » |
+| **Des photos** | `le-bar.html` | Illustrations au trait (dessins, pas des photos du lieu) |
+| **Une adresse e-mail** | `js/main.js` | Le formulaire renvoie vers le téléphone |
+| **Les dates d'événements** | `js/evenements.js` | « Aucune date annoncée pour le moment » |
 
-Deux points à confirmer également :
+Deux points à confirmer :
 
 - **L'orthographe du nom.** Le site utilise « Le Petit Ravisé ». La page Facebook et le
-  registre des entreprises écrivent « Le P'tit Ravisé ». Un chercher-remplacer suffit.
-- **Les horaires.** Ceux affichés (lundi–samedi 7 h – 20 h, fermé le dimanche)
-  proviennent de fiches publiques, pas du bar lui-même.
+  registre des entreprises écrivent « Le P'tit Ravisé ».
+- **Les horaires** (lundi–samedi 7 h – 20 h, fermé le dimanche) proviennent de fiches
+  publiques, pas du bar lui-même.
 
 ## Informations reprises de sources publiques
 
@@ -45,40 +57,73 @@ Deux points à confirmer également :
 
 | Fichier | Contenu |
 | --- | --- |
-| `docs/index.html` | Présentation, adresse, horaires, boutons « Voir la carte » et « Itinéraire », note Google |
-| `docs/carte.html` | Bières, cocktails & apéritifs, softs, boissons chaudes, à grignoter, QR code |
-| `docs/le-bar.html` | Ambiance, quartier, galerie, histoire du lieu |
-| `docs/evenements.html` | Calendrier automatique + fil Facebook intégré |
-| `docs/infos.html` | Plan, horaires, téléphone, transports, stationnement, avis |
-| `docs/contact.html` | Téléphone, réseaux sociaux, formulaire de contact |
+| `index.html` | Présentation, adresse, horaires, boutons « Voir la carte » et « Itinéraire », note Google |
+| `carte.html` | Bières, cocktails & apéritifs, softs, boissons chaudes, à grignoter, QR code |
+| `le-bar.html` | Ambiance, quartier, galerie |
+| `evenements.html` | Agenda automatique + fil Facebook |
+| `infos.html` | Plan, horaires, téléphone, transports, stationnement, avis |
+| `contact.html` | Téléphone, réseaux sociaux, formulaire |
 
 ## Lancer le site en local
 
 ```bash
-cd docs && python3 -m http.server 8000
+python3 -m http.server 8000
 # puis http://localhost:8000
 ```
 
-Ouvrir `docs/index.html` directement fonctionne aussi.
+Ouvrir `index.html` directement fonctionne aussi.
 
 ## Structure
 
 ```
-docs/                    ← racine publiée par GitHub Pages
-  CNAME                  Domaine personnalisé
-  *.html                 Les six pages (en-tête et pied de page identiques)
-  css/style.css          Thème, mise en page, responsive, impression
-  js/main.js             Horaires, menu mobile, calendrier, formulaire
-  js/evenements.js       Les dates à annoncer — seul fichier à toucher pour l'agenda
-  img/qr-carte.svg       QR code vers la carte
-tools/make-qr.py         Régénère le QR code (hors dossier publié)
+index.html … contact.html   Les six pages (en-tête et pied de page identiques)
+CNAME                       Domaine personnalisé
+.nojekyll                   Désactive Jekyll sur GitHub Pages
+css/style.css               Thème, mise en page, responsive, impression
+js/main.js                  Horaires, menu mobile, agenda, formulaire
+js/evenements.js            Les dates à annoncer
+img/qr-carte.svg            QR code vers la carte
+tools/make-qr.py            Régénère le QR code
 ```
 
 ## Modifier le site
 
+### Ajouter les prix
+
+Dans `carte.html`, chaque ligne ressemble à :
+
+```html
+<li><p class="menu-line"><span class="name">Express</span></p></li>
+```
+
+Ajoutez la ligne de pointillés et le prix :
+
+```html
+<li><p class="menu-line"><span class="name">Express</span><span class="dots"></span><span class="price">1,60 €</span></p></li>
+```
+
+Le style (pointillés de raccord, prix aligné à droite en vert) est déjà prêt. Pensez
+alors à retirer la mention « Tarifs affichés au comptoir » en haut de la page.
+
+### Brancher le formulaire de contact
+
+Une seule ligne, en haut de la section 6 de `js/main.js` :
+
+```js
+var EMAIL_CONTACT = 'contact@exemple.fr';
+```
+
+Le formulaire ouvre alors le logiciel de messagerie du visiteur avec un message
+pré-rempli (objet, texte, nom, e-mail, téléphone). Aucun serveur ni service tiers.
+Tant que la constante est vide, le formulaire renvoie poliment vers le téléphone.
+
+Pour un envoi sans passer par le logiciel de messagerie du visiteur, remplacez
+l'appel `window.location.href = 'mailto:…'` par un `fetch()` vers Formspree, Netlify
+Forms ou votre back-end.
+
 ### Les horaires — un seul endroit
 
-L'objet `SCHEDULE` en haut de `docs/js/main.js` (0 = dimanche … 6 = samedi, en minutes
+L'objet `SCHEDULE` en haut de `js/main.js` (0 = dimanche … 6 = samedi, en minutes
 depuis minuit, `null` = fermé) :
 
 ```js
@@ -92,13 +137,12 @@ Il pilote l'indicateur « ouvert / fermé » présent sur les six pages **et** l
 surlignage du jour courant. Une fermeture supérieure à `24 * 60` signifie « ferme le
 lendemain matin » (`26 * 60` = 2 h du matin), le cas est géré.
 
-Pensez à mettre à jour en parallèle les tableaux d'horaires dans `docs/index.html` et
-`docs/infos.html`, ainsi que le bloc `openingHoursSpecification` (Schema.org) de
-`docs/index.html`.
+Mettez à jour en parallèle les tableaux d'horaires de `index.html` et `infos.html`,
+ainsi que le bloc `openingHoursSpecification` (Schema.org) de `index.html`.
 
 ### Une date dans l'agenda
 
-Une entrée dans `docs/js/evenements.js`, rien d'autre :
+Une entrée dans `js/evenements.js`, rien d'autre :
 
 ```js
 window.EVENEMENTS = [
@@ -112,39 +156,28 @@ window.EVENEMENTS = [
 ];
 ```
 
-Les dates passées disparaissent toutes seules. Liste vide = message « Aucune date
-annoncée ».
+Les dates passées disparaissent toutes seules. Liste vide = « Aucune date annoncée ».
 
-### Les prix
+### Remplacer les illustrations par des photos
 
-Dans `docs/carte.html`, remplacer chaque `<span class="price todo">—</span>` par
-`<span class="price">2,20 €</span>` (retirer la classe `todo` grise le prix en vert).
+Dans `le-bar.html`, chaque vignette est un `<figure class="illu">` contenant un `<svg>`.
+Remplacez le bloc `<svg>…</svg>` par `<img src="img/comptoir.jpg" alt="Le comptoir">`
+et déposez la photo dans `img/`. Format carré conseillé, environ 800 × 800 px.
 
 ### Le QR code
 
-Le QR code livré pointe vers `https://xn--barlepetitravis-pnb.fr/carte.html` (forme
-punycode : comprise par tous les lecteurs, là où l'Unicode peut échouer). Vérifié par
-décodage. Il est prêt à imprimer.
-
-En cas de changement de domaine :
+Il pointe vers `https://xn--barlepetitravis-pnb.fr/carte.html` (forme punycode :
+comprise par tous les lecteurs, là où l'Unicode peut échouer) — vérifié par décodage,
+prêt à imprimer. En cas de changement de domaine :
 
 ```bash
 pip install segno
 python3 tools/make-qr.py https://nouveau-domaine.fr/carte.html
 ```
 
-Le fichier `docs/img/qr-carte.svg` est réécrit ; les pages qui l'affichent se mettent
-à jour automatiquement.
-
-### Le formulaire de contact
-
-La validation est complète, l'envoi ne l'est pas : remplacer le bloc commenté
-`// --- Démo statique` dans `docs/js/main.js` par un `fetch()` vers un back-end ou un
-service de formulaires (Formspree, Netlify Forms…).
-
 ### Couleurs et typographies
 
-Variables CSS en haut de `docs/css/style.css` :
+Variables CSS en haut de `css/style.css` :
 
 ```css
 :root {
@@ -161,39 +194,29 @@ système prennent le relais sans casser la mise en page.
 
 - **Plan** : iframe OpenStreetMap, sans clé d'API ni compte. La carte est cadrée sur le
   quartier plutôt que sur un point précis : les coordonnées exactes du numéro 14 n'ont
-  pas pu être vérifiées, et un repère mal placé en centre-ville est pire que pas de
-  repère. Les boutons « Itinéraire » (Google Maps, Apple Plans, Waze) utilisent
-  l'adresse postale complète et restent exacts.
+  pas pu être vérifiées, et un repère mal placé en centre-ville induit plus en erreur
+  que pas de repère. Les boutons « Itinéraire » (Google Maps, Apple Plans, Waze)
+  utilisent l'adresse postale complète et restent exacts.
 - **Facebook** : le fil de la page est intégré sur `evenements.html`. Le plugin
   Facebook ne fonctionne qu'avec une *page* professionnelle ; si l'établissement a un
   *profil*, l'encart restera vide — un lien de repli est affiché juste en dessous.
-- **Avis Google** : la note est affichée en clair avec sa date de relevé, et un bouton
-  renvoie vers la fiche. Aucun avis n'est recopié ni inventé.
+- **Avis Google** : la note est affichée avec sa date de relevé, et un bouton renvoie
+  vers la fiche. Aucun avis n'est recopié ni inventé.
 
-## Accessibilité et compatibilité
+## Accessibilité
 
 - Navigation clavier complète : lien d'évitement, menu mobile retiré du parcours de
   tabulation quand il est fermé, `aria-current` sur la page active.
 - `aria-live` sur les messages d'état, libellés associés à chaque champ.
-- `prefers-reduced-motion` respecté (animations et défilement fluide désactivés).
+- `prefers-reduced-motion` respecté.
 - La hauteur des messages d'erreur est réservée en permanence, pour qu'afficher ou
   effacer une erreur ne décale jamais le bouton d'envoi sous le curseur.
-- Feuille de style d'impression : la carte s'imprime proprement sur deux colonnes.
+- Feuille de style d'impression : la carte s'imprime sur deux colonnes.
 - Données structurées Schema.org (`BarOrPub`) pour le référencement local.
-
-## Mise en ligne
-
-*Settings → Pages* : source = cette branche, dossier = **`/docs`**. Le fichier
-`docs/CNAME` s'occupe du domaine personnalisé ; côté registrar, faites pointer
-`barlepetitravisé.fr` vers GitHub Pages (enregistrements A/ALIAS documentés par
-GitHub), puis activez « Enforce HTTPS ».
-
-Les mêmes fichiers fonctionnent tels quels sur Netlify, Cloudflare Pages ou un dossier
-Apache/nginx.
 
 ## Mentions légales
 
 Le pied de page porte les mentions obligatoires (modération, interdiction de vente aux
 mineurs, avertissement sanitaire tabac). Avant publication, ajoutez les mentions
-légales de l'établissement : raison sociale, SIRET, directeur de la publication et
+légales de l'établissement : raison sociale, SIRET, directeur de la publication,
 hébergeur.

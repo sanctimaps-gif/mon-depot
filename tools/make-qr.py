@@ -16,7 +16,7 @@ from pathlib import Path
 # Domaine du site (forme punycode : elle est comprise par tous les lecteurs
 # de QR codes, là où « barlepetitravisé.fr » en Unicode peut échouer).
 URL_PAR_DEFAUT = "https://xn--barlepetitravis-pnb.fr/carte.html"
-SORTIE = Path(__file__).resolve().parent.parent / "docs" / "img" / "qr-carte.svg"
+SORTIE = Path(__file__).resolve().parent.parent / "img" / "qr-carte.svg"
 
 # Vert de la charte, pour rester cohérent avec le reste du site.
 COULEUR = "#1f4d3d"
